@@ -13,6 +13,10 @@
       --gold: #c49a3c; --serif: 'Playfair Display', Georgia, serif;
       --sans: 'Syne', sans-serif; --body: 'Mulish', sans-serif;
     }
+    body.dark-mode {
+      --cream: #0c0a09; --cream2: #1c1917; --ink: #f5f5f4; --ink2: #d6d3d1;
+      --surface: #171717; --border: #262626; --red: #ef4444; 
+    }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--body); background: var(--cream); color: var(--ink); line-height: 1.6; padding-bottom: 80px; }
@@ -67,7 +71,10 @@
 
   <nav>
     <a href="/" class="nav-logo">Hire<span>EU</span></a>
-    <span class="nav-badge" id="nav-user-badge">Guest</span>
+    <div style="display:flex; align-items:center; gap:15px">
+      <button onclick="toggleDarkMode()" style="padding:4px 8px; font-size:16px; background:transparent; border:1px solid var(--ink2); color:var(--cream); cursor:pointer; border-radius:4px;" id="btn-theme">🌙</button>
+      <span class="nav-badge" id="nav-user-badge">Guest</span>
+    </div>
   </nav>
 
   <div class="container">
@@ -145,10 +152,10 @@
           </div>
           <button id="btn-match" style="padding:12px 20px"><div class="loader"></div>Go →</button>
         </div>
-        <div class="menu-item" onclick="showView('view-onboarding')">
+        <div class="menu-item" onclick="showView('view-preferences')">
           <div class="menu-info">
-            <h3>Update Profile</h3>
-            <p>Upload a new CV or change your skills & filters.</p>
+            <h3>Account Settings</h3>
+            <p>Adjust language filters and matching sensitivity.</p>
           </div>
           <button class="btn-secondary" style="padding:12px 20px">Settings</button>
         </div>
@@ -162,7 +169,27 @@
       </div>
     </div>
 
-    <div id="view-results" class="hidden">
+    <div id="view-preferences" class="hidden">
+      <h1>Job Preferences</h1>
+      <p class="subtitle">Fine-tune how we find matches for you.</p>
+      <section class="card">
+        <div class="row" style="margin-bottom:20px">
+          <div>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer">
+              <input type="checkbox" id="prefs-english-only" style="width:auto"> 
+              <strong>English Only</strong>
+            </label>
+            <p style="font-size:12px; color:var(--ink2); margin-top:5px">Hide jobs requiring Polish or German.</p>
+          </div>
+          <div>
+            <label>Min Fit %</label>
+            <input type="number" id="prefs-min-fit" value="45">
+          </div>
+        </div>
+        <button onclick="savePreferences()" id="btn-save-prefs">Save Preferences</button>
+        <button class="btn-secondary" onclick="showView('view-main-menu')" style="margin-top:10px">Back to Menu</button>
+      </section>
+    </div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
         <h1>Your Matches</h1>
         <button class="btn-secondary" onclick="showView('view-main-menu')">Back to Menu</button>
@@ -190,11 +217,25 @@
     }
 
     function showView(id) {
-      ['view-auth', 'view-onboarding', 'view-main-menu', 'view-results'].forEach(v => {
+      ['view-auth', 'view-onboarding', 'view-main-menu', 'view-results', 'view-preferences'].forEach(v => {
         document.getElementById(v).classList.toggle('hidden', v !== id);
       });
       window.scrollTo(0,0);
     }
+    
+    function toggleDarkMode() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('btn-theme').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function initTheme() {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('btn-theme').textContent = '☀️';
+      }
+    }
+    initTheme();
 
     async function register() {
       try {
@@ -319,6 +360,37 @@
       }
     }
 
+    async function savePreferences() {
+      try {
+        setBtnLoading('btn-save-prefs', true);
+        await api('/api/user-data?action=preferences-save', 'POST', {
+          englishOnly: document.getElementById('prefs-english-only').checked,
+          minFitPercent: Number(document.getElementById('prefs-min-fit').value),
+          preferredLocation: '', workType: 'any'
+        });
+        setBtnLoading('btn-save-prefs', false);
+        showView('view-main-menu');
+      } catch (e) { alert(e.message); setBtnLoading('btn-save-prefs', false); }
+    }
+
+    async function loadAppState() {
+      try {
+        const { user } = await api('/api/auth?action=session');
+        if (!user) return showView('view-auth');
+        document.getElementById('nav-user-badge').textContent = user.name || user.email;
+        showView('view-main-menu');
+        
+        // Load prefs
+        const { preferences } = await api('/api/user-data?action=preferences-get');
+        if (preferences) {
+          document.getElementById('prefs-english-only').checked = !!preferences.englishOnly;
+          document.getElementById('prefs-min-fit').value = preferences.minFitPercent || 45;
+        }
+
+        const { profile } = await api('/api/user-data?action=profile-get');
+        if (profile && profile.summary) fillProfile(profile);
+      } catch { showView('view-auth'); }
+    }
     loadAppState();
   </script>
 </body>

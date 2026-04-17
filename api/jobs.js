@@ -38,19 +38,21 @@ export default async function handler(req, res) {
         query('SELECT preferred_location, work_type, min_fit_percent FROM job_search_preferences WHERE user_id = $1', [user.id])
       ]);
       if (!profileRes.rowCount) return res.status(400).json({ error: 'Profile not found' });
-      const profile = profileRes.rows[0], prefs = prefRes.rows[0] || { preferred_location: '', work_type: 'any', min_fit_percent: 45 };
+      const profile = profileRes.rows[0], prefs = prefRes.rows[0] || { preferred_location: '', work_type: 'any', min_fit_percent: 45, english_only: false };
       
+      const searchOptions = { englishOnly: !!prefs.english_only };
+
       // QUALITY SEARCH: Use extracted Primary Role (e.g. "Frontend Developer")
       const baseRole = profile.primary_role || profile.skills[0] || 'Software Engineer';
       let roleQuery = `${profile.seniority} ${baseRole}`.trim();
-      let { results: jobs, diagnostics } = await searchJobsByRole(roleQuery);
+      let { results: jobs, diagnostics } = await searchJobsByRole(roleQuery, searchOptions);
       
       // BROADENING FALLBACK
       if (jobs.length < 10) {
         console.log('Low results, broadening search...');
         // Try role synonyms too
         const baseRole = profile.primary_role || profile.skills[0] || 'Software Engineer';
-        const broaderRes = await searchJobsByRole(baseRole);
+        const broaderRes = await searchJobsByRole(baseRole, searchOptions);
         
         // Final "Global" fallback if still empty
         if ((jobs.length + broaderRes.results.length) < 3) {

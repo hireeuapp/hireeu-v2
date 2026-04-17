@@ -78,7 +78,7 @@ export default async function handler(req, res) {
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
     try {
       const result = await query(
-        `SELECT preferred_location, work_type, min_fit_percent
+        `SELECT preferred_location, work_type, min_fit_percent, english_only
          FROM job_search_preferences WHERE user_id = $1`,
         [user.id]
       );
@@ -91,6 +91,7 @@ export default async function handler(req, res) {
           preferredLocation: row.preferred_location || '',
           workType: row.work_type || 'any',
           minFitPercent: row.min_fit_percent ?? 45,
+          englishOnly: !!row.english_only
         },
       });
     } catch (err) {
@@ -106,15 +107,16 @@ export default async function handler(req, res) {
     const minFitPercent = Math.max(0, Math.min(100, Number(body.minFitPercent ?? 45)));
     const ALLOWED_WORK_TYPES = new Set(['remote', 'hybrid', 'onsite', 'any']);
     if (!ALLOWED_WORK_TYPES.has(workType)) return res.status(400).json({ error: 'Invalid work type' });
+    const englishOnly = !!body.englishOnly;
     try {
       await query(
-        `INSERT INTO job_search_preferences (user_id, preferred_location, work_type, min_fit_percent, updated_at)
-         VALUES ($1, $2, $3, $4, NOW())
+        `INSERT INTO job_search_preferences (user_id, preferred_location, work_type, min_fit_percent, english_only, updated_at)
+         VALUES ($1, $2, $3, $4, $5, NOW())
          ON CONFLICT (user_id)
          DO UPDATE SET
            preferred_location = EXCLUDED.preferred_location, work_type = EXCLUDED.work_type,
-           min_fit_percent = EXCLUDED.min_fit_percent, updated_at = NOW()`,
-        [user.id, preferredLocation, workType, minFitPercent]
+           min_fit_percent = EXCLUDED.min_fit_percent, english_only = EXCLUDED.english_only, updated_at = NOW()`,
+        [user.id, preferredLocation, workType, minFitPercent, englishOnly]
       );
       return res.status(200).json({ ok: true });
     } catch (err) {
