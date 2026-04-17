@@ -190,6 +190,7 @@
         <button class="btn-secondary" onclick="showView('view-main-menu')" style="margin-top:10px">Back to Menu</button>
       </section>
     </div>
+    <div id="view-results" class="hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
         <h1>Your Matches</h1>
         <button class="btn-secondary" onclick="showView('view-main-menu')">Back to Menu</button>
@@ -373,24 +374,6 @@
       } catch (e) { alert(e.message); setBtnLoading('btn-save-prefs', false); }
     }
 
-    async function loadAppState() {
-      try {
-        const { user } = await api('/api/auth?action=session');
-        if (!user) return showView('view-auth');
-        document.getElementById('nav-user-badge').textContent = user.name || user.email;
-        showView('view-main-menu');
-        
-        // Load prefs
-        const { preferences } = await api('/api/user-data?action=preferences-get');
-        if (preferences) {
-          document.getElementById('prefs-english-only').checked = !!preferences.englishOnly;
-          document.getElementById('prefs-min-fit').value = preferences.minFitPercent || 45;
-        }
-
-        const { profile } = await api('/api/user-data?action=profile-get');
-        if (profile && profile.summary) fillProfile(profile);
-      } catch { showView('view-auth'); }
-    }
     loadAppState();
   </script>
 </body>
