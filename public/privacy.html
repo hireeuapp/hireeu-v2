@@ -9,33 +9,29 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
+      --navy: #000080; --navy2: #001f3f; --silver: #c0c0c0; --silver2: #e2e8f0;
+      --ink: #0f172a; --ink2: #334155; --ink3: #475569; --surface: #ffffff;
+      --border: #cbd5e1; --border2: #e2e8f0; --accent: #3b82f6;
       --serif: 'Playfair Display', Georgia, serif;
       --sans: 'Syne', sans-serif;
       --body: 'Mulish', sans-serif;
-      --cream: #f0ebe1;
-      --cream2: #e8e2d6;
-      --ink: #1a1612;
-      --ink2: #3d3730;
-      --ink3: #7a6f64;
-      --surface: #ffffff;
-      --border: #d4cdc4;
-      --border2: #c4bdb3;
-      --red: #d63f2a;
-      --red2: #e85c47;
-      --red-light: #fdf1ef;
-      --gold: #c49a3c;
-      --green: #1e7d46;
-      --green-light: #edf7f1;
+    }
+    body.dark-mode {
+      --navy: #e2e8f0; --navy2: #ffffff; --silver: #94a3b8; --silver2: #1e293b;
+      --ink: #f8fafc; --ink2: #cbd5e1; --ink3: #94a3b8; --surface: #1e293b;
+      --border: #334155; --background: #020617;
     }
     body {
       font-family: var(--body);
-      background: var(--cream);
+      background: var(--background, #ffffff);
       color: var(--ink);
       font-size: 16px;
       line-height: 1.7;
+      transition: background 0.3s;
     }
+    body:not(.dark-mode) { --background: #ffffff; }
     nav {
-      background: var(--ink);
+      background: var(--navy);
       padding: 18px 40px;
       display: flex;
       align-items: center;
@@ -43,9 +39,9 @@
     }
     .nav-logo {
       font-family: var(--sans); font-size: 20px; font-weight: 800;
-      color: var(--cream); text-decoration: none; letter-spacing: -0.5px;
+      color: white; text-decoration: none; letter-spacing: -1px;
     }
-    .nav-logo span { color: var(--red2); }
+    .nav-logo span { color: var(--silver); }
     .nav-back {
       font-family: var(--sans); font-size: 12px; font-weight: 700;
       letter-spacing: 1px; text-transform: uppercase;
@@ -67,7 +63,7 @@
       font-weight: 900; line-height: 1.08; letter-spacing: -1px;
       color: var(--ink); margin-bottom: 14px;
     }
-    h1 em { font-style: italic; color: var(--red2); }
+    h1 em { font-style: italic; color: var(--accent); }
     .last-updated {
       font-family: var(--sans); font-size: 11px; font-weight: 600;
       letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink3);
@@ -142,8 +138,27 @@
 
 <nav>
   <a href="/" class="nav-logo">Hire<span>EU</span></a>
-  <a href="/" class="nav-back">← Back to home</a>
+  <div style="display:flex; align-items:center; gap:20px">
+    <button onclick="toggleDarkMode()" style="padding:4px 8px; font-size:16px; background:transparent; border:1px solid var(--silver); color:white; cursor:pointer; border-radius:4px;" id="btn-theme">🌙</button>
+    <a href="/" class="nav-back">← Back to home</a>
+  </div>
 </nav>
+
+<script>
+  function toggleDarkMode() {
+    const isDark = document.body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    document.getElementById('btn-theme').textContent = isDark ? '☀️' : '🌙';
+  }
+  function initTheme() {
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+      const btn = document.getElementById('btn-theme');
+      if (btn) btn.textContent = '☀️';
+    }
+  }
+  initTheme();
+</script>
 
 <div class="page">
 

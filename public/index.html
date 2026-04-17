@@ -8,25 +8,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;500;600;700;800&family=Mulish:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #000080;
-    --navy2: #001f3f;
-    --silver: #c0c0c0;
-    --silver2: #e2e8f0;
-    --ink: #0f172a;
-    --surface: #ffffff;
+    --navy: #000080; --navy2: #001f3f; --silver: #c0c0c0; --silver2: #e2e8f0;
+    --ink: #0f172a; --surface: #ffffff;
     --serif: 'Playfair Display', Georgia, serif;
     --sans: 'Syne', sans-serif;
     --body: 'Mulish', sans-serif;
+  }
+  body.dark-mode {
+    --navy: #e2e8f0; --navy2: #ffffff; --silver: #94a3b8; --silver2: #1e293b;
+    --ink: #f8fafc; --surface: #0f172a; --background: #020617;
   }
  
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: var(--body);
-    background: var(--surface);
+    background: var(--background, #ffffff);
     color: var(--ink);
     line-height: 1.7;
     overflow-x: hidden;
+    transition: background 0.3s;
   }
+  body:not(.dark-mode) { --background: #ffffff; }
  
   nav {
     background: var(--navy);
@@ -101,8 +103,27 @@
 
   <nav>
     <a href="/" class="nav-logo">Hire<span>EU</span></a>
-    <span class="nav-badge">Beta</span>
+    <div style="display:flex; align-items:center; gap:15px">
+      <button onclick="toggleDarkMode()" style="padding:4px 8px; font-size:16px; background:transparent; border:1px solid var(--ink); color:var(--ink); cursor:pointer; border-radius:4px;" id="btn-theme">🌙</button>
+      <span class="nav-badge">Beta</span>
+    </div>
   </nav>
+
+  <script>
+    function toggleDarkMode() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('btn-theme').textContent = isDark ? '☀️' : '🌙';
+    }
+    function initTheme() {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        const btn = document.getElementById('btn-theme');
+        if (btn) btn.textContent = '☀️';
+      }
+    }
+    initTheme();
+  </script>
 
   <section class="hero">
     <div class="container">
