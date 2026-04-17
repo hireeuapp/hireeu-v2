@@ -127,6 +127,7 @@
         <div id="connection-status" style="display:flex; gap:15px; font-size:12px; font-weight:700; text-transform:uppercase;">
           <span id="st-db">...</span>
           <span id="st-js">...</span>
+          <span id="st-ad">...</span>
           <span id="st-sc">...</span>
           <span id="st-ai">...</span>
         </div>
@@ -220,6 +221,7 @@
         const sys = await api('/api/system-check');
         document.getElementById('st-db').textContent = sys.database ? '✅ DB' : '❌ DB';
         document.getElementById('st-js').textContent = sys.jsearch ? '✅ JSearch' : '⚪ JSearch';
+        document.getElementById('st-ad').textContent = sys.adzuna ? '✅ Adzuna' : '⚪ Adzuna';
         document.getElementById('st-sc').textContent = sys.scraper ? '✅ Scraper' : '⚪ Scraper';
         document.getElementById('st-ai').textContent = sys.groq ? '✅ AI' : '❌ AI';
         
