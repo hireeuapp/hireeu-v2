@@ -103,7 +103,10 @@
     </div>
 
     <div id="view-onboarding" class="hidden">
-      <h1>Let's Set Up</h1>
+      <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px">
+        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
+        <h1 style="margin:0">Profile & CV</h1>
+      </div>
       <p class="subtitle">We need your CV once to find you thousands of matches.</p>
       <section class="card">
         <h2>1. Upload CV</h2>
@@ -178,7 +181,10 @@
     </div>
 
     <div id="view-preferences" class="hidden">
-      <h1>Job Preferences</h1>
+      <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px">
+        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
+        <h1 style="margin:0">Job Settings</h1>
+      </div>
       <p class="subtitle">Fine-tune how we find matches for you.</p>
       <section class="card">
         <div class="row" style="margin-bottom:20px">
@@ -206,8 +212,11 @@
     </div>
     <div id="view-results" class="hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
-        <h1>Your Matches</h1>
-        <button class="btn-secondary" onclick="showView('view-main-menu')">Back to Menu</button>
+        <div style="display:flex; align-items:center; gap:15px">
+           <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
+           <h1 style="margin:0">Your Matches</h1>
+        </div>
+        <button class="btn-secondary" onclick="recommend()">Refresh Results 🔄</button>
       </div>
       <p id="prefs-status" class="status-msg"></p>
       <div id="jobs" class="jobs"></div>
@@ -369,7 +378,19 @@
         for (const job of results || []) {
           const div = document.createElement('div');
           div.className = 'job';
-          div.innerHTML = `<div class="job-title">${job.title}</div><div class="job-meta"><span>${job.company}</span> | <span class="job-fit">${job.match}% Fit</span></div><div style="font-size:14px; margin:10px 0">${job.reason}</div><a href="${job.applyUrl}" target="_blank" style="color:var(--red); font-size:14px">View Job →</a>`;
+          let missingHtml = '';
+          if (job.missingSkills?.length) {
+            missingHtml = `<div style="margin-top:10px; font-size:12px; color:var(--ink2)">
+              <strong>Missing:</strong> ${job.missingSkills.map(s => `<span style="color:#ef4444; margin-right:5px">${s}</span>`).join('')}
+            </div>`;
+          }
+          div.innerHTML = `
+            <div class="job-title">${job.title}</div>
+            <div class="job-meta"><span>${job.company}</span> | <span class="job-fit">${job.match}% Fit</span> | <span style="text-transform:capitalize">${job.seniority || 'Match'}</span></div>
+            <div style="font-size:14px; margin:10px 0">${job.reason}</div>
+            ${missingHtml}
+            <div style="margin-top:15px"><a href="${job.applyUrl}" target="_blank" style="color:var(--accent); font-weight:700; text-decoration:none">View Full Listing →</a></div>
+          `;
           jobsEl.appendChild(div);
         }
         status.textContent = `Found ${data.results?.length} matches.`;
