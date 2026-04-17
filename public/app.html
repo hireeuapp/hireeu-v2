@@ -3,93 +3,252 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HireEU App</title>
+  <title>HireEU — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Syne:wght@400;600;700;800&family=Mulish:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; color: #1e1e1e; }
-    .wrap { max-width: 960px; margin: 0 auto; padding: 20px; }
-    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-    h1, h2 { margin: 0 0 12px; }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    input, textarea, select, button { width: 100%; padding: 10px; box-sizing: border-box; }
-    textarea { min-height: 110px; }
-    button { cursor: pointer; }
-    .muted { color: #666; font-size: 13px; }
+    :root {
+      --cream: #f0ebe1;
+      --cream2: #e8e2d6;
+      --ink: #1a1612;
+      --ink2: #3d3730;
+      --surface: #ffffff;
+      --border: #d4cdc4;
+      --red: #d63f2a;
+      --red2: #e85c47;
+      --gold: #c49a3c;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Syne', sans-serif;
+      --body: 'Mulish', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--body);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    nav {
+      background: var(--ink);
+      height: 60px; padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    .nav-logo {
+      font-family: var(--sans); font-size: 20px; font-weight: 800;
+      color: var(--cream); text-decoration: none;
+    }
+    .nav-logo span { color: var(--red2); }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    .header-group { margin-bottom: 32px; }
+    h1 { font-family: var(--serif); font-size: 42px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--ink2); font-weight: 300; font-size: 18px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+    }
+    h2 { 
+      font-family: var(--sans); font-size: 14px; font-weight: 700; 
+      text-transform: uppercase; letter-spacing: 2px; color: var(--gold);
+      margin-bottom: 24px; border-bottom: 1px solid var(--cream2);
+      padding-bottom: 12px;
+    }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
+
+    .input-group { margin-bottom: 16px; }
+    label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; color: var(--ink2); }
+    
+    input, textarea, select {
+      width: 100%; padding: 12px 16px;
+      border: 1px solid var(--border);
+      background: #faf9f7;
+      font-family: var(--body); font-size: 15px;
+      border-radius: 2px; transition: all 0.2s;
+    }
+    input:focus, textarea:focus { outline: none; border-color: var(--gold); background: #fff; }
+    textarea { min-height: 120px; resize: vertical; }
+
+    button {
+      background: var(--ink); color: var(--cream);
+      font-family: var(--sans); font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      padding: 16px 24px; border: none; cursor: pointer;
+      border-radius: 2px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    button:hover { background: var(--red); transform: translateY(-2px); }
+    button:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+    
+    .btn-secondary { background: transparent; border: 1px solid var(--ink); color: var(--ink); }
+    .btn-secondary:hover { background: var(--ink); color: var(--cream); }
+
+    .status-msg { margin-top: 12px; font-size: 14px; color: var(--green); font-weight: 500; min-height: 20px; }
+    .status-msg.error { color: var(--red); }
+
     .hidden { display: none; }
-    .jobs { display: grid; gap: 12px; }
-    .job { border: 1px solid #ddd; border-radius: 8px; padding: 12px; background: #fafafa; }
+
+    /* Results */
+    .jobs { display: grid; gap: 16px; margin-top: 24px; }
+    .job { 
+      padding: 24px; border: 1px solid var(--border); border-radius: 4px;
+      background: #fdfcfb; transition: all 0.2s;
+    }
+    .job:hover { border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .job-title { font-family: var(--serif); font-size: 20px; margin-bottom: 4px; }
+    .job-meta { font-size: 13px; color: var(--ink2); margin-bottom: 12px; display: flex; gap: 12px; }
+    .job-fit { color: var(--red); font-weight: 700; }
+    .job-reason { font-size: 14px; margin-bottom: 16px; border-left: 3px solid var(--gold); padding-left: 12px; font-style: italic; }
+    .job-skills { font-size: 12px; margin-bottom: 16px; color: var(--ink2); }
+
+    .loader { animation: spin 1s linear infinite; display: none; }
+    button.loading .loader { display: inline-block; }
+    @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>HireEU Dashboard</h1>
-    <p class="muted">Register or log in, upload CV, review profile, set filters, then get matched jobs.</p>
 
+  <nav>
+    <a href="/" class="nav-logo">Hire<span>EU</span></a>
+    <span class="nav-badge">App</span>
+  </nav>
+
+  <div class="container">
+    <div class="header-group">
+      <h1 id="welcome-text">Your Dashboard</h1>
+      <p class="subtitle">Complete your profile to find high-fit jobs in Poland.</p>
+    </div>
+
+    <!-- Auth Section -->
     <section class="card" id="auth-card">
-      <h2>Auth</h2>
+      <h2>Account</h2>
       <div class="row">
         <div>
-          <h3>Register</h3>
-          <input id="reg-name" placeholder="Name (optional)">
-          <input id="reg-email" placeholder="Email">
+          <label>Register</label>
+          <input id="reg-name" placeholder="Full Name" style="margin-bottom:10px">
+          <input id="reg-email" placeholder="Email" style="margin-bottom:10px">
           <input id="reg-password" type="password" placeholder="Password (min 8 chars)">
-          <button onclick="register()">Register</button>
+          <button onclick="register()" id="btn-reg" style="margin-top:16px">Create Account</button>
         </div>
         <div>
-          <h3>Login</h3>
-          <input id="login-email" placeholder="Email">
+          <label>Login</label>
+          <input id="login-email" placeholder="Email" style="margin-bottom:10px">
           <input id="login-password" type="password" placeholder="Password">
-          <button onclick="login()">Login</button>
+          <button onclick="login()" id="btn-login" style="margin-top:16px" class="btn-secondary">Welcome Back</button>
         </div>
       </div>
-      <p id="auth-status" class="muted"></p>
+      <p id="auth-status" class="status-msg"></p>
     </section>
 
+    <!-- Profile Section -->
     <section class="card hidden" id="profile-card">
-      <h2>Profile Setup</h2>
-      <input id="cv-file" type="file" accept=".pdf,.doc,.docx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain">
-      <button onclick="parseCv()">Parse CV with AI</button>
-      <div class="row">
-        <textarea id="summary" placeholder="Summary"></textarea>
-        <textarea id="skills" placeholder="Skills (comma separated)"></textarea>
+      <h2>CV & Profile</h2>
+      <div class="input-group">
+        <label>Upload CV (PDF, DOCX, TXT)</label>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <input id="cv-file" type="file" style="padding:8px">
+          <button onclick="parseCv()" id="btn-parse" style="white-space:nowrap">
+            <span class="loader">⚙️</span> Analyze with AI
+          </button>
+        </div>
       </div>
+      
+      <p id="profile-status" class="status-msg"></p>
+
       <div class="row">
-        <input id="years" type="number" min="0" max="70" placeholder="Years experience">
-        <input id="seniority" placeholder="Seniority (junior/mid/senior/lead)">
+        <div class="input-group">
+          <label>Summary</label>
+          <textarea id="summary"></textarea>
+        </div>
+        <div class="input-group">
+          <label>Skills</label>
+          <textarea id="skills" placeholder="React, Node.js, Python..."></textarea>
+        </div>
       </div>
+
       <div class="row">
-        <input id="location" placeholder="Profile location">
-        <input id="languages" placeholder="Languages (comma separated)">
+        <div>
+          <label>Years of Experience</label>
+          <input id="years" type="number" min="0" max="70">
+        </div>
+        <div>
+          <label>Seniority Level</label>
+          <select id="seniority">
+            <option value="junior">Junior</option>
+            <option value="mid">Mid</option>
+            <option value="senior">Senior</option>
+            <option value="lead">Lead/Manager</option>
+          </select>
+        </div>
       </div>
-      <button onclick="saveProfile()">Save Profile</button>
-      <p id="profile-status" class="muted"></p>
+
+      <div class="row">
+        <div>
+          <label>Current Location</label>
+          <input id="location" placeholder="e.g. Warsaw, Poland">
+        </div>
+        <div>
+          <label>Languages</label>
+          <input id="languages" placeholder="English, Polish, etc.">
+        </div>
+      </div>
+      
+      <button onclick="saveProfile()" id="btn-save-profile">Save Profile Changes</button>
     </section>
 
+    <!-- Preferences Section -->
     <section class="card hidden" id="prefs-card">
-      <h2>Search Preferences</h2>
+      <h2>Search Filters</h2>
       <div class="row">
-        <input id="pref-location" placeholder="Preferred location">
-        <select id="work-type">
-          <option value="any">Any</option>
-          <option value="remote">Remote</option>
-          <option value="hybrid">Hybrid</option>
-          <option value="onsite">On-site</option>
-        </select>
+        <div>
+          <label>Preferred City</label>
+          <input id="pref-location" placeholder="e.g. Krakow">
+        </div>
+        <div>
+          <label>Work Type</label>
+          <select id="work-type">
+            <option value="any">Any</option>
+            <option value="remote">Remote</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="onsite">On-site</option>
+          </select>
+        </div>
       </div>
-      <input id="min-fit" type="number" min="0" max="100" value="45" placeholder="Min fit %">
-      <button onclick="savePreferences()">Save Preferences</button>
-      <button onclick="recommend()">Find Matches</button>
-      <p id="prefs-status" class="muted"></p>
+      <div class="input-group" style="max-width:200px">
+        <label>Minimum Match %</label>
+        <input id="min-fit" type="number" min="0" max="100" value="45">
+      </div>
+      
+      <div style="display:flex; gap:12px; margin-top:20px">
+        <button onclick="savePreferences()" class="btn-secondary">Save Filters</button>
+        <button onclick="recommend()" id="btn-match">
+          <span class="loader">⚙️</span> Find My Matches
+        </button>
+      </div>
+      <p id="prefs-status" class="status-msg"></p>
     </section>
 
+    <!-- Results Section -->
     <section class="card hidden" id="results-card">
-      <h2>Recommendations</h2>
-      <div id="jobs" class="jobs"></div>
+      <h2>Recommended Jobs</h2>
+      <div id="jobs" class="jobs">
+        <p class="subtitle">Your top AI-scored matches will appear here.</p>
+      </div>
     </section>
   </div>
 
   <script>
-    let cachedFileBase64 = '';
-    let cachedFileType = '';
     let rawCvText = null;
 
     async function api(path, method = 'GET', body) {
@@ -103,30 +262,53 @@
       return data;
     }
 
+    function setBtnLoading(id, isLoading) {
+      const btn = document.getElementById(id);
+      if (isLoading) {
+        btn.classList.add('loading');
+        btn.disabled = true;
+      } else {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+
     async function register() {
+      const status = document.getElementById('auth-status');
+      status.className = 'status-msg';
       try {
+        setBtnLoading('btn-reg', true);
         const data = await api('/api/auth-register', 'POST', {
           name: document.getElementById('reg-name').value,
           email: document.getElementById('reg-email').value,
           password: document.getElementById('reg-password').value
         });
-        document.getElementById('auth-status').textContent = `Registered as ${data.user.email}`;
+        status.textContent = `Welcome, ${data.user.email}!`;
         await loadAppState();
       } catch (e) {
-        document.getElementById('auth-status').textContent = e.message;
+        status.textContent = e.message;
+        status.classList.add('error');
+      } finally {
+        setBtnLoading('btn-reg', false);
       }
     }
 
     async function login() {
+      const status = document.getElementById('auth-status');
+      status.className = 'status-msg';
       try {
+        setBtnLoading('btn-login', true);
         const data = await api('/api/auth-login', 'POST', {
           email: document.getElementById('login-email').value,
           password: document.getElementById('login-password').value
         });
-        document.getElementById('auth-status').textContent = `Logged in as ${data.user.email}`;
+        status.textContent = `Welcome back!`;
         await loadAppState();
       } catch (e) {
-        document.getElementById('auth-status').textContent = e.message;
+        status.textContent = e.message;
+        status.classList.add('error');
+      } finally {
+        setBtnLoading('btn-login', false);
       }
     }
 
@@ -134,129 +316,151 @@
       try {
         const session = await api('/api/auth-session');
         if (!session.user) return;
+        
+        document.getElementById('auth-card').classList.add('hidden');
         document.getElementById('profile-card').classList.remove('hidden');
         document.getElementById('prefs-card').classList.remove('hidden');
         document.getElementById('results-card').classList.remove('hidden');
+        document.getElementById('welcome-text').textContent = `Hello, ${session.user.name || 'User'}`;
+        
         const profile = await api('/api/profile-get');
         fillProfile(profile.profile);
         const prefs = await api('/api/preferences-get');
         fillPrefs(prefs.preferences);
-      } catch {
-        // user not signed in
+      } catch (err) {
+        console.log('Session check:', err.message);
       }
     }
 
     function fillProfile(profile) {
+      if (!profile) return;
       document.getElementById('summary').value = profile.summary || '';
       document.getElementById('skills').value = (profile.skills || []).join(', ');
       document.getElementById('years').value = profile.yearsExperience || 0;
-      document.getElementById('seniority').value = profile.seniority || '';
+      document.getElementById('seniority').value = profile.seniority || 'mid';
       document.getElementById('location').value = profile.location || '';
       document.getElementById('languages').value = (profile.languages || []).join(', ');
       rawCvText = profile.rawCvText || null;
     }
 
     function fillPrefs(prefs) {
+      if (!prefs) return;
       document.getElementById('pref-location').value = prefs.preferredLocation || '';
       document.getElementById('work-type').value = prefs.workType || 'any';
       document.getElementById('min-fit').value = prefs.minFitPercent ?? 45;
     }
 
-    function splitCsv(value) {
-      return String(value || '').split(',').map((s) => s.trim()).filter(Boolean);
-    }
-
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
     async function parseCv() {
+      const status = document.getElementById('profile-status');
       const file = document.getElementById('cv-file').files[0];
       if (!file) {
-        document.getElementById('profile-status').textContent = 'Please choose a CV file.';
+        status.textContent = 'Please select a file first.';
+        status.classList.add('error');
         return;
       }
+      status.className = 'status-msg';
+      status.textContent = 'AI is reading your CV...';
+      
       try {
-        cachedFileBase64 = await fileToBase64(file);
-        cachedFileType = file.type || 'application/pdf';
+        setBtnLoading('btn-parse', true);
+        const base64 = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(r.result.split(',')[1]);
+          r.onerror = rej;
+          r.readAsDataURL(file);
+        });
+
         const parsed = await api('/api/parse-cv', 'POST', {
-          role: 'candidate profile extraction',
-          fileBase64: cachedFileBase64,
-          fileType: cachedFileType
+          fileBase64: base64,
+          fileType: file.type || 'application/pdf'
         });
         fillProfile(parsed);
-        document.getElementById('profile-status').textContent = 'CV parsed. Review and save your profile.';
+        status.textContent = 'Extraction complete. Please review your details below.';
       } catch (e) {
-        document.getElementById('profile-status').textContent = e.message;
+        status.textContent = 'Error: ' + e.message;
+        status.classList.add('error');
+      } finally {
+        setBtnLoading('btn-parse', false);
       }
     }
 
     async function saveProfile() {
+      const status = document.getElementById('profile-status');
+      status.className = 'status-msg';
       try {
+        setBtnLoading('btn-save-profile', true);
         await api('/api/profile-save', 'POST', {
           summary: document.getElementById('summary').value,
-          skills: splitCsv(document.getElementById('skills').value),
-          yearsExperience: Number(document.getElementById('years').value || 0),
+          skills: document.getElementById('skills').value.split(',').map(s=>s.trim()).filter(Boolean),
+          yearsExperience: Number(document.getElementById('years').value),
           seniority: document.getElementById('seniority').value,
           location: document.getElementById('location').value,
-          languages: splitCsv(document.getElementById('languages').value),
+          languages: document.getElementById('languages').value.split(',').map(s=>s.trim()).filter(Boolean),
           rawCvText
         });
-        document.getElementById('profile-status').textContent = 'Profile saved.';
+        status.textContent = 'Profile successfully updated.';
       } catch (e) {
-        document.getElementById('profile-status').textContent = e.message;
+        status.textContent = e.message;
+        status.classList.add('error');
+      } finally {
+        setBtnLoading('btn-save-profile', false);
       }
     }
 
     async function savePreferences() {
+      const status = document.getElementById('prefs-status');
+      status.className = 'status-msg';
       try {
         await api('/api/preferences-save', 'POST', {
           preferredLocation: document.getElementById('pref-location').value,
           workType: document.getElementById('work-type').value,
-          minFitPercent: Number(document.getElementById('min-fit').value || 45)
+          minFitPercent: Number(document.getElementById('min-fit').value)
         });
-        document.getElementById('prefs-status').textContent = 'Preferences saved.';
-      } catch (e) {
-        document.getElementById('prefs-status').textContent = e.message;
-      }
+        status.textContent = 'Search filters saved.';
+      } catch (e) { status.textContent = e.message; status.classList.add('error'); }
     }
 
     async function recommend() {
+      const status = document.getElementById('prefs-status');
+      status.className = 'status-msg';
+      status.textContent = 'Finding the best matches in Poland...';
       try {
+        setBtnLoading('btn-match', true);
         const data = await api('/api/jobs-recommend', 'POST', {});
         const jobsEl = document.getElementById('jobs');
         jobsEl.innerHTML = '';
+        
+        if (!data.results?.length) {
+          jobsEl.innerHTML = '<p class="subtitle">No matches found. Try lowering your "Min Fit %" or broadening your skills.</p>';
+        }
+
         for (const job of data.results || []) {
           const div = document.createElement('div');
           div.className = 'job';
-          const score = job.match ?? job.score ?? 0;
           div.innerHTML = `
-            <strong>${escapeHtml(job.title || '')}</strong> - ${escapeHtml(job.company || '')}<br>
-            ${escapeHtml(job.location || '')} | Fit: ${score}%<br>
-            <em>${escapeHtml(job.reason || '')}</em><br>
-            ${(job.missingSkills || []).length ? `Missing: ${escapeHtml((job.missingSkills || []).join(', '))}<br>` : ''}
-            ${job.applyUrl ? `<a href="${escapeHtml(job.applyUrl)}" target="_blank" rel="noopener">Apply</a>` : ''}
+            <div class="job-title">${escapeHtml(job.title)}</div>
+            <div class="job-meta">
+              <span>🏢 ${escapeHtml(job.company)}</span>
+              <span>📍 ${escapeHtml(job.location)}</span>
+              <span class="job-fit">🎯 ${job.match ?? 0}% Fit</span>
+            </div>
+            <div class="job-reason">${escapeHtml(job.reason)}</div>
+            <div class="job-skills"><strong>Key Missing:</strong> ${escapeHtml((job.missingSkills || []).join(', ') || 'None!')}</div>
+            <a href="${escapeHtml(job.applyUrl)}" target="_blank" class="nav-logo" style="color:var(--red); font-size:14px; text-decoration:underline; font-family:var(--sans)">View & Apply →</a>
           `;
           jobsEl.appendChild(div);
         }
-        document.getElementById('prefs-status').textContent = `Found ${data.results?.length || 0} jobs.`;
+        status.textContent = `Analysis complete. Found ${data.results?.length} high-fit matches.`;
       } catch (e) {
-        document.getElementById('prefs-status').textContent = e.message;
+        status.textContent = e.message;
+        status.classList.add('error');
+      } finally {
+        setBtnLoading('btn-match', false);
       }
     }
 
     function escapeHtml(v) {
-      return String(v || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+      return String(v || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
     }
 
     loadAppState();
