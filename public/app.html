@@ -139,7 +139,7 @@
             <h3>Find New Matches</h3>
             <p>Scan JSearch, Adzuna & JustJoinIT for jobs in Poland.</p>
           </div>
-          <button style="padding:12px 20px">Go →</button>
+          <button id="btn-match" style="padding:12px 20px"><div class="loader"></div>Go →</button>
         </div>
         <div class="menu-item" onclick="showView('view-onboarding')">
           <div class="menu-info">
@@ -176,6 +176,13 @@
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Request failed');
       return data;
+    }
+
+    function setBtnLoading(id, isLoading) {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.disabled = isLoading;
+      btn.classList.toggle('loading', isLoading);
     }
 
     function showView(id) {
