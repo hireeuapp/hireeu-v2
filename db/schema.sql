@@ -1,7 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE IF NOT EXISTS app_users (
-  id UUID PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
   name TEXT,
@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS candidate_profiles (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL UNIQUE REFERENCES app_users(id) ON DELETE CASCADE,
   summary TEXT NOT NULL DEFAULT '',
+  primary_role TEXT NOT NULL DEFAULT '',
   skills JSONB NOT NULL DEFAULT '[]'::jsonb,
   years_experience INTEGER NOT NULL DEFAULT 0,
   seniority TEXT NOT NULL DEFAULT 'unknown',
@@ -27,6 +28,7 @@ CREATE TABLE IF NOT EXISTS job_search_preferences (
   preferred_location TEXT,
   work_type TEXT NOT NULL DEFAULT 'any',
   min_fit_percent INTEGER NOT NULL DEFAULT 45,
+  english_only BOOLEAN NOT NULL DEFAULT false,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT valid_work_type CHECK (work_type IN ('remote', 'hybrid', 'onsite', 'any')),
   CONSTRAINT valid_fit_range CHECK (min_fit_percent BETWEEN 0 AND 100)
