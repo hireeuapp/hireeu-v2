@@ -46,10 +46,18 @@ export default async function handler(req, res) {
       let { results: jobs, diagnostics } = await searchJobsByRole(roleQuery);
       
       // BROADENING FALLBACK
-      if (jobs.length < 5) {
+      if (jobs.length < 10) {
         console.log('Low results, broadening search...');
-        const broaderQuery = baseRole; 
-        const broaderRes = await searchJobsByRole(broaderQuery);
+        // Try role synonyms too
+        const baseRole = profile.primary_role || profile.skills[0] || 'Software Engineer';
+        const broaderRes = await searchJobsByRole(baseRole);
+        
+        // Final "Global" fallback if still empty
+        if ((jobs.length + broaderRes.results.length) < 3) {
+           const techFallback = await searchJobsByRole("IT Specialist");
+           broaderRes.results.push(...techFallback.results);
+        }
+
         // Merge without duplicates
         const seenIds = new Set(jobs.map(j => j.id));
         for (const j of broaderRes.results) {
