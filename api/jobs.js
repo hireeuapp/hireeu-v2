@@ -39,18 +39,24 @@ export default async function handler(req, res) {
       ]);
       if (!profileRes.rowCount) return res.status(400).json({ error: 'Profile not found' });
       const profile = profileRes.rows[0], prefs = prefRes.rows[0] || { preferred_location: '', work_type: 'any', min_fit_percent: 45 };
-      let roleQuery = `${profile.seniority} ${profile.skills.slice(0, 3).join(' ')}`.trim();
-      let jobs = await searchJobsByRole(roleQuery || 'software engineer');
+      
+      // Simplify query: Just Seniority + Main Skill (e.g. "Senior React Developer")
+      // JSearch is much more successful with shorter queries.
+      let roleQuery = `${profile.seniority} ${profile.skills[0] || 'Developer'}`.trim();
+      let { results: jobs, diagnostics } = await searchJobsByRole(roleQuery);
       
       // Fallback if no jobs found
-      if (jobs.length === 0 && profile.skills.length > 0) {
+      if (jobs.length === 0 && profile.skills.length > 1) {
         console.log('No jobs found for precise role, trying broader search...');
-        roleQuery = `${profile.seniority} ${profile.skills[0]} developer`.trim();
-        jobs = await searchJobsByRole(roleQuery);
+        roleQuery = `${profile.skills[0] || 'Software'} Developer`.trim();
+        const fallbackRes = await searchJobsByRole(roleQuery);
+        jobs = fallbackRes.results;
+        // Merge diagnostics if needed, or just keep latest
+        if (fallbackRes.diagnostics) diagnostics = fallbackRes.diagnostics;
       }
       
       const scored = await matchAndScoreJobs({ summary: profile.summary, skills: profile.skills, yearsExperience: profile.years_experience }, jobs, prefs.min_fit_percent);
-      return res.status(200).json({ results: scored.slice(0, 20) });
+      return res.status(200).json({ results: scored.slice(0, 20), diagnostics });
     } catch (err) { return res.status(500).json({ error: err.message }); }
   }
 
