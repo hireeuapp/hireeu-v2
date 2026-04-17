@@ -1,13 +1,24 @@
 {
   "version": 2,
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/public/$1"
-    }
+    { "source": "/api/auth-login",    "destination": "/api/auth.js?action=login" },
+    { "source": "/api/auth-register", "destination": "/api/auth.js?action=register" },
+    { "source": "/api/auth-logout",   "destination": "/api/auth.js?action=logout" },
+    { "source": "/api/auth-session",  "destination": "/api/auth.js?action=session" },
+    
+    { "source": "/api/profile-get",      "destination": "/api/user-data.js?action=profile-get" },
+    { "source": "/api/profile-save",     "destination": "/api/user-data.js?action=profile-save" },
+    { "source": "/api/preferences-get",  "destination": "/api/user-data.js?action=preferences-get" },
+    { "source": "/api/preferences-save", "destination": "/api/user-data.js?action=preferences-save" },
+    
+    { "source": "/api/search-jobs",    "destination": "/api/jobs.js?action=search" },
+    { "source": "/api/jobs-recommend", "destination": "/api/jobs.js?action=recommend" },
+    { "source": "/api/score-jobs",     "destination": "/api/jobs.js?action=score" },
+    
+    { "source": "/api/parse-cv",        "destination": "/api/cv.js?action=parse" },
+    { "source": "/api/match-and-score", "destination": "/api/cv.js?action=match" },
+    
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)",     "destination": "/public/$1" }
   ]
 }
