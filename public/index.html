@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HireEU — AI Job Matcher for Foreigners in Poland & EU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;500;600;700;800&family=Mulish:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f0ebe1;
+    --cream2: #e8e2d6;
+    --ink: #1a1612;
+    --ink2: #3d3730;
+    --ink3: #7a6f64;
+    --surface: #ffffff;
+    --border: #d4cdc4;
+    --border2: #c4bdb3;
+    --red: #d63f2a;
+    --red2: #e85c47;
+    --red-light: #fdf1ef;
+    --gold: #c49a3c;
+    --green: #1e7d46;
+    --green-light: #edf7f1;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Syne', sans-serif;
+    --body: 'Mulish', sans-serif;
+  }
+ 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+ 
+  body {
+    font-family: var(--body);
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+ 
+  /* ── NAV ── */
+  nav {
+    background: var(--ink);
+    height: 60px; padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: var(--sans); font-size: 20px; font-weight: 800;
+    color: var(--cream); text-decoration: none; letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--red2); }
+  .nav-badge {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink); background: var(--gold);
+    padding: 4px 12px; border-radius: 2px;
+  }
+ 
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    padding: 64px 0 56px;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 0 32px; }
+ 
+  .hero-eyebrow {
+    font-family: var(--sans); font-size: 11px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+ 
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(34px, 5vw, 58px);
+    font-weight: 900; line-height: 1.08; letter-spacing: -1px;
+    color: var(--cream); margin-bottom: 18px;
+  }
+  .hero h1 em { font-style: italic; color: var(--red2); }
+ 
+  .hero-desc {
+    font-size: 16px; color: rgba(240,235,225,0.6);
+    max-width: 540px; line-height: 1.7; font-weight: 300;
+  }
+ 
+  /* ── TOOL CARD ── */
+  .tool-section {
+    padding: 48px 0 80px;
+    background: var(--cream2);
+  }
+ 
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(26,22,18,0.08);
+  }
+ 
+  .tool-step {
+    padding: 32px 36px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tool-step:last-child { border-bottom: none; }
+ 
+  .step-label {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase; color: var(--red);
+    margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+  }
+  .step-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+ 
+  label {
+    display: block; font-family: var(--sans); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink2);
+    margin-bottom: 8px;
+  }
+  label small {
+    font-weight: 400; text-transform: none; letter-spacing: 0;
+    color: var(--ink3); margin-left: 6px; font-size: 11px;
+  }
+ 
+  textarea, input[type="text"] {
+    width: 100%; background: var(--cream); border: 1px solid var(--border2);
+    border-radius: 3px; padding: 12px 16px; color: var(--ink);
+    font-family: var(--body); font-size: 14px; line-height: 1.6;
+    resize: vertical; transition: border-color 0.2s, background 0.2s; outline: none;
+  }
+  textarea { min-height: 200px; }
+  textarea:focus, input:focus { border-color: var(--red); background: white; }
+  textarea::placeholder, input::placeholder { color: var(--ink3); }
+
+  /* ── FILE UPLOAD ── */
+  .upload-zone {
+    width: 100%; background: var(--cream); border: 2px dashed var(--border2);
+    border-radius: 3px; padding: 32px 20px; text-align: center;
+    cursor: pointer; transition: all 0.2s; position: relative;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--red); background: var(--red-light);
+  }
+  .upload-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 28px; margin-bottom: 8px; }
+  .upload-title {
+    font-family: var(--sans); font-size: 13px; font-weight: 700;
+    color: var(--ink2); letter-spacing: 0.3px; margin-bottom: 4px;
+  }
+  .upload-hint {
+    font-family: var(--sans); font-size: 11px; color: var(--ink3); letter-spacing: 0.3px;
+  }
+  .upload-success {
+    display: none; align-items: center; gap: 10px;
+    background: var(--green-light); border: 1px solid rgba(30,125,70,0.2);
+    border-radius: 3px; padding: 12px 16px; margin-top: 10px;
+  }
+  .upload-success.active { display: flex; }
+  .upload-success-name {
+    font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--green); flex: 1;
+  }
+  .upload-remove {
+    background: none; border: none; color: var(--ink3); font-size: 16px;
+    cursor: pointer; padding: 0 4px; line-height: 1; transition: color 0.15s;
+  }
+  .upload-remove:hover { color: var(--red); }
+ 
+  .field { margin-bottom: 20px; }
+  .char-hint { font-family: var(--sans); font-size: 11px; color: var(--ink3); margin-top: 5px; }
+ 
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+ 
+  .btn-find {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--ink); color: var(--cream);
+    font-family: var(--sans); font-size: 13px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 14px 32px; border-radius: 3px; border: none; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-find:hover { background: var(--red); }
+  .btn-find:disabled { opacity: 0.4; cursor: not-allowed; background: var(--ink); }
+ 
+  .loading {
+    display: none; align-items: center; gap: 12px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink3);
+    letter-spacing: 0.5px; margin-top: 16px;
+  }
+  .loading.active { display: flex; }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border); border-top-color: var(--red);
+    border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+ 
+  .error-box {
+    display: none; background: var(--red-light); border: 1px solid rgba(214,63,42,0.25);
+    border-radius: 3px; padding: 12px 16px; font-family: var(--sans);
+    font-size: 12px; color: var(--red); margin-top: 12px;
+  }
+  .error-box.active { display: block; }
+ 
+  /* ── RESULTS ── */
+  #results-section { display: none; }
+  #results-section.active { display: block; }
+ 
+  .results-meta {
+    font-family: var(--sans); font-size: 11px; color: var(--ink3);
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .results-meta strong { color: var(--ink); }
+ 
+  .job-list { display: flex; flex-direction: column; gap: 0; }
+ 
+  .job-card {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+    animation: fadeUp 0.3s ease both;
+    transition: background 0.15s;
+  }
+  .job-card:first-child { border-top: 1px solid var(--border); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+ 
+  .job-top { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; margin-bottom: 8px; }
+ 
+  .job-title {
+    font-family: var(--sans); font-size: 16px; font-weight: 700;
+    color: var(--ink); letter-spacing: -0.2px; margin-bottom: 3px;
+  }
+  .job-meta {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    font-family: var(--sans); font-size: 11px; color: var(--ink3);
+    letter-spacing: 0.3px; text-transform: uppercase;
+  }
+  .job-source {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 2px;
+    background: var(--cream2); color: var(--ink3);
+  }
+  .job-source.poland { background: rgba(214,63,42,0.08); color: var(--red); }
+ 
+  .score-block { text-align: right; flex-shrink: 0; }
+  .score-num {
+    font-family: var(--serif); font-size: 30px; font-weight: 900;
+    line-height: 1; letter-spacing: -1px;
+  }
+  .score-high { color: var(--green); }
+  .score-mid  { color: var(--gold); }
+  .score-low  { color: var(--ink3); }
+  .score-lbl {
+    font-family: var(--sans); font-size: 9px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--ink3); margin-top: 1px;
+  }
+  .score-bar { width: 52px; height: 2px; background: var(--border); margin-top: 6px; overflow: hidden; margin-left: auto; }
+  .score-fill { height: 100%; transition: width 0.4s ease; }
+  .score-fill.high { background: var(--green); }
+  .score-fill.mid  { background: var(--gold); }
+  .score-fill.low  { background: var(--border2); }
+ 
+  .job-reason {
+    font-size: 13px; color: var(--ink3); font-style: italic;
+    line-height: 1.6; margin-bottom: 10px;
+    font-family: var(--body); font-weight: 300;
+  }
+ 
+  .missing-skills {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+  }
+  .skill-tag {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 2px;
+    background: rgba(26,22,18,0.06); color: var(--ink3);
+    border: 1px solid var(--border);
+  }
+  .missing-label {
+    font-family: var(--sans); font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--ink3);
+    margin-bottom: 6px;
+  }
+ 
+  .job-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+ 
+  .btn-ghost {
+    background: transparent; border: 1px solid var(--border2); color: var(--ink2);
+    font-family: var(--sans); font-size: 11px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    padding: 7px 16px; border-radius: 2px; cursor: pointer;
+    transition: all 0.15s; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+  .btn-apply {
+    background: var(--ink); border-color: var(--ink); color: var(--cream);
+  }
+  .btn-apply:hover { background: var(--red); border-color: var(--red); color: white; }
+ 
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(26,22,18,0.75); z-index: 200;
+    padding: 24px; align-items: center; justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: white; border: 1px solid var(--border2); border-radius: 4px;
+    width: 100%; max-width: 640px; max-height: 85vh;
+    display: flex; flex-direction: column;
+    animation: mIn 0.2s ease;
+    box-shadow: 0 24px 64px rgba(26,22,18,0.25);
+  }
+  @keyframes mIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .modal-hd {
+    padding: 18px 24px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+  }
+  .modal-title {
+    font-family: var(--sans); font-size: 13px; font-weight: 800;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--ink);
+  }
+  .modal-close {
+    background: none; border: none; color: var(--ink3); font-size: 22px;
+    cursor: pointer; padding: 2px 6px; line-height: 1; transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--ink); }
+  .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+  .modal-for {
+    font-family: var(--sans); font-size: 11px; color: var(--ink3);
+    margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .cover-text {
+    font-size: 14px; line-height: 1.85; color: var(--ink);
+    white-space: pre-wrap; font-family: var(--body); font-weight: 300;
+  }
+  .modal-loading {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--sans); font-size: 12px; color: var(--ink3); padding: 16px 0;
+  }
+  .modal-ft {
+    padding: 14px 24px; border-top: 1px solid var(--border);
+    display: flex; gap: 10px; align-items: center; flex-shrink: 0;
+  }
+  .btn-copy {
+    background: var(--ink); border: none; color: var(--cream);
+    font-family: var(--sans); font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 10px 22px; border-radius: 3px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-copy:hover { background: var(--red); }
+  .copy-ok { font-family: var(--sans); font-size: 11px; color: var(--green); display: none; font-weight: 700; }
+ 
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); padding: 24px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--sans); font-size: 12px;
+    color: rgba(240,235,225,0.35); letter-spacing: 0.3px;
+  }
+  footer a { color: rgba(240,235,225,0.35); text-decoration: underline; transition: color 0.15s; }
+  footer a:hover { color: var(--cream); }
+  footer strong { color: rgba(240,235,225,0.6); }
+ 
+  @media(max-width:700px){
+    nav { padding: 0 20px; }
+    .container { padding: 0 20px; }
+    .hero { padding: 44px 0 40px; }
+    .tool-step { padding: 24px 20px; }
+    .row { grid-template-columns: 1fr; }
+    .job-top { grid-template-columns: 1fr; }
+    .score-block { display: flex; align-items: center; gap: 14px; }
+    .score-bar { margin-left: 0; }
+    footer { flex-direction: column; gap: 10px; text-align: center; padding: 20px; }
+  }
+</style>
+</head>
+<body>
+ 
+<nav>
+  <a href="#" class="nav-logo">Hire<span>EU</span></a>
+  <span class="nav-badge">Beta</span>
+</nav>
+ 
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">AI Job Matcher for Foreigners</div>
+    <h1>Find jobs in Poland & EU<br>you can <em>actually get.</em></h1>
+    <p class="hero-desc">Upload your CV, enter a role — AI scores each job like a real recruiter. No fluff, no guessing.</p>
+    <p class="hero-desc" style="margin-top:14px"><a href="/app.html" style="color:#f0ebe1;text-decoration:underline">Open the new login + profile dashboard</a></p>
+  </div>
+</section>
+ 
+<section class="tool-section">
+  <div class="container">
+    <div class="tool-card">
+ 
+      <!-- Step 01 -->
+      <div class="tool-step">
+        <div class="step-label">Step 01 — Your CV &amp; Target Role</div>
+        <div class="field">
+          <label>Your CV <small>PDF or DOCX — max 5MB</small></label>
+          <div class="upload-zone" id="upload-zone">
+            <input type="file" id="cv-file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">Drop your CV here or click to upload</div>
+            <div class="upload-hint">PDF or DOCX · Max 5MB</div>
+          </div>
+          <div class="upload-success" id="upload-success">
+            <span>✅</span>
+            <span class="upload-success-name" id="upload-filename"></span>
+            <button class="upload-remove" onclick="removeFile()" title="Remove file">×</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field" style="margin-bottom:0">
+            <label>Target Role <small>job title you're looking for</small></label>
+            <input type="text" id="role-input" placeholder="e.g. QA Engineer, Frontend Developer">
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <label>Country <small>optional</small></label>
+            <select id="country-input" style="width:100%;background:var(--cream);border:1px solid var(--border2);border-radius:3px;padding:12px 16px;color:var(--ink);font-family:var(--body);font-size:14px;outline:none;appearance:none;cursor:pointer">
+              <option value="">All of Europe (Poland first)</option>
+              <option value="Poland">🇵🇱 Poland only</option>
+              <option value="Germany">🇩🇪 Germany</option>
+              <option value="France">🇫🇷 France</option>
+              <option value="Italy">🇮🇹 Italy</option>
+              <option value="Spain">🇪🇸 Spain</option>
+              <option value="Austria">🇦🇹 Austria</option>
+              <option value="Netherlands">🇳🇱 Netherlands</option>
+              <option value="United Kingdom">🇬🇧 United Kingdom</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:20px">
+          <button class="btn-find" id="find-btn" onclick="findJobs()">Find Matching Jobs →</button>
+        </div>
+        <div class="loading" id="main-loading">
+          <div class="spinner"></div>
+          <span id="loading-msg">Fetching jobs...</span>
+        </div>
+        <div class="error-box" id="main-error"></div>
+      </div>
+
+      <!-- Step 02: Results -->
+      <div id="results-section">
+        <div class="tool-step" style="padding-bottom:8px">
+          <div class="step-label">Step 02 — Your Matches</div>
+          <div class="results-meta" id="results-meta"></div>
+          <div class="job-list" id="job-list"></div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</section>
+ 
+<footer>
+  <div>© 2026 <strong>HireEU</strong> — Built for foreigners job hunting in Poland &amp; the EU.</div>
+  <div><a href="/privacy.html">Privacy Policy</a></div>
+</footer>
+ 
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">Cover Letter</div>
+      <button class="modal-close" onclick="closeModalDirect()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <div class="modal-loading"><div class="spinner"></div><span>Writing your cover letter...</span></div>
+    </div>
+    <div class="modal-ft" id="modal-ft" style="display:none">
+      <button class="btn-copy" onclick="copyCL()">Copy to Clipboard</button>
+      <span class="copy-ok" id="copy-ok">Copied ✓</span>
+    </div>
+  </div>
+</div>
+ 
+<script>
+  let cvFileBase64 = '';
+  let cvFileType = '';
+  let cvFileName = '';
+  let currentCL = '';
+  let jobsStore = [];
+
+  // File upload handling
+  const cvFile = document.getElementById('cv-file');
+  const uploadZone = document.getElementById('upload-zone');
+
+  cvFile.addEventListener('change', function() {
+    if (this.files && this.files[0]) handleFile(this.files[0]);
+  });
+
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  });
+
+  function handleFile(file) {
+    if (file.size > 5 * 1024 * 1024) { showErr('File too large. Max 5MB.'); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      cvFileBase64 = e.target.result.split(',')[1];
+      cvFileType = file.type || 'application/pdf';
+      cvFileName = file.name;
+      document.getElementById('upload-filename').textContent = file.name;
+      document.getElementById('upload-success').classList.add('active');
+      clearErr();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeFile() {
+    cvFileBase64 = ''; cvFileType = ''; cvFileName = '';
+    document.getElementById('cv-file').value = '';
+    document.getElementById('upload-success').classList.remove('active');
+  }
+ 
+  const loadingMsgs = [
+    'Parsing your CV...', 'Searching JSearch & Adzuna...', 'Filtering English jobs...',
+    'AI scoring each role...', 'Ranking by fit...', 'Almost done...'
+  ];
+  let msgInt;
+  function startMsgs() {
+    let i = 0;
+    document.getElementById('loading-msg').textContent = loadingMsgs[0];
+    msgInt = setInterval(() => { i = (i+1) % loadingMsgs.length; document.getElementById('loading-msg').textContent = loadingMsgs[i]; }, 3000);
+  }
+  function stopMsgs() { clearInterval(msgInt); }
+
+  async function findJobs() {
+    const role = document.getElementById('role-input').value.trim();
+    const country = document.getElementById('country-input').value;
+
+    if (!cvFileBase64) { showErr('Please upload your CV first (PDF or DOCX).'); return; }
+    if (!role) { showErr('Please enter a target role.'); return; }
+
+    clearErr(); setLoading(true);
+    document.getElementById('results-section').classList.remove('active');
+
+    try {
+      // Step 1: Parse CV to extract structured skills profile
+      const pRes = await fetch('/api/parse-cv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role, fileBase64: cvFileBase64, fileType: cvFileType })
+      });
+      if (!pRes.ok) throw new Error(await pRes.text());
+      const cvProfile = await pRes.json();
+      // cvProfile: { summary, skills, yearsExperience, seniority, location, languages }
+
+      // Step 2: Search jobs — pass skills so search pre-filters irrelevant listings
+      const countries = country ? [country] : [];
+      const sRes = await fetch('/api/search-jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role, cvSkills: cvProfile.skills })
+        });
+        if (!sRes.ok) throw new Error(await sRes.text());
+        const { jobs } = await sRes.json();
+        if (!jobs?.length) throw new Error('No matching jobs found. Try a broader role like "QA engineer" or "software tester".');
+
+      // Step 3: AI match & score using the parsed CV profile
+      const mRes = await fetch('/api/match-and-score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          summary: cvProfile.summary,
+          skills: cvProfile.skills,
+          yearsExperience: cvProfile.yearsExperience,
+          jobs
+        })
+      });
+      if (!mRes.ok) throw new Error(await mRes.text());
+      const { scored } = await mRes.json();
+
+      if (!scored?.length) throw new Error('No jobs matched your profile. Try a different role title or broaden your search.');
+
+      renderResults(scored, role);
+    } catch(e) {
+      showErr(e.message || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+ 
+  function renderResults(results, role) {
+    jobsStore = results;
+    const list = document.getElementById('job-list');
+    list.innerHTML = '';
+
+    if (!results.length) {
+      document.getElementById('results-meta').innerHTML = `No results found for "${role}".`;
+      document.getElementById('results-section').classList.add('active');
+      return;
+    }
+
+    document.getElementById('results-meta').innerHTML =
+      `<strong>${results.length} jobs</strong> matched for "${role}" — best fit first`;
+
+    results.forEach((job, i) => {
+      const score = job.match ?? job.score ?? 0;
+      const scoreClass = score >= 65 ? 'high' : score >= 45 ? 'mid' : 'low';
+      const scoreColorClass = score >= 65 ? 'score-high' : score >= 45 ? 'score-mid' : 'score-low';
+
+      const missingArr = job.missingSkills || job.missing_skills || [];
+      const missingHtml = missingArr.length
+        ? `<div class="missing-label">Skills to highlight or learn</div>
+           <div class="missing-skills">${missingArr.map(s => `<span class="skill-tag">${esc(s)}</span>`).join('')}</div>`
+        : '';
+ 
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      card.style.animationDelay = `${i * 60}ms`;
+      card.innerHTML = `
+        <div class="job-top">
+          <div>
+            <div class="job-title">${esc(job.title)}</div>
+            <div class="job-meta">
+              <span>${esc(job.company)}</span>
+              <span>${esc(job.location)}</span>
+              <span class="job-source ${job.source === 'Poland' || job.source === 'JustJoinIT' ? 'poland' : ''}">${esc(job.source || 'EU')}</span>
+            </div>
+          </div>
+          <div class="score-block">
+            <div class="score-num ${scoreColorClass}">${score}</div>
+            <div class="score-lbl">/ 100</div>
+            <div class="score-bar"><div class="score-fill ${scoreClass}" style="width:${score}%"></div></div>
+          </div>
+        </div>
+        <div class="job-reason">${esc(job.reason)}</div>
+        ${missingHtml}
+        <div class="job-actions">
+          <button class="btn-ghost" onclick="openCL(${i})">✉️ Cover Letter</button>
+          ${job.applyUrl ? `<a href="${esc(job.applyUrl)}" target="_blank" rel="noopener" class="btn-ghost btn-apply">Apply →</a>` : ''}
+        </div>
+      `;
+      list.appendChild(card);
+    });
+ 
+    document.getElementById('results-section').classList.add('active');
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+ 
+  async function openCL(index) {
+    const job = jobsStore[index];
+    if (!job) return;
+    openModal(); currentCL = ''; document.getElementById('modal-ft').style.display = 'none';
+    try {
+      const r = await fetch('/api/generate-cover-letter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cv: '', fileBase64: cvFileBase64, fileType: cvFileType, job })
+      });
+      if (!r.ok) throw new Error(await r.text());
+      const { letter } = await r.json();
+      currentCL = letter;
+      document.getElementById('modal-body').innerHTML = `
+        <div class="modal-for">${esc(job.title)} at ${esc(job.company)}</div>
+        <div class="cover-text">${esc(letter)}</div>`;
+      document.getElementById('modal-ft').style.display = 'flex';
+    } catch(e) {
+      document.getElementById('modal-body').innerHTML =
+        `<div style="color:var(--red);font-family:var(--sans);font-size:12px">Error: ${esc(e.message)}</div>`;
+    }
+  }
+ 
+  function openModal() {
+    document.getElementById('modal-body').innerHTML =
+      `<div class="modal-loading"><div class="spinner"></div><span>Writing your cover letter...</span></div>`;
+    document.getElementById('modal-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalDirect(); }
+  function closeModalDirect() { document.getElementById('modal-overlay').classList.remove('active'); document.body.style.overflow = ''; }
+ 
+  function copyCL() {
+    if (!currentCL) return;
+    navigator.clipboard.writeText(currentCL).then(() => {
+      const el = document.getElementById('copy-ok'); el.style.display = 'inline';
+      setTimeout(() => el.style.display = 'none', 2000);
+    });
+  }
+ 
+  function setLoading(on) {
+    document.getElementById('find-btn').disabled = on;
+    const el = document.getElementById('main-loading');
+    if (on) { el.classList.add('active'); startMsgs(); }
+    else { el.classList.remove('active'); stopMsgs(); }
+  }
+  function showErr(msg) { const e = document.getElementById('main-error'); e.textContent = msg; e.classList.add('active'); }
+  function clearErr() { const e = document.getElementById('main-error'); e.textContent = ''; e.classList.remove('active'); }
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+ 
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+</script>
+</body>
+</html>

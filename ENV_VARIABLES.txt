@@ -1,0 +1,34 @@
+# ─────────────────────────────────────────────────────
+#  HireEU — Vercel Environment Variables
+#  Add ALL of these in Vercel Dashboard → Project → Settings → Environment Variables
+# ─────────────────────────────────────────────────────
+
+# ── JSearch via RapidAPI (REPLACES Jooble) ──
+# Sign up free at https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch
+# Free tier: 200 req/month | Basic: $10/mo for 2000 req
+JSEARCH_API_KEY=your-rapidapi-key-here
+
+# ── Adzuna (still used alongside JSearch) ──
+# https://developer.adzuna.com/
+ADZUNA_APP_ID=your-adzuna-app-id
+ADZUNA_APP_KEY=your-adzuna-app-key
+
+# ── Groq (AI scoring — free tier is plenty) ──
+# https://console.groq.com/
+GROQ_API_KEY=your-groq-api-key
+
+# ── Railway scraper (Playwright scraper for JustJoinIT, NoFluffJobs, EnglishJobs.pl) ──
+# Deploy the hireeu-scraper to Railway, copy the public URL here
+SCRAPER_URL=https://your-scraper.railway.app
+
+# ── Neon Postgres (for waitlist) ──
+DATABASE_URL=postgresql://user:password@ep-xxxx.us-east-2.aws.neon.tech/neondb?sslmode=require
+
+# ── Gmail SMTP (for waitlist confirmation emails) ──
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-gmail@gmail.com
+SMTP_PASS=xxxx xxxx xxxx xxxx
+ADMIN_EMAIL=your-gmail@gmail.com
+SITE_URL=https://hireeu.vercel.app

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HireEU App</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; color: #1e1e1e; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 20px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    h1, h2 { margin: 0 0 12px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    input, textarea, select, button { width: 100%; padding: 10px; box-sizing: border-box; }
+    textarea { min-height: 110px; }
+    button { cursor: pointer; }
+    .muted { color: #666; font-size: 13px; }
+    .hidden { display: none; }
+    .jobs { display: grid; gap: 12px; }
+    .job { border: 1px solid #ddd; border-radius: 8px; padding: 12px; background: #fafafa; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>HireEU Dashboard</h1>
+    <p class="muted">Register or log in, upload CV, review profile, set filters, then get matched jobs.</p>
+
+    <section class="card" id="auth-card">
+      <h2>Auth</h2>
+      <div class="row">
+        <div>
+          <h3>Register</h3>
+          <input id="reg-name" placeholder="Name (optional)">
+          <input id="reg-email" placeholder="Email">
+          <input id="reg-password" type="password" placeholder="Password (min 8 chars)">
+          <button onclick="register()">Register</button>
+        </div>
+        <div>
+          <h3>Login</h3>
+          <input id="login-email" placeholder="Email">
+          <input id="login-password" type="password" placeholder="Password">
+          <button onclick="login()">Login</button>
+        </div>
+      </div>
+      <p id="auth-status" class="muted"></p>
+    </section>
+
+    <section class="card hidden" id="profile-card">
+      <h2>Profile Setup</h2>
+      <input id="cv-file" type="file" accept=".pdf,.doc,.docx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain">
+      <button onclick="parseCv()">Parse CV with AI</button>
+      <div class="row">
+        <textarea id="summary" placeholder="Summary"></textarea>
+        <textarea id="skills" placeholder="Skills (comma separated)"></textarea>
+      </div>
+      <div class="row">
+        <input id="years" type="number" min="0" max="70" placeholder="Years experience">
+        <input id="seniority" placeholder="Seniority (junior/mid/senior/lead)">
+      </div>
+      <div class="row">
+        <input id="location" placeholder="Profile location">
+        <input id="languages" placeholder="Languages (comma separated)">
+      </div>
+      <button onclick="saveProfile()">Save Profile</button>
+      <p id="profile-status" class="muted"></p>
+    </section>
+
+    <section class="card hidden" id="prefs-card">
+      <h2>Search Preferences</h2>
+      <div class="row">
+        <input id="pref-location" placeholder="Preferred location">
+        <select id="work-type">
+          <option value="any">Any</option>
+          <option value="remote">Remote</option>
+          <option value="hybrid">Hybrid</option>
+          <option value="onsite">On-site</option>
+        </select>
+      </div>
+      <input id="min-fit" type="number" min="0" max="100" value="45" placeholder="Min fit %">
+      <button onclick="savePreferences()">Save Preferences</button>
+      <button onclick="recommend()">Find Matches</button>
+      <p id="prefs-status" class="muted"></p>
+    </section>
+
+    <section class="card hidden" id="results-card">
+      <h2>Recommendations</h2>
+      <div id="jobs" class="jobs"></div>
+    </section>
+  </div>
+
+  <script>
+    let cachedFileBase64 = '';
+    let cachedFileType = '';
+    let rawCvText = null;
+
+    async function api(path, method = 'GET', body) {
+      const res = await fetch(path, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Request failed');
+      return data;
+    }
+
+    async function register() {
+      try {
+        const data = await api('/api/auth-register', 'POST', {
+          name: document.getElementById('reg-name').value,
+          email: document.getElementById('reg-email').value,
+          password: document.getElementById('reg-password').value
+        });
+        document.getElementById('auth-status').textContent = `Registered as ${data.user.email}`;
+        await loadAppState();
+      } catch (e) {
+        document.getElementById('auth-status').textContent = e.message;
+      }
+    }
+
+    async function login() {
+      try {
+        const data = await api('/api/auth-login', 'POST', {
+          email: document.getElementById('login-email').value,
+          password: document.getElementById('login-password').value
+        });
+        document.getElementById('auth-status').textContent = `Logged in as ${data.user.email}`;
+        await loadAppState();
+      } catch (e) {
+        document.getElementById('auth-status').textContent = e.message;
+      }
+    }
+
+    async function loadAppState() {
+      try {
+        const session = await api('/api/auth-session');
+        if (!session.user) return;
+        document.getElementById('profile-card').classList.remove('hidden');
+        document.getElementById('prefs-card').classList.remove('hidden');
+        document.getElementById('results-card').classList.remove('hidden');
+        const profile = await api('/api/profile-get');
+        fillProfile(profile.profile);
+        const prefs = await api('/api/preferences-get');
+        fillPrefs(prefs.preferences);
+      } catch {
+        // user not signed in
+      }
+    }
+
+    function fillProfile(profile) {
+      document.getElementById('summary').value = profile.summary || '';
+      document.getElementById('skills').value = (profile.skills || []).join(', ');
+      document.getElementById('years').value = profile.yearsExperience || 0;
+      document.getElementById('seniority').value = profile.seniority || '';
+      document.getElementById('location').value = profile.location || '';
+      document.getElementById('languages').value = (profile.languages || []).join(', ');
+      rawCvText = profile.rawCvText || null;
+    }
+
+    function fillPrefs(prefs) {
+      document.getElementById('pref-location').value = prefs.preferredLocation || '';
+      document.getElementById('work-type').value = prefs.workType || 'any';
+      document.getElementById('min-fit').value = prefs.minFitPercent ?? 45;
+    }
+
+    function splitCsv(value) {
+      return String(value || '').split(',').map((s) => s.trim()).filter(Boolean);
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function parseCv() {
+      const file = document.getElementById('cv-file').files[0];
+      if (!file) {
+        document.getElementById('profile-status').textContent = 'Please choose a CV file.';
+        return;
+      }
+      try {
+        cachedFileBase64 = await fileToBase64(file);
+        cachedFileType = file.type || 'application/pdf';
+        const parsed = await api('/api/parse-cv', 'POST', {
+          role: 'candidate profile extraction',
+          fileBase64: cachedFileBase64,
+          fileType: cachedFileType
+        });
+        fillProfile(parsed);
+        document.getElementById('profile-status').textContent = 'CV parsed. Review and save your profile.';
+      } catch (e) {
+        document.getElementById('profile-status').textContent = e.message;
+      }
+    }
+
+    async function saveProfile() {
+      try {
+        await api('/api/profile-save', 'POST', {
+          summary: document.getElementById('summary').value,
+          skills: splitCsv(document.getElementById('skills').value),
+          yearsExperience: Number(document.getElementById('years').value || 0),
+          seniority: document.getElementById('seniority').value,
+          location: document.getElementById('location').value,
+          languages: splitCsv(document.getElementById('languages').value),
+          rawCvText
+        });
+        document.getElementById('profile-status').textContent = 'Profile saved.';
+      } catch (e) {
+        document.getElementById('profile-status').textContent = e.message;
+      }
+    }
+
+    async function savePreferences() {
+      try {
+        await api('/api/preferences-save', 'POST', {
+          preferredLocation: document.getElementById('pref-location').value,
+          workType: document.getElementById('work-type').value,
+          minFitPercent: Number(document.getElementById('min-fit').value || 45)
+        });
+        document.getElementById('prefs-status').textContent = 'Preferences saved.';
+      } catch (e) {
+        document.getElementById('prefs-status').textContent = e.message;
+      }
+    }
+
+    async function recommend() {
+      try {
+        const data = await api('/api/jobs-recommend', 'POST', {});
+        const jobsEl = document.getElementById('jobs');
+        jobsEl.innerHTML = '';
+        for (const job of data.results || []) {
+          const div = document.createElement('div');
+          div.className = 'job';
+          const score = job.match ?? job.score ?? 0;
+          div.innerHTML = `
+            <strong>${escapeHtml(job.title || '')}</strong> - ${escapeHtml(job.company || '')}<br>
+            ${escapeHtml(job.location || '')} | Fit: ${score}%<br>
+            <em>${escapeHtml(job.reason || '')}</em><br>
+            ${(job.missingSkills || []).length ? `Missing: ${escapeHtml((job.missingSkills || []).join(', '))}<br>` : ''}
+            ${job.applyUrl ? `<a href="${escapeHtml(job.applyUrl)}" target="_blank" rel="noopener">Apply</a>` : ''}
+          `;
+          jobsEl.appendChild(div);
+        }
+        document.getElementById('prefs-status').textContent = `Found ${data.results?.length || 0} jobs.`;
+      } catch (e) {
+        document.getElementById('prefs-status').textContent = e.message;
+      }
+    }
+
+    function escapeHtml(v) {
+      return String(v || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    loadAppState();
+  </script>
+</body>
+</html>

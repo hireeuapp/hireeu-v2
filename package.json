@@ -1,0 +1,15 @@
+{
+  "name": "hireeu-v2",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "npx vercel dev"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "mammoth": "^1.7.2",
+    "pdf-parse": "^1.1.1",
+    "pg": "^8.16.3"
+  }
+}
