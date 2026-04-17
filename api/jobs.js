@@ -34,28 +34,35 @@ export default async function handler(req, res) {
     const user = await requireAuth(req, res); if (!user) return;
     try {
       const [profileRes, prefRes] = await Promise.all([
-        query('SELECT summary, skills, years_experience, seniority FROM candidate_profiles WHERE user_id = $1', [user.id]),
+        query('SELECT summary, primary_role, skills, years_experience, seniority FROM candidate_profiles WHERE user_id = $1', [user.id]),
         query('SELECT preferred_location, work_type, min_fit_percent FROM job_search_preferences WHERE user_id = $1', [user.id])
       ]);
       if (!profileRes.rowCount) return res.status(400).json({ error: 'Profile not found' });
       const profile = profileRes.rows[0], prefs = prefRes.rows[0] || { preferred_location: '', work_type: 'any', min_fit_percent: 45 };
       
-      // Simplify query: Just Seniority + Main Skill (e.g. "Senior React Developer")
-      // JSearch is much more successful with shorter queries.
-      let roleQuery = `${profile.seniority} ${profile.skills[0] || 'Developer'}`.trim();
+      // QUALITY SEARCH: Use extracted Primary Role (e.g. "Frontend Developer")
+      const baseRole = profile.primary_role || profile.skills[0] || 'Software Engineer';
+      let roleQuery = `${profile.seniority} ${baseRole}`.trim();
       let { results: jobs, diagnostics } = await searchJobsByRole(roleQuery);
       
-      // Fallback if no jobs found
-      if (jobs.length === 0 && profile.skills.length > 1) {
-        console.log('No jobs found for precise role, trying broader search...');
-        roleQuery = `${profile.skills[0] || 'Software'} Developer`.trim();
-        const fallbackRes = await searchJobsByRole(roleQuery);
-        jobs = fallbackRes.results;
-        // Merge diagnostics if needed, or just keep latest
-        if (fallbackRes.diagnostics) diagnostics = fallbackRes.diagnostics;
+      // BROADENING FALLBACK
+      if (jobs.length < 5) {
+        console.log('Low results, broadening search...');
+        const broaderQuery = baseRole; 
+        const broaderRes = await searchJobsByRole(broaderQuery);
+        // Merge without duplicates
+        const seenIds = new Set(jobs.map(j => j.id));
+        for (const j of broaderRes.results) {
+          if (!seenIds.has(j.id)) { jobs.push(j); seenIds.add(j.id); }
+        }
+        if (broaderRes.diagnostics) diagnostics = broaderRes.diagnostics;
       }
       
-      const scored = await matchAndScoreJobs({ summary: profile.summary, skills: profile.skills, yearsExperience: profile.years_experience }, jobs, prefs.min_fit_percent);
+      const scored = await matchAndScoreJobs(
+        { summary: profile.summary, primaryRole: profile.primary_role, skills: profile.skills, yearsExperience: profile.years_experience }, 
+        jobs, 
+        prefs.min_fit_percent
+      );
       return res.status(200).json({ results: scored.slice(0, 20), diagnostics });
     } catch (err) { return res.status(500).json({ error: err.message }); }
   }

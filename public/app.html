@@ -108,10 +108,12 @@
         <h2>2. Review Profile</h2>
         <div class="row">
           <div><label>Summary</label><textarea id="summary"></textarea></div>
-          <div><label>Skills (Extracted)</label><textarea id="skills"></textarea></div>
+          <div><label>Target Role (e.g. Frontend Dev)</label><input id="primary-role" placeholder="e.g. Senior Software Engineer"></div>
         </div>
         <div class="row">
+          <div><label>Skills (Extracted)</label><textarea id="skills"></textarea></div>
           <div><label>Exp Years</label><input id="years" type="number"></div>
+        </div>
           <div><label>Seniority</label><select id="seniority"><option value="junior">Junior</option><option value="mid">Mid</option><option value="senior">Senior</option><option value="lead">Lead</option></select></div>
         </div>
         <button onclick="saveProfile()" id="btn-save-profile">Confirm & Save</button>
@@ -243,6 +245,7 @@
 
     function fillProfile(profile) {
       document.getElementById('summary').value = profile.summary || '';
+      document.getElementById('primary-role').value = profile.primaryRole || '';
       document.getElementById('skills').value = (profile.skills || []).join(', ');
       document.getElementById('years').value = profile.yearsExperience || 0;
       document.getElementById('seniority').value = profile.seniority || 'mid';
@@ -265,6 +268,7 @@
       try {
         await api('/api/profile-save', 'POST', {
           summary: document.getElementById('summary').value,
+          primaryRole: document.getElementById('primary-role').value,
           skills: document.getElementById('skills').value.split(',').map(s=>s.trim()).filter(Boolean),
           yearsExperience: Number(document.getElementById('years').value),
           seniority: document.getElementById('seniority').value,

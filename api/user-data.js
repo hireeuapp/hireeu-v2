@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
     try {
       const result = await query(
-        `SELECT summary, skills, years_experience, seniority, location, languages, raw_cv_text
+        `SELECT summary, primary_role, skills, years_experience, seniority, location, languages, raw_cv_text
          FROM candidate_profiles WHERE user_id = $1`,
         [user.id]
       );
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         profile: {
           summary: row.summary || '',
+          primaryRole: row.primary_role || '',
           skills: row.skills || [],
           yearsExperience: row.years_experience || 0,
           seniority: row.seniority || 'unknown',
@@ -54,16 +55,18 @@ export default async function handler(req, res) {
     const location = body.location ? String(body.location).trim().slice(0, 200) : null;
     const languages = sanitizeArray(body.languages);
     const rawCvText = body.rawCvText ? String(body.rawCvText).slice(0, 20000) : null;
+    const primaryRole = String(body.primaryRole || '').trim().slice(0, 200);
     try {
       await query(
-        `INSERT INTO candidate_profiles (user_id, summary, skills, years_experience, seniority, location, languages, raw_cv_text, updated_at)
-         VALUES ($1, $2, $3::jsonb, $4, $5, $6, $7::jsonb, $8, NOW())
+        `INSERT INTO candidate_profiles (user_id, summary, primary_role, skills, years_experience, seniority, location, languages, raw_cv_text, updated_at)
+         VALUES ($1, $2, $3, $4::jsonb, $5, $6, $7, $8::jsonb, $9, NOW())
          ON CONFLICT (user_id)
          DO UPDATE SET
-           summary = EXCLUDED.summary, skills = EXCLUDED.skills, years_experience = EXCLUDED.years_experience,
-           seniority = EXCLUDED.seniority, location = EXCLUDED.location, languages = EXCLUDED.languages,
+           summary = EXCLUDED.summary, primary_role = EXCLUDED.primary_role, skills = EXCLUDED.skills, 
+           years_experience = EXCLUDED.years_experience, seniority = EXCLUDED.seniority, 
+           location = EXCLUDED.location, languages = EXCLUDED.languages,
            raw_cv_text = EXCLUDED.raw_cv_text, updated_at = NOW()`,
-        [user.id, summary, JSON.stringify(skills), yearsExperience, seniority, location, JSON.stringify(languages), rawCvText]
+        [user.id, summary, primaryRole, JSON.stringify(skills), yearsExperience, seniority, location, JSON.stringify(languages), rawCvText]
       );
       return res.status(200).json({ ok: true });
     } catch (err) {

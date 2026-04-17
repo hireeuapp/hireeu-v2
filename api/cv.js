@@ -64,6 +64,7 @@ STRICT INSTRUCTIONS:
 Respond with ONLY valid JSON:
 {
   "summary": "Professional summary focusing on career highlights",
+  "primaryRole": "Main job title, e.g. Frontend Developer",
   "skills": ["Skill 1", "Skill 2", "..."],
   "yearsExperience": <number>,
   "seniority": "junior" | "mid" | "senior" | "lead",
