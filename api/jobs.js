@@ -39,8 +39,16 @@ export default async function handler(req, res) {
       ]);
       if (!profileRes.rowCount) return res.status(400).json({ error: 'Profile not found' });
       const profile = profileRes.rows[0], prefs = prefRes.rows[0] || { preferred_location: '', work_type: 'any', min_fit_percent: 45 };
-      const roleQuery = `${profile.seniority} ${profile.skills.slice(0, 3).join(' ')}`.trim();
-      const jobs = await searchJobsByRole(roleQuery || 'software engineer');
+      let roleQuery = `${profile.seniority} ${profile.skills.slice(0, 3).join(' ')}`.trim();
+      let jobs = await searchJobsByRole(roleQuery || 'software engineer');
+      
+      // Fallback if no jobs found
+      if (jobs.length === 0 && profile.skills.length > 0) {
+        console.log('No jobs found for precise role, trying broader search...');
+        roleQuery = `${profile.seniority} ${profile.skills[0]} developer`.trim();
+        jobs = await searchJobsByRole(roleQuery);
+      }
+      
       const scored = await matchAndScoreJobs({ summary: profile.summary, skills: profile.skills, yearsExperience: profile.years_experience }, jobs, prefs.min_fit_percent);
       return res.status(200).json({ results: scored.slice(0, 20) });
     } catch (err) { return res.status(500).json({ error: err.message }); }

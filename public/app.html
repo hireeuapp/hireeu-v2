@@ -3,464 +3,261 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HireEU — Dashboard</title>
+  <title>HireEU — App Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Syne:wght@400;600;700;800&family=Mulish:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --cream: #f0ebe1;
-      --cream2: #e8e2d6;
-      --ink: #1a1612;
-      --ink2: #3d3730;
-      --surface: #ffffff;
-      --border: #d4cdc4;
-      --red: #d63f2a;
-      --red2: #e85c47;
-      --gold: #c49a3c;
-      --serif: 'Playfair Display', Georgia, serif;
-      --sans: 'Syne', sans-serif;
-      --body: 'Mulish', sans-serif;
+      --cream: #f0ebe1; --cream2: #e8e2d6; --ink: #1a1612; --ink2: #3d3730;
+      --surface: #ffffff; --border: #d4cdc4; --red: #d63f2a; --red2: #e85c47;
+      --gold: #c49a3c; --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Syne', sans-serif; --body: 'Mulish', sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: var(--body);
-      background: var(--cream);
-      color: var(--ink);
-      line-height: 1.6;
-      padding-bottom: 80px;
-    }
+    body { font-family: var(--body); background: var(--cream); color: var(--ink); line-height: 1.6; padding-bottom: 80px; }
 
-    nav {
-      background: var(--ink);
-      height: 60px; padding: 0 40px;
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 40px;
-    }
-    .nav-logo {
-      font-family: var(--sans); font-size: 20px; font-weight: 800;
-      color: var(--cream); text-decoration: none;
-    }
+    nav { background: var(--ink); height: 60px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
+    .nav-logo { font-family: var(--sans); font-size: 20px; font-weight: 800; color: var(--cream); text-decoration: none; }
     .nav-logo span { color: var(--red2); }
 
-    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
 
-    .header-group { margin-bottom: 32px; }
     h1 { font-family: var(--serif); font-size: 42px; font-weight: 700; margin-bottom: 8px; }
-    .subtitle { color: var(--ink2); font-weight: 300; font-size: 18px; }
+    .subtitle { color: var(--ink2); font-weight: 300; font-size: 18px; margin-bottom: 32px; }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 32px;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 30px rgba(0,0,0,0.03);
-    }
-    h2 { 
-      font-family: var(--sans); font-size: 14px; font-weight: 700; 
-      text-transform: uppercase; letter-spacing: 2px; color: var(--gold);
-      margin-bottom: 24px; border-bottom: 1px solid var(--cream2);
-      padding-bottom: 12px;
-    }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 30px rgba(0,0,0,0.03); }
+    h2 { font-family: var(--sans); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 24px; border-bottom: 1px solid var(--cream2); padding-bottom: 12px; }
 
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
     @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
 
-    .input-group { margin-bottom: 16px; }
     label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; color: var(--ink2); }
-    
-    input, textarea, select {
-      width: 100%; padding: 12px 16px;
-      border: 1px solid var(--border);
-      background: #faf9f7;
-      font-family: var(--body); font-size: 15px;
-      border-radius: 2px; transition: all 0.2s;
-    }
+    input, textarea, select { width: 100%; padding: 12px 16px; border: 1px solid var(--border); background: #faf9f7; font-family: var(--body); font-size: 15px; border-radius: 2px; }
     input:focus, textarea:focus { outline: none; border-color: var(--gold); background: #fff; }
-    textarea { min-height: 120px; resize: vertical; }
+    textarea { min-height: 100px; }
 
-    button {
-      background: var(--ink); color: var(--cream);
-      font-family: var(--sans); font-size: 13px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1.5px;
-      padding: 16px 24px; border: none; cursor: pointer;
-      border-radius: 2px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    }
+    button { background: var(--ink); color: var(--cream); font-family: var(--sans); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 16px 24px; border: none; cursor: pointer; border-radius: 2px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
     button:hover { background: var(--red); transform: translateY(-2px); }
-    button:disabled { background: var(--border); cursor: not-allowed; transform: none; }
-    
+    button:disabled { background: var(--border); cursor: not-allowed; }
     .btn-secondary { background: transparent; border: 1px solid var(--ink); color: var(--ink); }
-    .btn-secondary:hover { background: var(--ink); color: var(--cream); }
 
-    .status-msg { margin-top: 12px; font-size: 14px; color: var(--green); font-weight: 500; min-height: 20px; }
+    .status-msg { margin-top: 12px; font-size: 14px; color: #1e7d46; font-weight: 500; }
     .status-msg.error { color: var(--red); }
-
     .hidden { display: none; }
 
-    /* Results */
+    /* Flow Specifics */
+    .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: #fdfcfb; cursor: pointer; transition: all 0.2s; }
+    .menu-item:hover { border-color: var(--gold); background: white; }
+    .menu-info h3 { font-family: var(--serif); font-size: 22px; margin-bottom: 4px; }
+    .menu-info p { font-size: 14px; color: var(--ink2); }
+
     .jobs { display: grid; gap: 16px; margin-top: 24px; }
-    .job { 
-      padding: 24px; border: 1px solid var(--border); border-radius: 4px;
-      background: #fdfcfb; transition: all 0.2s;
-    }
-    .job:hover { border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .job { padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: #fdfcfb; }
     .job-title { font-family: var(--serif); font-size: 20px; margin-bottom: 4px; }
     .job-meta { font-size: 13px; color: var(--ink2); margin-bottom: 12px; display: flex; gap: 12px; }
     .job-fit { color: var(--red); font-weight: 700; }
-    .job-reason { font-size: 14px; margin-bottom: 16px; border-left: 3px solid var(--gold); padding-left: 12px; font-style: italic; }
-    .job-skills { font-size: 12px; margin-bottom: 16px; color: var(--ink2); }
-
-    .loader { animation: spin 1s linear infinite; display: none; }
+    .loader { animation: spin 1s linear infinite; display: none; border: 2px solid white; border-top: 2px solid transparent; width: 14px; height: 14px; border-radius: 50%; }
     button.loading .loader { display: inline-block; }
-    @keyframes spin { from {transform:rotate(0deg);} to {transform:rotate(360deg);} }
+    @keyframes spin { to {transform:rotate(360deg);} }
   </style>
 </head>
 <body>
 
   <nav>
     <a href="/" class="nav-logo">Hire<span>EU</span></a>
-    <span class="nav-badge">App</span>
+    <span class="nav-badge" id="nav-user-badge">Guest</span>
   </nav>
 
   <div class="container">
-    <div class="header-group">
-      <h1 id="welcome-text">Your Dashboard</h1>
-      <p class="subtitle">Complete your profile to find high-fit jobs in Poland.</p>
+    <div id="view-auth">
+      <h1>Join HireEU</h1>
+      <p class="subtitle">The first AI platform built for foreigners job hunting in Poland.</p>
+      <section class="card">
+        <h2>Identify Yourself</h2>
+        <div class="row">
+          <div>
+            <label>Create Account</label>
+            <input id="reg-name" placeholder="Full Name" style="margin-bottom:10px">
+            <input id="reg-email" placeholder="Email" style="margin-bottom:10px">
+            <input id="reg-password" type="password" placeholder="Password (8+ chars)">
+            <button onclick="register()" id="btn-reg" style="margin-top:16px">Get Started</button>
+          </div>
+          <div>
+            <label>Member Login</label>
+            <input id="login-email" placeholder="Email" style="margin-bottom:10px">
+            <input id="login-password" type="password" placeholder="Password">
+            <button onclick="login()" id="btn-login" style="margin-top:16px" class="btn-secondary">Sign In</button>
+          </div>
+        </div>
+        <p id="auth-status" class="status-msg"></p>
+      </section>
     </div>
 
-    <!-- Auth Section -->
-    <section class="card" id="auth-card">
-      <h2>Account</h2>
-      <div class="row">
-        <div>
-          <label>Register</label>
-          <input id="reg-name" placeholder="Full Name" style="margin-bottom:10px">
-          <input id="reg-email" placeholder="Email" style="margin-bottom:10px">
-          <input id="reg-password" type="password" placeholder="Password (min 8 chars)">
-          <button onclick="register()" id="btn-reg" style="margin-top:16px">Create Account</button>
+    <div id="view-onboarding" class="hidden">
+      <h1>Let's Set Up</h1>
+      <p class="subtitle">We need your CV once to find you thousands of matches.</p>
+      <section class="card">
+        <h2>1. Upload CV</h2>
+        <input id="cv-file" type="file" style="margin-bottom:15px">
+        <button onclick="parseCv()" id="btn-parse">✨ AI Extraction</button>
+        <p id="profile-status" class="status-msg"></p>
+      </section>
+      <section class="card">
+        <h2>2. Review Profile</h2>
+        <div class="row">
+          <div><label>Summary</label><textarea id="summary"></textarea></div>
+          <div><label>Skills (Extracted)</label><textarea id="skills"></textarea></div>
         </div>
-        <div>
-          <label>Login</label>
-          <input id="login-email" placeholder="Email" style="margin-bottom:10px">
-          <input id="login-password" type="password" placeholder="Password">
-          <button onclick="login()" id="btn-login" style="margin-top:16px" class="btn-secondary">Welcome Back</button>
+        <div class="row">
+          <div><label>Exp Years</label><input id="years" type="number"></div>
+          <div><label>Seniority</label><select id="seniority"><option value="junior">Junior</option><option value="mid">Mid</option><option value="senior">Senior</option><option value="lead">Lead</option></select></div>
         </div>
-      </div>
-      <p id="auth-status" class="status-msg"></p>
-    </section>
+        <button onclick="saveProfile()" id="btn-save-profile">Confirm & Save</button>
+      </section>
+    </div>
 
-    <!-- Profile Section -->
-    <section class="card hidden" id="profile-card">
-      <h2>CV & Profile</h2>
-      <div class="input-group">
-        <label>Upload CV (PDF, DOCX, TXT)</label>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <input id="cv-file" type="file" style="padding:8px">
-          <button onclick="parseCv()" id="btn-parse" style="white-space:nowrap">
-            <span class="loader">⚙️</span> Analyze with AI
-          </button>
+    <div id="view-main-menu" class="hidden">
+      <h1>Main Menu</h1>
+      <p class="subtitle" id="main-welcome">Welcome back.</p>
+      <div class="menu-grid">
+        <div class="menu-item" onclick="showView('view-results'); recommend()">
+          <div class="menu-info">
+            <h3>Find New Matches</h3>
+            <p>Scan JSearch, Adzuna & JustJoinIT for jobs in Poland.</p>
+          </div>
+          <button style="padding:12px 20px">Go →</button>
+        </div>
+        <div class="menu-item" onclick="showView('view-onboarding')">
+          <div class="menu-info">
+            <h3>Update Profile</h3>
+            <p>Upload a new CV or change your skills & filters.</p>
+          </div>
+          <button class="btn-secondary" style="padding:12px 20px">Settings</button>
+        </div>
+        <div class="menu-item" onclick="logout()">
+          <div class="menu-info">
+            <h3>Sign Out</h3>
+            <p>Securely exit your session.</p>
+          </div>
+          <span style="font-size:12px; color:var(--red) opacity:0.6">Logout</span>
         </div>
       </div>
-      
-      <p id="profile-status" class="status-msg"></p>
+    </div>
 
-      <div class="row">
-        <div class="input-group">
-          <label>Summary</label>
-          <textarea id="summary"></textarea>
-        </div>
-        <div class="input-group">
-          <label>Skills</label>
-          <textarea id="skills" placeholder="React, Node.js, Python..."></textarea>
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label>Years of Experience</label>
-          <input id="years" type="number" min="0" max="70">
-        </div>
-        <div>
-          <label>Seniority Level</label>
-          <select id="seniority">
-            <option value="junior">Junior</option>
-            <option value="mid">Mid</option>
-            <option value="senior">Senior</option>
-            <option value="lead">Lead/Manager</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label>Current Location</label>
-          <input id="location" placeholder="e.g. Warsaw, Poland">
-        </div>
-        <div>
-          <label>Languages</label>
-          <input id="languages" placeholder="English, Polish, etc.">
-        </div>
-      </div>
-      
-      <button onclick="saveProfile()" id="btn-save-profile">Save Profile Changes</button>
-    </section>
-
-    <!-- Preferences Section -->
-    <section class="card hidden" id="prefs-card">
-      <h2>Search Filters</h2>
-      <div class="row">
-        <div>
-          <label>Preferred City</label>
-          <input id="pref-location" placeholder="e.g. Krakow">
-        </div>
-        <div>
-          <label>Work Type</label>
-          <select id="work-type">
-            <option value="any">Any</option>
-            <option value="remote">Remote</option>
-            <option value="hybrid">Hybrid</option>
-            <option value="onsite">On-site</option>
-          </select>
-        </div>
-      </div>
-      <div class="input-group" style="max-width:200px">
-        <label>Minimum Match %</label>
-        <input id="min-fit" type="number" min="0" max="100" value="45">
-      </div>
-      
-      <div style="display:flex; gap:12px; margin-top:20px">
-        <button onclick="savePreferences()" class="btn-secondary">Save Filters</button>
-        <button onclick="recommend()" id="btn-match">
-          <span class="loader">⚙️</span> Find My Matches
-        </button>
+    <div id="view-results" class="hidden">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
+        <h1>Your Matches</h1>
+        <button class="btn-secondary" onclick="showView('view-main-menu')">Back to Menu</button>
       </div>
       <p id="prefs-status" class="status-msg"></p>
-    </section>
-
-    <!-- Results Section -->
-    <section class="card hidden" id="results-card">
-      <h2>Recommended Jobs</h2>
-      <div id="jobs" class="jobs">
-        <p class="subtitle">Your top AI-scored matches will appear here.</p>
-      </div>
-    </section>
+      <div id="jobs" class="jobs"></div>
+    </div>
   </div>
 
   <script>
     let rawCvText = null;
 
     async function api(path, method = 'GET', body) {
-      const res = await fetch(path, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: body ? JSON.stringify(body) : undefined
-      });
+      const res = await fetch(path, { method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Request failed');
       return data;
     }
 
-    function setBtnLoading(id, isLoading) {
-      const btn = document.getElementById(id);
-      if (isLoading) {
-        btn.classList.add('loading');
-        btn.disabled = true;
-      } else {
-        btn.classList.remove('loading');
-        btn.disabled = false;
-      }
+    function showView(id) {
+      ['view-auth', 'view-onboarding', 'view-main-menu', 'view-results'].forEach(v => {
+        document.getElementById(v).classList.toggle('hidden', v !== id);
+      });
+      window.scrollTo(0,0);
     }
 
     async function register() {
-      const status = document.getElementById('auth-status');
-      status.className = 'status-msg';
       try {
-        setBtnLoading('btn-reg', true);
-        const data = await api('/api/auth-register', 'POST', {
-          name: document.getElementById('reg-name').value,
-          email: document.getElementById('reg-email').value,
-          password: document.getElementById('reg-password').value
-        });
-        status.textContent = `Welcome, ${data.user.email}!`;
+        const data = await api('/api/auth-register', 'POST', { name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, password: document.getElementById('reg-password').value });
         await loadAppState();
-      } catch (e) {
-        status.textContent = e.message;
-        status.classList.add('error');
-      } finally {
-        setBtnLoading('btn-reg', false);
-      }
+      } catch (e) { document.getElementById('auth-status').textContent = e.message; }
     }
 
     async function login() {
-      const status = document.getElementById('auth-status');
-      status.className = 'status-msg';
       try {
-        setBtnLoading('btn-login', true);
-        const data = await api('/api/auth-login', 'POST', {
-          email: document.getElementById('login-email').value,
-          password: document.getElementById('login-password').value
-        });
-        status.textContent = `Welcome back!`;
+        const data = await api('/api/auth-login', 'POST', { email: document.getElementById('login-email').value, password: document.getElementById('login-password').value });
         await loadAppState();
-      } catch (e) {
-        status.textContent = e.message;
-        status.classList.add('error');
-      } finally {
-        setBtnLoading('btn-login', false);
-      }
+      } catch (e) { document.getElementById('auth-status').textContent = e.message; }
+    }
+
+    async function logout() {
+      await api('/api/auth-logout', 'POST');
+      location.reload();
     }
 
     async function loadAppState() {
       try {
         const session = await api('/api/auth-session');
-        if (!session.user) return;
+        if (!session.user) { showView('view-auth'); return; }
         
-        document.getElementById('auth-card').classList.add('hidden');
-        document.getElementById('profile-card').classList.remove('hidden');
-        document.getElementById('prefs-card').classList.remove('hidden');
-        document.getElementById('results-card').classList.remove('hidden');
-        document.getElementById('welcome-text').textContent = `Hello, ${session.user.name || 'User'}`;
-        
+        document.getElementById('nav-user-badge').textContent = session.user.name || session.user.email;
         const profile = await api('/api/profile-get');
-        fillProfile(profile.profile);
-        const prefs = await api('/api/preferences-get');
-        fillPrefs(prefs.preferences);
-      } catch (err) {
-        console.log('Session check:', err.message);
-      }
+        if (!profile.profile?.summary) {
+          showView('view-onboarding');
+        } else {
+          fillProfile(profile.profile);
+          document.getElementById('main-welcome').textContent = `Hello, ${session.user.name || 'Explorer'}. What would you like to do today?`;
+          showView('view-main-menu');
+        }
+      } catch (err) { showView('view-auth'); }
     }
 
     function fillProfile(profile) {
-      if (!profile) return;
       document.getElementById('summary').value = profile.summary || '';
       document.getElementById('skills').value = (profile.skills || []).join(', ');
       document.getElementById('years').value = profile.yearsExperience || 0;
       document.getElementById('seniority').value = profile.seniority || 'mid';
-      document.getElementById('location').value = profile.location || '';
-      document.getElementById('languages').value = (profile.languages || []).join(', ');
       rawCvText = profile.rawCvText || null;
     }
 
-    function fillPrefs(prefs) {
-      if (!prefs) return;
-      document.getElementById('pref-location').value = prefs.preferredLocation || '';
-      document.getElementById('work-type').value = prefs.workType || 'any';
-      document.getElementById('min-fit').value = prefs.minFitPercent ?? 45;
-    }
-
     async function parseCv() {
-      const status = document.getElementById('profile-status');
       const file = document.getElementById('cv-file').files[0];
-      if (!file) {
-        status.textContent = 'Please select a file first.';
-        status.classList.add('error');
-        return;
-      }
-      status.className = 'status-msg';
-      status.textContent = 'AI is reading your CV...';
-      
+      if (!file) return;
+      document.getElementById('profile-status').textContent = 'Analyzing...';
       try {
-        setBtnLoading('btn-parse', true);
-        const base64 = await new Promise((res, rej) => {
-          const r = new FileReader();
-          r.onload = () => res(r.result.split(',')[1]);
-          r.onerror = rej;
-          r.readAsDataURL(file);
-        });
-
-        const parsed = await api('/api/parse-cv', 'POST', {
-          fileBase64: base64,
-          fileType: file.type || 'application/pdf'
-        });
+        const base64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.readAsDataURL(file); });
+        const parsed = await api('/api/parse-cv', 'POST', { fileBase64: base64, fileType: file.type });
         fillProfile(parsed);
-        status.textContent = 'Extraction complete. Please review your details below.';
-      } catch (e) {
-        status.textContent = 'Error: ' + e.message;
-        status.classList.add('error');
-      } finally {
-        setBtnLoading('btn-parse', false);
-      }
+        document.getElementById('profile-status').textContent = 'Profile ready. Check the details below.';
+      } catch (e) { document.getElementById('profile-status').textContent = e.message; }
     }
 
     async function saveProfile() {
-      const status = document.getElementById('profile-status');
-      status.className = 'status-msg';
       try {
-        setBtnLoading('btn-save-profile', true);
         await api('/api/profile-save', 'POST', {
           summary: document.getElementById('summary').value,
           skills: document.getElementById('skills').value.split(',').map(s=>s.trim()).filter(Boolean),
           yearsExperience: Number(document.getElementById('years').value),
           seniority: document.getElementById('seniority').value,
-          location: document.getElementById('location').value,
-          languages: document.getElementById('languages').value.split(',').map(s=>s.trim()).filter(Boolean),
-          rawCvText
+          location: '', languages: [], rawCvText
         });
-        status.textContent = 'Profile successfully updated.';
-      } catch (e) {
-        status.textContent = e.message;
-        status.classList.add('error');
-      } finally {
-        setBtnLoading('btn-save-profile', false);
-      }
-    }
-
-    async function savePreferences() {
-      const status = document.getElementById('prefs-status');
-      status.className = 'status-msg';
-      try {
-        await api('/api/preferences-save', 'POST', {
-          preferredLocation: document.getElementById('pref-location').value,
-          workType: document.getElementById('work-type').value,
-          minFitPercent: Number(document.getElementById('min-fit').value)
-        });
-        status.textContent = 'Search filters saved.';
-      } catch (e) { status.textContent = e.message; status.classList.add('error'); }
+        await loadAppState();
+      } catch (e) { alert(e.message); }
     }
 
     async function recommend() {
       const status = document.getElementById('prefs-status');
-      status.className = 'status-msg';
-      status.textContent = 'Finding the best matches in Poland...';
+      status.textContent = 'Searching...';
       try {
-        setBtnLoading('btn-match', true);
         const data = await api('/api/jobs-recommend', 'POST', {});
         const jobsEl = document.getElementById('jobs');
         jobsEl.innerHTML = '';
-        
-        if (!data.results?.length) {
-          jobsEl.innerHTML = '<p class="subtitle">No matches found. Try lowering your "Min Fit %" or broadening your skills.</p>';
-        }
-
+        if (!data.results?.length) { jobsEl.innerHTML = '<p>No jobs found. Try updating your profile skills.</p>'; }
         for (const job of data.results || []) {
           const div = document.createElement('div');
           div.className = 'job';
-          div.innerHTML = `
-            <div class="job-title">${escapeHtml(job.title)}</div>
-            <div class="job-meta">
-              <span>🏢 ${escapeHtml(job.company)}</span>
-              <span>📍 ${escapeHtml(job.location)}</span>
-              <span class="job-fit">🎯 ${job.match ?? 0}% Fit</span>
-            </div>
-            <div class="job-reason">${escapeHtml(job.reason)}</div>
-            <div class="job-skills"><strong>Key Missing:</strong> ${escapeHtml((job.missingSkills || []).join(', ') || 'None!')}</div>
-            <a href="${escapeHtml(job.applyUrl)}" target="_blank" class="nav-logo" style="color:var(--red); font-size:14px; text-decoration:underline; font-family:var(--sans)">View & Apply →</a>
-          `;
+          div.innerHTML = `<div class="job-title">${job.title}</div><div class="job-meta"><span>${job.company}</span> | <span class="job-fit">${job.match}% Fit</span></div><div style="font-size:14px; margin:10px 0">${job.reason}</div><a href="${job.applyUrl}" target="_blank" style="color:var(--red); font-size:14px">View Job →</a>`;
           jobsEl.appendChild(div);
         }
-        status.textContent = `Analysis complete. Found ${data.results?.length} high-fit matches.`;
-      } catch (e) {
-        status.textContent = e.message;
-        status.classList.add('error');
-      } finally {
-        setBtnLoading('btn-match', false);
-      }
-    }
-
-    function escapeHtml(v) {
-      return String(v || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
+        status.textContent = `Found ${data.results?.length} matches.`;
+      } catch (e) { status.textContent = e.message; }
     }
 
     loadAppState();

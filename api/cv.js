@@ -48,17 +48,26 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'Groq API Key is not configured in Vercel settings.' });
       }
 
-      const prompt = `You are a career assistant. Extract profile details from this CV. Role sought: ${role || 'Not specified'}.
+      const prompt = `You are an expert technical recruiter analyzing a CV. 
+Extract a COMPREHENSIVE profile from this CV. 
+
+Role sought: ${role || 'Not specified'}.
+
 CV CONTENT:
 ${text.slice(0, 5000)}
 
+STRICT INSTRUCTIONS:
+1. Extract at least 15-20 relevant skills if they exist. Include technical tools, languages, frameworks, methodologies (Agile, TDD), and soft skills.
+2. Be precise about 'yearsExperience'.
+3. For 'seniority', choose the best fit: junior, mid, senior, or lead.
+
 Respond with ONLY valid JSON:
 {
-  "summary": "Short professional summary",
-  "skills": ["Skill 1", "Skill 2"],
+  "summary": "Professional summary focusing on career highlights",
+  "skills": ["Skill 1", "Skill 2", "..."],
   "yearsExperience": <number>,
   "seniority": "junior" | "mid" | "senior" | "lead",
-  "location": "Current City, Country",
+  "location": "City, Country",
   "languages": ["Language 1", "Language 2"]
 }`;
 
