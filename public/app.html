@@ -267,20 +267,42 @@
 
     async function recommend() {
       const status = document.getElementById('prefs-status');
+      const jobsEl = document.getElementById('jobs');
       status.textContent = 'Searching...';
       try {
+        setBtnLoading('btn-match', true);
         const data = await api('/api/jobs-recommend', 'POST', {});
-        const jobsEl = document.getElementById('jobs');
         jobsEl.innerHTML = '';
-        if (!data.results?.length) { jobsEl.innerHTML = '<p>No jobs found. Try updating your profile skills.</p>'; }
-        for (const job of data.results || []) {
+        
+        const { results, diagnostics } = data;
+
+        if (!results?.length) {
+          let diagHtml = `<div style="font-size:13px; color:var(--ink2); background:var(--cream2); padding:15px; border-radius:4px; margin-top:10px;">
+            <strong>Diagnostics:</strong><br>
+            • Raw jobs found: ${diagnostics?.rawCount || 0}<br>
+            • Hidden by Language Filter: ${diagnostics?.langFiltered || 0}<br>
+            • Hidden by Role Filter: ${diagnostics?.qaFiltered || 0}<br>`;
+            
+          if (diagnostics?.jsearchErrors?.length) {
+            diagHtml += `<br><span style="color:var(--red)">• API Errors: ${diagnostics.jsearchErrors.join(', ')}</span>`;
+          }
+          
+          diagHtml += `<br><br><em>Try updating your skills or seniority if raw counts are high but final results are 0.</em></div>`;
+          jobsEl.innerHTML = `<div><p class="subtitle">No final matches found.</p>${diagHtml}</div>`;
+        }
+
+        for (const job of results || []) {
           const div = document.createElement('div');
           div.className = 'job';
           div.innerHTML = `<div class="job-title">${job.title}</div><div class="job-meta"><span>${job.company}</span> | <span class="job-fit">${job.match}% Fit</span></div><div style="font-size:14px; margin:10px 0">${job.reason}</div><a href="${job.applyUrl}" target="_blank" style="color:var(--red); font-size:14px">View Job →</a>`;
           jobsEl.appendChild(div);
         }
         status.textContent = `Found ${data.results?.length} matches.`;
-      } catch (e) { status.textContent = e.message; }
+        setBtnLoading('btn-match', false);
+      } catch (e) { 
+        status.textContent = e.message; 
+        setBtnLoading('btn-match', false);
+      }
     }
 
     loadAppState();
