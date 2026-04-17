@@ -8,60 +8,60 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Syne:wght@400;600;700;800&family=Mulish:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --cream: #f0ebe1; --cream2: #e8e2d6; --ink: #1a1612; --ink2: #3d3730;
-      --surface: #ffffff; --border: #d4cdc4; --red: #d63f2a; --red2: #e85c47;
-      --gold: #c49a3c; --serif: 'Playfair Display', Georgia, serif;
+      --navy: #000080; --navy2: #001f3f; --silver: #c0c0c0; --silver2: #e2e8f0;
+      --ink: #0f172a; --ink2: #334155; --surface: #ffffff; --border: #cbd5e1;
+      --accent: #3b82f6; --serif: 'Playfair Display', Georgia, serif;
       --sans: 'Syne', sans-serif; --body: 'Mulish', sans-serif;
     }
     body.dark-mode {
-      --cream: #0c0a09; --cream2: #1c1917; --ink: #f5f5f4; --ink2: #d6d3d1;
-      --surface: #171717; --border: #262626; --red: #ef4444; 
+      --navy: #1e3a8a; --navy2: #ffffff; --silver: #94a3b8; --silver2: #1e293b;
+      --ink: #f8fafc; --ink2: #cbd5e1; --surface: #0f172a; --border: #1e293b; 
+      --background: #020617;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--body); background: var(--cream); color: var(--ink); line-height: 1.6; padding-bottom: 80px; }
+    body { font-family: var(--body); background: var(--background, #ffffff); color: var(--ink); line-height: 1.6; padding-bottom: 80px; transition: background 0.3s; }
+    body:not(.dark-mode) { --background: #ffffff; }
 
-    nav { background: var(--ink); height: 60px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
-    .nav-logo { font-family: var(--sans); font-size: 20px; font-weight: 800; color: var(--cream); text-decoration: none; }
-    .nav-logo span { color: var(--red2); }
+    nav { background: var(--navy); height: 60px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .nav-logo { font-family: var(--sans); font-size: 20px; font-weight: 800; color: #ffffff; text-decoration: none; letter-spacing: -1px; }
+    .nav-logo span { color: var(--silver); }
 
     .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
 
     h1 { font-family: var(--serif); font-size: 42px; font-weight: 700; margin-bottom: 8px; }
     .subtitle { color: var(--ink2); font-weight: 300; font-size: 18px; margin-bottom: 32px; }
 
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 30px rgba(0,0,0,0.03); }
-    h2 { font-family: var(--sans); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 24px; border-bottom: 1px solid var(--cream2); padding-bottom: 12px; }
+    .card { background: var(--surface); border: 1px solid var(--border); padding: 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .btn-secondary { background: var(--silver2); color: var(--navy); border: 1px solid var(--silver); }
+    .btn-secondary:hover { background: var(--silver); }
+    button { background: var(--navy); color: #ffffff; border: none; padding: 14px 28px; border-radius: 8px; font-family: var(--sans); font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+    button:hover { transform: translateY(-1px); filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h2 { font-family: var(--sans); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--navy); margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
 
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
     @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
 
-    label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px; color: var(--ink2); }
-    input, textarea, select { width: 100%; padding: 12px 16px; border: 1px solid var(--border); background: #faf9f7; font-family: var(--body); font-size: 15px; border-radius: 2px; }
-    input:focus, textarea:focus { outline: none; border-color: var(--gold); background: #fff; }
-    textarea { min-height: 100px; }
-
-    button { background: var(--ink); color: var(--cream); font-family: var(--sans); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; padding: 16px 24px; border: none; cursor: pointer; border-radius: 2px; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
-    button:hover { background: var(--red); transform: translateY(-2px); }
-    button:disabled { background: var(--border); cursor: not-allowed; }
-    .btn-secondary { background: transparent; border: 1px solid var(--ink); color: var(--ink); }
+    input, textarea, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; font-family: var(--body); font-size: 14px; background: var(--surface); color: var(--ink); }
+    label { display: block; font-family: var(--sans); font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--navy); margin-bottom: 6px; margin-top: 12px; }
 
     .status-msg { margin-top: 12px; font-size: 14px; color: #1e7d46; font-weight: 500; }
-    .status-msg.error { color: var(--red); }
+    .status-msg.error { color: #ef4444; }
     .hidden { display: none; }
 
     /* Flow Specifics */
-    .menu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: #fdfcfb; cursor: pointer; transition: all 0.2s; }
-    .menu-item:hover { border-color: var(--gold); background: white; }
-    .menu-info h3 { font-family: var(--serif); font-size: 22px; margin-bottom: 4px; }
+    .menu-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); cursor: pointer; transition: all 0.2s; }
+    .menu-item:hover { border-color: var(--navy); transform: scale(1.01); background: var(--silver2); }
+    .menu-info h3 { font-family: var(--serif); font-size: 24px; margin-bottom: 4px; color: var(--navy); }
     .menu-info p { font-size: 14px; color: var(--ink2); }
 
     .jobs { display: grid; gap: 16px; margin-top: 24px; }
-    .job { padding: 24px; border: 1px solid var(--border); border-radius: 4px; background: #fdfcfb; }
-    .job-title { font-family: var(--serif); font-size: 20px; margin-bottom: 4px; }
-    .job-meta { font-size: 13px; color: var(--ink2); margin-bottom: 12px; display: flex; gap: 12px; }
-    .job-fit { color: var(--red); font-weight: 700; }
+    .job { padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); transition: all 0.2s; }
+    .job:hover { border-color: var(--navy); }
+    .job-title { font-family: var(--serif); font-size: 22px; margin-bottom: 4px; color: var(--navy); }
+    .job-meta { font-size: 13px; color: var(--ink2); margin-bottom: 12px; display: flex; gap: 12px; align-items: center; }
+    .job-fit { color: var(--accent); font-weight: 800; background: var(--silver2); padding: 2px 8px; border-radius: 4px; }
     .loader { animation: spin 1s linear infinite; display: none; border: 2px solid white; border-top: 2px solid transparent; width: 14px; height: 14px; border-radius: 50%; }
     button.loading .loader { display: inline-block; }
     @keyframes spin { to {transform:rotate(360deg);} }
@@ -114,17 +114,18 @@
       <section class="card">
         <h2>2. Review Profile</h2>
         <div class="row">
-          <div><label>Summary</label><textarea id="summary"></textarea></div>
-          <div><label>Target Role (e.g. Frontend Dev)</label><input id="primary-role" placeholder="e.g. Senior Software Engineer"></div>
+          <div><label>Target Role</label><input id="primary-role" placeholder="e.g. Senior Software Engineer"></div>
+          <div><label>Current Location</label><input id="location" placeholder="e.g. Warsaw, Poland"></div>
         </div>
         <div class="row">
-          <div><label>Skills (Extracted)</label><textarea id="skills"></textarea></div>
+          <div><label>Summary</label><textarea id="summary" style="height:100px"></textarea></div>
+          <div><label>Skills (Extracted)</label><textarea id="skills" style="height:100px" placeholder="React, Node.js, etc"></textarea></div>
+        </div>
+        <div class="row">
           <div><label>Exp Years</label><input id="years" type="number"></div>
-        </div>
-        <div class="row">
           <div><label>Seniority</label><select id="seniority"><option value="junior">Junior</option><option value="mid">Mid</option><option value="senior">Senior</option><option value="lead">Lead</option></select></div>
-          <div style="display:flex; align-items:flex-end;"><button onclick="saveProfile()" id="btn-save-profile" style="width:100%">Confirm & Save</button></div>
         </div>
+        <button onclick="saveProfile()" id="btn-save-profile" style="width:100%; margin-top:20px">Confirm & Save Profile</button>
       </section>
     </div>
 
@@ -152,12 +153,19 @@
           </div>
           <button id="btn-match" style="padding:12px 20px"><div class="loader"></div>Go →</button>
         </div>
+        <div class="menu-item" onclick="showView('view-onboarding')">
+          <div class="menu-info">
+            <h3>Profile & CV</h3>
+            <p>Update skills, role, and current location.</p>
+          </div>
+          <button class="btn-secondary" style="padding:12px 20px">Edit</button>
+        </div>
         <div class="menu-item" onclick="showView('view-preferences')">
           <div class="menu-info">
-            <h3>Account Settings</h3>
-            <p>Adjust language filters and matching sensitivity.</p>
+            <h3>Job Settings</h3>
+            <p>Adjust language filters and destination targets.</p>
           </div>
-          <button class="btn-secondary" style="padding:12px 20px">Settings</button>
+          <button class="btn-secondary" style="padding:12px 20px">Preferences</button>
         </div>
         <div class="menu-item" onclick="logout()">
           <div class="menu-info">
@@ -186,7 +194,13 @@
             <input type="number" id="prefs-min-fit" value="45">
           </div>
         </div>
-        <button onclick="savePreferences()" id="btn-save-prefs">Save Preferences</button>
+        <div class="row">
+          <div>
+            <label>Preferred Destination</label>
+            <input id="prefs-location" placeholder="e.g. Warsaw, Remote, etc">
+          </div>
+        </div>
+        <button onclick="savePreferences()" id="btn-save-prefs" style="width:100%">Save Preferences</button>
         <button class="btn-secondary" onclick="showView('view-main-menu')" style="margin-top:10px">Back to Menu</button>
       </section>
     </div>
@@ -276,10 +290,11 @@
 
         document.getElementById('nav-user-badge').textContent = session.user.name || session.user.email;
         const profile = await api('/api/profile-get');
+        if (profile.profile) fillProfile(profile.profile);
+        
         if (!profile.profile?.summary) {
           showView('view-onboarding');
         } else {
-          fillProfile(profile.profile);
           document.getElementById('main-welcome').textContent = `Hello, ${session.user.name || 'Explorer'}. What would you like to do today?`;
           showView('view-main-menu');
         }
@@ -292,6 +307,7 @@
       document.getElementById('skills').value = (profile.skills || []).join(', ');
       document.getElementById('years').value = profile.yearsExperience || 0;
       document.getElementById('seniority').value = profile.seniority || 'mid';
+      document.getElementById('location').value = profile.location || '';
       rawCvText = profile.rawCvText || null;
     }
 
@@ -309,16 +325,19 @@
 
     async function saveProfile() {
       try {
+        setBtnLoading('btn-save-profile', true);
         await api('/api/profile-save', 'POST', {
           summary: document.getElementById('summary').value,
           primaryRole: document.getElementById('primary-role').value,
           skills: document.getElementById('skills').value.split(',').map(s=>s.trim()).filter(Boolean),
           yearsExperience: Number(document.getElementById('years').value),
           seniority: document.getElementById('seniority').value,
-          location: '', languages: [], rawCvText
+          location: document.getElementById('location').value,
+          languages: [], rawCvText
         });
+        setBtnLoading('btn-save-profile', false);
         await loadAppState();
-      } catch (e) { alert(e.message); }
+      } catch (e) { alert(e.message); setBtnLoading('btn-save-profile', false); }
     }
 
     async function recommend() {
@@ -367,7 +386,8 @@
         await api('/api/user-data?action=preferences-save', 'POST', {
           englishOnly: document.getElementById('prefs-english-only').checked,
           minFitPercent: Number(document.getElementById('prefs-min-fit').value),
-          preferredLocation: '', workType: 'any'
+          preferredLocation: document.getElementById('prefs-location').value, 
+          workType: 'any'
         });
         setBtnLoading('btn-save-prefs', false);
         showView('view-main-menu');
