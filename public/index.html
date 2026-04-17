@@ -8,11 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;500;600;700;800&family=Mulish:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #f0ebe1;
-    --cream2: #e8e2d6;
-    --ink: #1a1612;
-    --red2: #e85c47;
-    --gold: #c49a3c;
+    --navy: #000080;
+    --navy2: #001f3f;
+    --silver: #c0c0c0;
+    --silver2: #e2e8f0;
+    --ink: #0f172a;
+    --surface: #ffffff;
     --serif: 'Playfair Display', Georgia, serif;
     --sans: 'Syne', sans-serif;
     --body: 'Mulish', sans-serif;
@@ -21,31 +22,31 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: var(--body);
-    background: var(--cream);
+    background: var(--surface);
     color: var(--ink);
     line-height: 1.7;
     overflow-x: hidden;
   }
  
   nav {
-    background: var(--ink);
+    background: var(--navy);
     height: 60px; padding: 0 40px;
     display: flex; align-items: center; justify-content: space-between;
   }
   .nav-logo {
     font-family: var(--sans); font-size: 20px; font-weight: 800;
-    color: var(--cream); text-decoration: none;
+    color: white; text-decoration: none;
   }
-  .nav-logo span { color: var(--red2); }
+  .nav-logo span { color: var(--silver); }
   .nav-badge {
     font-family: var(--sans); font-size: 10px; font-weight: 700;
     letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--ink); background: var(--gold);
-    padding: 4px 12px; border-radius: 2px;
+    color: var(--navy); background: var(--silver);
+    padding: 4px 12px; border-radius: 4px;
   }
  
   .hero {
-    background: var(--ink);
+    background: var(--navy);
     padding: 120px 0 100px;
     text-align: center;
   }
@@ -54,46 +55,46 @@
   .hero-eyebrow {
     font-family: var(--sans); font-size: 11px; font-weight: 700;
     letter-spacing: 3px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 24px;
+    color: var(--silver); margin-bottom: 24px;
     display: inline-flex; align-items: center; gap: 10px;
   }
-  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 20px; height: 1px; background: var(--gold); }
+  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 20px; height: 1px; background: var(--silver); }
  
   .hero h1 {
     font-family: var(--serif); font-size: clamp(40px, 8vw, 72px);
     font-weight: 900; line-height: 1.05; letter-spacing: -2px;
-    color: var(--cream); margin-bottom: 24px;
+    color: white; margin-bottom: 24px;
   }
-  .hero h1 em { font-style: italic; color: var(--red2); }
+  .hero h1 em { font-style: italic; color: var(--silver); }
  
   .hero-desc {
-    font-size: 19px; color: rgba(240,235,225,0.7);
+    font-size: 19px; color: rgba(255,255,255,0.7);
     max-width: 600px; margin: 0 auto 40px; font-weight: 300;
   }
-
+ 
   .cta-button {
-    background: var(--red2); color: white;
-    font-family: var(--sans); font-weight: 700; text-transform: uppercase;
-    text-decoration: none; padding: 18px 48px; border-radius: 2px;
+    background: var(--silver); color: var(--navy);
+    font-family: var(--sans); font-weight: 800; text-transform: uppercase;
+    text-decoration: none; padding: 18px 48px; border-radius: 8px;
     font-size: 14px; letter-spacing: 1px; display: inline-block;
     transition: all 0.3s;
   }
-  .cta-button:hover { background: #d63f2a; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-
-  .features { padding: 100px 0; background: var(--cream2); }
+  .cta-button:hover { background: white; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+ 
+  .features { padding: 100px 0; background: var(--silver2); }
   .feature-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-top: 60px; }
   @media (max-width: 800px) { .feature-grid { grid-template-columns: 1fr; } }
   
   .feat-card { text-align: left; }
-  .feat-card h3 { font-family: var(--serif); font-size: 24px; margin-bottom: 12px; }
+  .feat-card h3 { font-family: var(--serif); font-size: 24px; margin-bottom: 12px; color: var(--navy); }
   .feat-card p { font-size: 15px; color: var(--ink); opacity: 0.8; }
-  .feat-num { font-family: var(--sans); color: var(--gold); font-weight: 800; margin-bottom: 10px; display: block; }
-
+  .feat-num { font-family: var(--sans); color: var(--navy); font-weight: 800; margin-bottom: 10px; display: block; }
+ 
   footer {
-    background: var(--ink); color: rgba(240,235,225,0.4);
+    background: var(--navy); color: rgba(255,255,255,0.4);
     padding: 40px; text-align: center; font-size: 13px;
   }
-  footer a { color: var(--gold); text-decoration: none; margin: 0 10px; }
+  footer a { color: var(--silver); text-decoration: none; margin: 0 10px; }
 </style>
 </head>
 <body>
