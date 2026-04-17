@@ -121,6 +121,18 @@
     <div id="view-main-menu" class="hidden">
       <h1>Main Menu</h1>
       <p class="subtitle" id="main-welcome">Welcome back.</p>
+      
+      <div class="card" style="margin-bottom:32px; padding:20px; border-style:dashed;">
+        <h2 style="margin-bottom:12px; border:none; padding:0">Connection Status</h2>
+        <div id="connection-status" style="display:flex; gap:15px; font-size:12px; font-weight:700; text-transform:uppercase;">
+          <span id="st-db">...</span>
+          <span id="st-js">...</span>
+          <span id="st-sc">...</span>
+          <span id="st-ai">...</span>
+        </div>
+        <p id="st-hint" class="subtitle" style="font-size:13px; margin:10px 0 0; display:none;">⚠️ Some keys are missing. Jobs won't show up until you add them in Vercel.</p>
+      </div>
+
       <div class="menu-grid">
         <div class="menu-item" onclick="showView('view-results'); recommend()">
           <div class="menu-info">
@@ -197,6 +209,17 @@
         const session = await api('/api/auth-session');
         if (!session.user) { showView('view-auth'); return; }
         
+        // Check system status
+        const sys = await api('/api/system-check');
+        document.getElementById('st-db').textContent = sys.database ? '✅ DB' : '❌ DB';
+        document.getElementById('st-js').textContent = sys.jsearch ? '✅ JSearch' : '⚪ JSearch';
+        document.getElementById('st-sc').textContent = sys.scraper ? '✅ Scraper' : '⚪ Scraper';
+        document.getElementById('st-ai').textContent = sys.groq ? '✅ AI' : '❌ AI';
+        
+        if (!sys.jsearch && !sys.scraper) {
+          document.getElementById('st-hint').style.display = 'block';
+        }
+
         document.getElementById('nav-user-badge').textContent = session.user.name || session.user.email;
         const profile = await api('/api/profile-get');
         if (!profile.profile?.summary) {
