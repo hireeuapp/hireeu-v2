@@ -70,7 +70,8 @@
     .btn-cover:hover { background: var(--navy); color: #fff; transform: none; }
 
     /* Modal */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
     .modal { background: var(--surface); border-radius: 12px; padding: 32px; max-width: 660px; width: 100%; max-height: 82vh; overflow-y: auto; position: relative; }
     .modal h3 { font-family: var(--serif); font-size: 24px; color: var(--navy); margin-bottom: 4px; }
     .modal-close { position: absolute; top: 14px; right: 14px; background: transparent; border: 1px solid var(--border); color: var(--ink2); padding: 4px 10px; font-size: 16px; border-radius: 6px; text-transform: none; letter-spacing: 0; }
@@ -95,9 +96,9 @@
   </nav>
 
   <!-- Cover Letter Modal -->
-  <div class="modal-overlay hidden" id="cover-letter-modal">
+  <div class="modal-overlay" id="cover-letter-modal">
     <div class="modal">
-      <button class="modal-close" onclick="closeCoverLetterModal()">✕</button>
+      <button class="modal-close" onclick="closeCoverLetterModal(event)">✕</button>
       <h3 id="cl-modal-title">Cover Letter</h3>
       <p style="font-size:13px; color:var(--ink2); margin-bottom:4px" id="cl-modal-subtitle"></p>
       <div id="cl-modal-body"></div>
@@ -512,7 +513,7 @@
       document.getElementById('cl-modal-subtitle').textContent = job.company;
       document.getElementById('cl-modal-body').innerHTML = '<p style="color:var(--ink2); text-align:center; padding:40px 0">Generating your personalised cover letter…</p>';
       document.getElementById('btn-copy-cl').classList.add('hidden');
-      document.getElementById('cover-letter-modal').classList.remove('hidden');
+      document.getElementById('cover-letter-modal').classList.add('open');
       currentCoverLetter = '';
 
       try {
@@ -548,12 +549,13 @@
       }
     }
 
-    function closeCoverLetterModal() {
-      document.getElementById('cover-letter-modal').classList.add('hidden');
+    function closeCoverLetterModal(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('cover-letter-modal').classList.remove('open');
     }
 
     document.getElementById('cover-letter-modal').addEventListener('click', function(e) {
-      if (e.target === this) closeCoverLetterModal();
+      if (e.target === this) closeCoverLetterModal(e);
     });
 
     async function copyCoverLetter() {
