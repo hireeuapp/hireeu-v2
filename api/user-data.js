@@ -1,5 +1,6 @@
 import { requireAuth } from '../lib/auth.js';
 import { query } from '../lib/db.js';
+import bcrypt from 'bcryptjs';
 
 function sanitizeArray(input) {
   if (!Array.isArray(input)) return [];
@@ -62,8 +63,8 @@ export default async function handler(req, res) {
          VALUES ($1, $2, $3, $4::jsonb, $5, $6, $7, $8::jsonb, $9, NOW())
          ON CONFLICT (user_id)
          DO UPDATE SET
-           summary = EXCLUDED.summary, primary_role = EXCLUDED.primary_role, skills = EXCLUDED.skills, 
-           years_experience = EXCLUDED.years_experience, seniority = EXCLUDED.seniority, 
+           summary = EXCLUDED.summary, primary_role = EXCLUDED.primary_role, skills = EXCLUDED.skills,
+           years_experience = EXCLUDED.years_experience, seniority = EXCLUDED.seniority,
            location = EXCLUDED.location, languages = EXCLUDED.languages,
            raw_cv_text = EXCLUDED.raw_cv_text, updated_at = NOW()`,
         [user.id, summary, primaryRole, JSON.stringify(skills), yearsExperience, seniority, location, JSON.stringify(languages), rawCvText]
@@ -91,7 +92,7 @@ export default async function handler(req, res) {
           preferredLocation: row.preferred_location || '',
           workType: row.work_type || 'any',
           minFitPercent: row.min_fit_percent ?? 45,
-          englishOnly: !!row.english_only
+          englishOnly: !!row.english_only,
         },
       });
     } catch (err) {
@@ -121,6 +122,68 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true });
     } catch (err) {
       return res.status(500).json({ error: err.message || 'Failed to save preferences' });
+    }
+  }
+
+  // NEW: Update name + email
+  if (action === 'account-update') {
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+    const body = req.body || {};
+    const name = body.name ? String(body.name).trim().slice(0, 200) : null;
+    const email = body.email ? String(body.email).trim().toLowerCase().slice(0, 254) : null;
+
+    if (!email) return res.status(400).json({ error: 'Email is required' });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: 'Invalid email address' });
+    }
+
+    try {
+      const existing = await query(
+        'SELECT id FROM app_users WHERE email = $1 AND id != $2',
+        [email, user.id]
+      );
+      if (existing.rowCount > 0) {
+        return res.status(409).json({ error: 'That email is already in use by another account' });
+      }
+      await query(
+        'UPDATE app_users SET name = $1, email = $2 WHERE id = $3',
+        [name, email, user.id]
+      );
+      return res.status(200).json({ ok: true });
+    } catch (err) {
+      return res.status(500).json({ error: err.message || 'Failed to update account' });
+    }
+  }
+
+  // NEW: Change password
+  if (action === 'password-update') {
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+    const body = req.body || {};
+    const currentPassword = String(body.currentPassword || '');
+    const newPassword = String(body.newPassword || '');
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'Both current and new passwords are required' });
+    }
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'New password must be at least 8 characters' });
+    }
+
+    try {
+      const result = await query(
+        'SELECT password_hash FROM app_users WHERE id = $1',
+        [user.id]
+      );
+      if (result.rowCount === 0) return res.status(404).json({ error: 'User not found' });
+
+      const valid = await bcrypt.compare(currentPassword, result.rows[0].password_hash);
+      if (!valid) return res.status(401).json({ error: 'Current password is incorrect' });
+
+      const newHash = await bcrypt.hash(newPassword, 12);
+      await query('UPDATE app_users SET password_hash = $1 WHERE id = $2', [newHash, user.id]);
+      return res.status(200).json({ ok: true });
+    } catch (err) {
+      return res.status(500).json({ error: err.message || 'Failed to update password' });
     }
   }
 
