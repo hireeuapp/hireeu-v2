@@ -49,15 +49,15 @@
       transition: color 0.15s;
     }
     .nav-back:hover { color: var(--cream); }
-    .page { max-width: 680px; margin: 0 auto; padding: 56px 24px 80px; }
+    .page { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
     .page-header { margin-bottom: 40px; }
     .page-label {
       display: inline-flex; align-items: center; gap: 8px;
       font-family: var(--sans); font-size: 10px; font-weight: 700;
-      letter-spacing: 2.5px; text-transform: uppercase; color: var(--red);
+      letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent);
       margin-bottom: 16px;
     }
-    .page-label::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+    .page-label::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
     h1 {
       font-family: var(--serif); font-size: clamp(28px, 4vw, 44px);
       font-weight: 900; line-height: 1.08; letter-spacing: -1px;
@@ -70,7 +70,7 @@
     }
     .intro-box {
       background: var(--surface); border: 1px solid var(--border2);
-      border-left: 3px solid var(--red); border-radius: 3px;
+      border-left: 3px solid var(--accent); border-radius: 3px;
       padding: 20px 24px; margin-bottom: 40px;
       font-size: 0.95rem; color: var(--ink2); line-height: 1.7;
       font-family: var(--body); font-weight: 300;
@@ -90,7 +90,7 @@
     }
     p:last-child { margin-bottom: 0; }
     p strong { color: var(--ink2); font-weight: 600; }
-    p a { color: var(--red); font-weight: 600; text-decoration: none; }
+    p a { color: var(--accent); font-weight: 600; text-decoration: none; }
     p a:hover { color: var(--ink); }
     .highlight {
       background: var(--surface); border: 1px solid var(--border2);
@@ -110,17 +110,22 @@
     }
     .data-value { color: var(--ink3); font-family: var(--body); font-weight: 300; font-size: 0.92rem; }
     .delete-box {
-      background: var(--green-light); border: 1px solid rgba(30,125,70,0.2);
+      background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.2);
       border-radius: 3px; padding: 20px 24px; margin-top: 12px;
     }
-    .delete-box p { color: var(--green); }
-    .delete-box a { color: var(--green); font-weight: 700; }
+    .delete-box p { color: #22c55e; }
+    .delete-box a { color: #22c55e; font-weight: 700; }
     .server-box {
-      background: rgba(196,154,60,0.08); border: 1px solid rgba(196,154,60,0.3);
+      background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2);
       border-radius: 3px; padding: 20px 24px; margin-top: 12px;
     }
     .server-box p { color: var(--ink2); }
-    .server-box a { color: var(--red); font-weight: 700; }
+    .server-box a { color: var(--accent); font-weight: 700; }
+    .warning-box {
+      background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 3px; padding: 20px 24px; margin-top: 12px;
+    }
+    .warning-box p { color: #ef4444; }
     footer {
       margin-top: 60px;
       background: var(--ink); border-radius: 3px;
@@ -132,6 +137,22 @@
     footer a { color: rgba(240,235,225,0.35); text-decoration: underline; transition: color 0.15s; }
     footer a:hover { color: var(--cream); }
     footer strong { color: rgba(240,235,225,0.6); }
+    .toc {
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 3px; padding: 20px 24px; margin-bottom: 40px;
+    }
+    .toc ul {
+      list-style: none; padding: 0;
+    }
+    .toc li {
+      margin-bottom: 8px;
+    }
+    .toc a {
+      color: var(--accent); text-decoration: none;
+    }
+    .toc a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -165,102 +186,326 @@
   <div class="page-header">
     <div class="page-label">Legal</div>
     <h1>Privacy <em>Policy</em></h1>
-    <p class="last-updated">Last updated: April 2026</p>
+    <p class="last-updated">Last updated: April 2026 · v2.0</p>
   </div>
 
   <div class="intro-box">
-    This policy is written in plain English, not legal jargon. HireEU is a small early-stage project — there's no team of lawyers here, just one person building something useful. Here's exactly what happens with your data, honestly.
+    <strong>HireEU is transparent about data.</strong> This policy explains what we collect, why, where it lives, and what you can do about it. No jargon, no tricks — just straight facts. HireEU is built to respect your privacy.
   </div>
 
-  <div class="section">
+  <!-- Table of Contents -->
+  <div class="toc">
+    <strong style="display: block; margin-bottom: 12px;">Quick navigation:</strong>
+    <ul>
+      <li><a href="#what-we-collect">What data we collect</a></li>
+      <li><a href="#why-we-collect">Why we collect it</a></li>
+      <li><a href="#how-we-use">How we use your data</a></li>
+      <li><a href="#third-parties">Third parties & integrations</a></li>
+      <li><a href="#where-stored">Where data is stored</a></li>
+      <li><a href="#how-protected">How it's protected</a></li>
+      <li><a href="#your-rights">Your rights (GDPR)</a></li>
+      <li><a href="#deletion">How to delete your account</a></li>
+      <li><a href="#contact">Contact & questions</a></li>
+    </ul>
+  </div>
+
+  <!-- WHAT WE COLLECT -->
+  <div class="section" id="what-we-collect">
     <h2><span class="icon">📋</span> What data we collect</h2>
-    <p>We collect <strong>one thing only</strong> when you join the waitlist:</p>
+    
+    <p><strong>If you use HireEU, we collect:</strong></p>
+    
     <div class="highlight">
-      <div class="data-row">
-        <span class="data-label">Email address</span>
-        <span class="data-value">The email you type into the waitlist form</span>
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-family: var(--sans); font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--ink2); margin-bottom: 12px;">Account Information</h3>
+        <div class="data-row">
+          <span class="data-label">Email address</span>
+          <span class="data-value">Your email (required for login & recovery)</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Password</span>
+          <span class="data-value">Hashed with bcryptjs (never stored in plaintext)</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Name</span>
+          <span class="data-value">Optional — you can leave it blank</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Created date</span>
+          <span class="data-value">When you created your account</span>
+        </div>
       </div>
-      <div class="data-row">
-        <span class="data-label">Signup timestamp</span>
-        <span class="data-value">The date and time you submitted the form</span>
+
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-family: var(--sans); font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--ink2); margin-bottom: 12px;">CV & Profile Data</h3>
+        <div class="data-row">
+          <span class="data-label">CV file</span>
+          <span class="data-value">Extracted text from your uploaded PDF or DOCX (used for parsing only)</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Career summary</span>
+          <span class="data-value">Professional overview extracted from your CV</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Primary role</span>
+          <span class="data-value">Your job title / desired position</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Skills</span>
+          <span class="data-value">Technical tools, languages, frameworks (extracted via AI)</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Years of experience</span>
+          <span class="data-value">Total work experience (0–70 years)</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Seniority level</span>
+          <span class="data-value">Junior, mid, senior, or lead</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Location</span>
+          <span class="data-value">Your city/country (optional)</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Languages</span>
+          <span class="data-value">Languages you speak (from CV)</span>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-family: var(--sans); font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--ink2); margin-bottom: 12px;">Job Search Preferences</h3>
+        <div class="data-row">
+          <span class="data-label">Preferred location</span>
+          <span class="data-value">Cities/countries you're interested in</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Work type</span>
+          <span class="data-value">Remote, hybrid, onsite, or any</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Minimum fit %</span>
+          <span class="data-value">Lowest match score you'll accept (0–100)</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">English only</span>
+          <span class="data-value">Whether to show only English-language jobs</span>
+        </div>
       </div>
     </div>
-    <p style="margin-top: 12px;">That's it. No name, no location, no tracking cookies, no analytics scripts. We don't use Google Analytics or any third-party trackers on this page.</p>
+
+    <p style="margin-top: 20px;"><strong>What we DON'T collect:</strong> Phone number, IP address, device fingerprinting, cookies (except session auth), browsing history, or location data beyond what you volunteer.</p>
   </div>
 
-  <div class="section">
+  <!-- WHY WE COLLECT -->
+  <div class="section" id="why-we-collect">
     <h2><span class="icon">🎯</span> Why we collect it</h2>
+    
     <div class="highlight">
-      <p><strong>One reason only:</strong> to email you when HireEU launches and you can get early access.</p>
-      <p>We will never use your email for anything else — no newsletters you didn't ask for, no marketing from partners, nothing unrelated to HireEU.</p>
+      <div class="data-row">
+        <span class="data-label">Account data</span>
+        <span class="data-value">To let you log in, reset your password, and keep your profile safe</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">CV & profile</span>
+        <span class="data-value">To parse your CV, extract skills, and match you with relevant jobs</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Search preferences</span>
+        <span class="data-value">To filter jobs by your location, work type, and fit threshold</span>
+      </div>
     </div>
+
+    <p style="margin-top: 16px;"><strong>We do not:</strong></p>
+    <ul style="margin-left: 20px; color: var(--ink3); margin-top: 8px;">
+      <li>Sell your data to recruiters, job boards, or anyone else</li>
+      <li>Use your email for marketing or newsletters (unless you opt in separately)</li>
+      <li>Share your CV with employers without your explicit consent</li>
+      <li>Train AI models on your CV data</li>
+    </ul>
   </div>
 
-  <div class="section">
-    <h2><span class="icon">👤</span> Who can see your data</h2>
-    <p><strong>Only the founder of HireEU.</strong> No team, no contractors, no third parties have access to the waitlist.</p>
-    <p>The only exception is Neon (our database provider) who stores the data on their servers — but they cannot read or use it, they just provide the storage infrastructure.</p>
+  <!-- HOW WE USE -->
+  <div class="section" id="how-we-use">
+    <h2><span class="icon">⚙️</span> How we use your data</h2>
+
+    <p><strong>CV Parsing:</strong> When you upload your CV, we extract text and send it to <strong>Groq API</strong> (Claude Llama 3.3 70B) to parse your profile (skills, experience, seniority). The CV text is used for this parsing only and is stored for future reference — you can delete it anytime.</p>
+
+    <p><strong>Job Matching:</strong> We use your profile (skills, years of experience, seniority) to score jobs from our aggregators (JSearch, Adzuna, Polish job boards). We compute a match percentage (0–100%) and rank results. Your data stays on our servers during this process.</p>
+
+    <p><strong>Cover Letter Generation:</strong> When you request a cover letter, we send your profile summary + the job description to Groq API to generate personalized text. The cover letter is not stored — it's generated on-demand.</p>
+
+    <p><strong>Email Communication:</strong> We send transactional emails (password reset, account notifications) via Gmail SMTP. We do not send marketing emails unless you explicitly opt in.</p>
   </div>
 
-  <div class="section">
-    <h2><span class="icon">🚫</span> Do we sell or share your data</h2>
+  <!-- THIRD PARTIES -->
+  <div class="section" id="third-parties">
+    <h2><span class="icon">🔗</span> Third parties & integrations</h2>
+
+    <p>HireEU uses the following services. Your data flows to them <strong>only as necessary</strong> for HireEU to function:</p>
+
     <div class="highlight">
-      <p><strong>No. Never.</strong> Your email address will never be sold, rented, shared, or given to any other company or person for any reason.</p>
+      <div style="margin-bottom: 20px;">
+        <strong style="display: block; margin-bottom: 8px;">Groq API (AI)</strong>
+        <p style="margin: 0; font-size: 0.9rem;">Processes CV text and generates cover letters. <a href="https://groq.com/privacy" target="_blank">Groq's privacy policy</a>.</p>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <strong style="display: block; margin-bottom: 8px;">Neon (Database)</strong>
+        <p style="margin: 0; font-size: 0.9rem;">Stores user accounts, profiles, and preferences on PostgreSQL. <a href="https://neon.tech/privacy" target="_blank">Neon's privacy policy</a>.</p>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <strong style="display: block; margin-bottom: 8px;">JSearch API via RapidAPI</strong>
+        <p style="margin: 0; font-size: 0.9rem;">Provides job listings globally. Search queries are sent to RapidAPI. <a href="https://rapidapi.com/privacy" target="_blank">RapidAPI's privacy policy</a>.</p>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <strong style="display: block; margin-bottom: 8px;">Adzuna API</strong>
+        <p style="margin: 0; font-size: 0.9rem;">Provides EU job listings. <a href="https://www.adzuna.com/site/privacy_policy" target="_blank">Adzuna's privacy policy</a>.</p>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <strong style="display: block; margin-bottom: 8px;">Railway (Scraper)</strong>
+        <p style="margin: 0; font-size: 0.9rem;">Hosts a custom scraper for Polish job boards (JustJoinIT, NoFluffJobs, EnglishJobs.pl). No personal data is sent. <a href="https://railway.app/legal/privacy" target="_blank">Railway's privacy policy</a>.</p>
+      </div>
+
+      <div>
+        <strong style="display: block; margin-bottom: 8px;">Gmail SMTP (Email)</strong>
+        <p style="margin: 0; font-size: 0.9rem;">Sends transactional emails. <a href="https://policies.google.com/privacy" target="_blank">Google's privacy policy</a>.</p>
+      </div>
     </div>
+
+    <p style="margin-top: 16px;"><strong>Important:</strong> We use these services to make HireEU work. Their privacy policies apply to data they receive. We do not add extra processing or delays — your data is used only as needed.</p>
   </div>
 
-  <div class="section">
+  <!-- WHERE STORED -->
+  <div class="section" id="where-stored">
     <h2><span class="icon">🌍</span> Where your data is stored</h2>
+    
     <div class="server-box">
-      <p>Your data is stored on servers located in <strong>Frankfurt, Germany</strong> (EU), provided by <a href="https://neon.tech" target="_blank">Neon.tech</a>.</p>
-      <p>This means your data stays within the European Union and is subject to EU data protection standards (GDPR).</p>
+      <p><strong>Primary storage:</strong> Neon PostgreSQL (Frankfurt, Germany — EU)</p>
+      <p>Your account, profile, and preferences are stored in an EU data center and encrypted in transit.</p>
+      <p style="margin-top: 12px;"><strong>Temporary processing:</strong> When you upload a CV or generate a cover letter, the data is sent to Groq API servers (US-based) for AI processing. The results are returned and stored locally on Neon.</p>
+      <p style="margin-top: 12px;"><strong>EU Compliance:</strong> Data stored in the EU is subject to GDPR. Data sent to Groq (US) is covered by <a href="https://commission.europa.eu/publications/standard-contractual-clauses-scc_en" target="_blank">Standard Contractual Clauses</a>.</p>
     </div>
   </div>
 
-  <div class="section">
-    <h2><span class="icon">🗑️</span> How to request deletion</h2>
-    <p>You can ask us to delete your email from the waitlist at any time, no questions asked.</p>
-    <div class="delete-box">
-      <p>Just send an email to <a href="mailto:hireeuapp@gmail.com">hireeuapp@gmail.com</a> with the subject <strong>"Delete my data"</strong> and we'll remove your email within 48 hours and confirm when it's done.</p>
+  <!-- SECURITY -->
+  <div class="section" id="how-protected">
+    <h2><span class="icon">🔒</span> How your data is protected</h2>
+
+    <div class="highlight">
+      <div class="data-row">
+        <span class="data-label">Passwords</span>
+        <span class="data-value">Hashed with bcryptjs (10-round salt); never stored in plaintext</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Authentication</span>
+        <span class="data-value">JWT tokens (7-day expiry) for session management</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Database</span>
+        <span class="data-value">Neon uses SSL/TLS encryption (requires HTTPS)</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">API communication</span>
+        <span class="data-value">All API calls use HTTPS</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Data isolation</span>
+        <span class="data-value">Each user's data is isolated by UUID; no cross-user leaks</span>
+      </div>
     </div>
+
+    <p style="margin-top: 16px;"><strong>We don't:</strong> Use cookies for tracking, store session tokens in localStorage (only secure HTTP-only cookies), or log sensitive data.</p>
   </div>
 
-  <div class="section">
-    <h2><span class="icon">⚖️</span> Your rights (GDPR)</h2>
+  <!-- YOUR RIGHTS (GDPR) -->
+  <div class="section" id="your-rights">
+    <h2><span class="icon">⚖️</span> Your rights under GDPR</h2>
+
     <p>If you're in the EU or EEA, you have the right to:</p>
+
     <div class="highlight">
       <div class="data-row">
         <span class="data-label">Access</span>
-        <span class="data-value">Ask what data we hold about you</span>
-      </div>
-      <div class="data-row">
-        <span class="data-label">Deletion</span>
-        <span class="data-value">Ask us to delete your data (see above)</span>
+        <span class="data-value">Request a copy of all data we hold about you</span>
       </div>
       <div class="data-row">
         <span class="data-label">Correction</span>
-        <span class="data-value">Ask us to correct your email if it was entered wrong</span>
+        <span class="data-value">Ask us to fix incorrect data (e.g., wrong email)</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Deletion</span>
+        <span class="data-value">Ask us to delete your account and all data (right to be forgotten)</span>
       </div>
       <div class="data-row">
         <span class="data-label">Portability</span>
-        <span class="data-value">Ask for a copy of your data in a readable format</span>
+        <span class="data-value">Get your data in a portable, machine-readable format</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Objection</span>
+        <span class="data-value">Object to processing for marketing (we don't market anyway)</span>
       </div>
     </div>
-    <p style="margin-top: 12px;">To exercise any of these, just email <a href="mailto:hireeuapp@gmail.com">hireeuapp@gmail.com</a>.</p>
+
+    <p style="margin-top: 16px;"><strong>To exercise these rights, email</strong> <a href="mailto:hireeuapp@gmail.com">hireeuapp@gmail.com</a> with the subject <strong>"GDPR Request: [access/deletion/correction/portability]"</strong>. We'll respond within 30 days.</p>
   </div>
 
+  <!-- DELETION -->
+  <div class="section" id="deletion">
+    <h2><span class="icon">🗑️</span> How to delete your account</h2>
+
+    <p>You can request account deletion at any time. Here's what happens:</p>
+
+    <div class="delete-box">
+      <p><strong>Send an email to:</strong> <a href="mailto:hireeuapp@gmail.com">hireeuapp@gmail.com</a></p>
+      <p><strong>Subject:</strong> "Delete my HireEU account"</p>
+      <p><strong>We will:</strong></p>
+      <ul style="margin-left: 20px; margin-top: 8px; margin-bottom: 0;">
+        <li>Delete your account, password, and profile</li>
+        <li>Delete your CV data and search preferences</li>
+        <li>Confirm deletion within 48 hours</li>
+      </ul>
+      <p style="margin-top: 12px;"><strong>We won't:</strong> Recover deleted data once you confirm. This is permanent.</p>
+    </div>
+
+    <p style="margin-top: 16px;">Alternatively, if you're logged in, you can delete your account directly in the app settings (coming soon).</p>
+  </div>
+
+  <!-- LOGGING & RETENTION -->
+  <div class="section">
+    <h2><span class="icon">📊</span> Logging & data retention</h2>
+
+    <p><strong>Server logs:</strong> Vercel (our hosting provider) logs basic request data (IP, method, status) for debugging. These are deleted after 30 days.</p>
+
+    <p><strong>Your data:</strong> We keep your account and profile data as long as your account is active. After deletion, we retain no backups or copies (we're a small project, not a big corporation with tape backups).</p>
+
+    <p><strong>Job search history:</strong> We don't track or store your job search history. Matches are computed fresh each time.</p>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="section" id="contact">
+    <h2><span class="icon">✉️</span> Questions or concerns</h2>
+
+    <p>Data questions? Privacy concerns? Want to report a security issue?</p>
+
+    <div class="highlight">
+      <p><strong>Email:</strong> <a href="mailto:hireeuapp@gmail.com">hireeuapp@gmail.com</a></p>
+      <p><strong>Response time:</strong> Within 48 hours (you'll get a reply from a real person)</p>
+      <p><strong>Security issue?</strong> Please email privately — don't post publicly</p>
+    </div>
+  </div>
+
+  <!-- CHANGES -->
   <div class="section">
     <h2><span class="icon">📝</span> Changes to this policy</h2>
-    <p>If anything changes about how we handle data, we'll update this page and change the "last updated" date at the top. We won't notify you by email unless the change is significant.</p>
-  </div>
 
-  <div class="section">
-    <h2><span class="icon">✉️</span> Contact</h2>
-    <p>Questions about privacy? Email <a href="mailto:hireeuapp@gmail.com">hireeuapp@gmail.com</a> — you'll get a reply from a real person, not a bot.</p>
+    <p>As HireEU evolves, this policy may change. We'll update the "last updated" date above and post a notice on the home page if the change is significant. We won't use or share your data in ways not described here without explicit consent.</p>
   </div>
 
   <footer>
-    <p>© 2026 <strong>HireEU</strong> · <a href="/">Back to home</a> · <a href="mailto:hireeuapp@gmail.com">Contact</a></p>
+    <p>© 2026 <strong>HireEU</strong> · <a href="/">Back to home</a> · <a href="mailto:hireeuapp@gmail.com">Contact</a> · <a href="https://github.com/AbelHazi3110/hireeu-vercel" target="_blank">GitHub</a></p>
   </footer>
 
 </div>
