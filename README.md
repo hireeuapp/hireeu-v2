@@ -363,7 +363,7 @@ Contributions welcome! To contribute:
 
 **Questions or issues?**
 - Open a GitHub issue: https://github.com/AbelHazi3110/hireeu-vercel/issues
-- Email: [your-email@example.com]
+- Email: [haziabel10@gmail.com]
 - Live site: https://hireeu.vercel.app
 
 ---
