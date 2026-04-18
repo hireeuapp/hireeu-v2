@@ -15,7 +15,7 @@
     }
     body.dark-mode {
       --navy: #e2e8f0; --navy2: #ffffff; --silver: #94a3b8; --silver2: #1e293b;
-      --ink: #f8fafc; --ink2: #cbd5e1; --surface: #0f172a; --border: #334155; 
+      --ink: #f8fafc; --ink2: #cbd5e1; --surface: #0f172a; --border: #334155;
       --background: #020617;
     }
 
@@ -49,7 +49,6 @@
     .status-msg.error { color: #ef4444; }
     .hidden { display: none; }
 
-    /* Flow Specifics */
     .menu-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
     .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); cursor: pointer; transition: all 0.2s; }
     .menu-item:hover { border-color: var(--navy); transform: scale(1.01); background: var(--silver2); }
@@ -64,7 +63,25 @@
     .job-fit { color: var(--accent); font-weight: 800; background: var(--silver2); padding: 2px 8px; border-radius: 4px; }
     .loader { animation: spin 1s linear infinite; display: none; border: 2px solid white; border-top: 2px solid transparent; width: 14px; height: 14px; border-radius: 50%; }
     button.loading .loader { display: inline-block; }
-    @keyframes spin { to {transform:rotate(360deg);} }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Cover letter button */
+    .btn-cover { background: transparent; color: var(--navy); border: 1px solid var(--navy); padding: 8px 16px; font-size: 12px; text-transform: none; letter-spacing: 0; }
+    .btn-cover:hover { background: var(--navy); color: #fff; transform: none; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal { background: var(--surface); border-radius: 12px; padding: 32px; max-width: 660px; width: 100%; max-height: 82vh; overflow-y: auto; position: relative; }
+    .modal h3 { font-family: var(--serif); font-size: 24px; color: var(--navy); margin-bottom: 4px; }
+    .modal-close { position: absolute; top: 14px; right: 14px; background: transparent; border: 1px solid var(--border); color: var(--ink2); padding: 4px 10px; font-size: 16px; border-radius: 6px; text-transform: none; letter-spacing: 0; }
+    .modal-close:hover { transform: none; filter: none; box-shadow: none; background: var(--silver2); }
+    .cover-letter-box { margin-top: 16px; padding: 20px; background: var(--silver2); border-radius: 8px; border: 1px solid var(--border); font-size: 14px; line-height: 1.85; white-space: pre-wrap; color: var(--ink); }
+    .btn-copy { background: transparent; color: var(--ink2); border: 1px solid var(--border); padding: 8px 16px; font-size: 12px; text-transform: none; letter-spacing: 0; margin-top: 12px; }
+    .btn-copy:hover { background: var(--silver2); transform: none; }
+
+    /* Prefs alignment */
+    .prefs-field { display: flex; flex-direction: column; justify-content: flex-end; }
+    .prefs-field label { margin-top: 0; }
   </style>
 </head>
 <body>
@@ -77,7 +94,20 @@
     </div>
   </nav>
 
+  <!-- Cover Letter Modal -->
+  <div class="modal-overlay hidden" id="cover-letter-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeCoverLetterModal()">✕</button>
+      <h3 id="cl-modal-title">Cover Letter</h3>
+      <p style="font-size:13px; color:var(--ink2); margin-bottom:4px" id="cl-modal-subtitle"></p>
+      <div id="cl-modal-body"></div>
+      <button class="btn-copy hidden" id="btn-copy-cl" onclick="copyCoverLetter()">📋 Copy to Clipboard</button>
+    </div>
+  </div>
+
   <div class="container">
+
+    <!-- AUTH -->
     <div id="view-auth">
       <h1>Join HireEU</h1>
       <p class="subtitle">The first AI platform built for foreigners job hunting in Poland.</p>
@@ -102,6 +132,7 @@
       </section>
     </div>
 
+    <!-- ONBOARDING / PROFILE -->
     <div id="view-onboarding" class="hidden">
       <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px">
         <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
@@ -132,6 +163,7 @@
       </section>
     </div>
 
+    <!-- MAIN MENU -->
     <div id="view-main-menu" class="hidden">
       <h1>Main Menu</h1>
       <p class="subtitle" id="main-welcome">Welcome back.</p>
@@ -170,16 +202,24 @@
           </div>
           <button class="btn-secondary" style="padding:12px 20px">Preferences</button>
         </div>
+        <div class="menu-item" onclick="showView('view-account')">
+          <div class="menu-info">
+            <h3>Account Settings</h3>
+            <p>Change your name, email address, or password.</p>
+          </div>
+          <button class="btn-secondary" style="padding:12px 20px">Manage</button>
+        </div>
         <div class="menu-item" onclick="logout()">
           <div class="menu-info">
             <h3>Sign Out</h3>
             <p>Securely exit your session.</p>
           </div>
-          <span style="font-size:12px; color:var(--red) opacity:0.6">Logout</span>
+          <span style="font-size:12px; color:var(--ink2)">Logout</span>
         </div>
       </div>
     </div>
 
+    <!-- JOB SETTINGS / PREFERENCES — fixed: duplicate back button removed, fields aligned -->
     <div id="view-preferences" class="hidden">
       <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px">
         <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
@@ -187,29 +227,74 @@
       </div>
       <p class="subtitle">Fine-tune how we find matches for you.</p>
       <section class="card">
-        <div class="row" style="margin-bottom:20px">
-          <div>
-            <label style="display:flex; align-items:center; gap:10px; cursor:pointer">
-              <input type="checkbox" id="prefs-english-only" style="width:auto"> 
-              <strong>English Only</strong>
+        <div class="row" style="align-items:end;">
+          <div class="prefs-field">
+            <label style="margin-top:0; text-transform:none; font-size:14px;">
+              <span style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                <input type="checkbox" id="prefs-english-only" style="width:auto; margin:0;">
+                <strong>English Only</strong>
+              </span>
             </label>
-            <p style="font-size:12px; color:var(--ink2); margin-top:5px">Hide jobs requiring Polish or German.</p>
+            <p style="font-size:12px; color:var(--ink2); margin-top:6px;">Hide jobs requiring Polish or German.</p>
           </div>
-          <div>
-            <label>Min Fit %</label>
+          <div class="prefs-field">
+            <label for="prefs-min-fit">Min Fit %</label>
             <input type="number" id="prefs-min-fit" value="45">
           </div>
         </div>
         <div class="row">
-          <div>
-            <label>Preferred Destination</label>
+          <div class="prefs-field">
+            <label for="prefs-location">Preferred Destination</label>
             <input id="prefs-location" placeholder="e.g. Warsaw, Remote, etc">
           </div>
+          <div></div>
         </div>
-        <button onclick="savePreferences()" id="btn-save-prefs" style="width:100%">Save Preferences</button>
-        <button class="btn-secondary" onclick="showView('view-main-menu')" style="margin-top:10px">Back to Menu</button>
+        <button onclick="savePreferences()" id="btn-save-prefs" style="width:100%; margin-top:8px">Save Preferences</button>
       </section>
     </div>
+
+    <!-- ACCOUNT SETTINGS -->
+    <div id="view-account" class="hidden">
+      <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px">
+        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
+        <h1 style="margin:0">Account Settings</h1>
+      </div>
+      <p class="subtitle">Update your login details.</p>
+
+      <section class="card">
+        <h2>Profile Info</h2>
+        <div class="row">
+          <div>
+            <label for="acct-name">Display Name</label>
+            <input id="acct-name" placeholder="Your full name">
+          </div>
+          <div>
+            <label for="acct-email">Email Address</label>
+            <input id="acct-email" type="email" placeholder="you@example.com">
+          </div>
+        </div>
+        <button onclick="saveAccountInfo()" id="btn-save-account" style="margin-top:8px">Save Changes</button>
+        <p id="acct-info-status" class="status-msg"></p>
+      </section>
+
+      <section class="card">
+        <h2>Change Password</h2>
+        <div class="row">
+          <div>
+            <label for="acct-current-pw">Current Password</label>
+            <input id="acct-current-pw" type="password" placeholder="Current password">
+          </div>
+          <div>
+            <label for="acct-new-pw">New Password</label>
+            <input id="acct-new-pw" type="password" placeholder="8+ characters">
+          </div>
+        </div>
+        <button onclick="savePassword()" id="btn-save-pw" style="margin-top:8px">Update Password</button>
+        <p id="acct-pw-status" class="status-msg"></p>
+      </section>
+    </div>
+
+    <!-- RESULTS -->
     <div id="view-results" class="hidden">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
         <div style="display:flex; align-items:center; gap:15px">
@@ -221,10 +306,12 @@
       <p id="prefs-status" class="status-msg"></p>
       <div id="jobs" class="jobs"></div>
     </div>
+
   </div>
 
   <script>
     let rawCvText = null;
+    let currentCoverLetter = '';
 
     async function api(path, method = 'GET', body) {
       const res = await fetch(path, { method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
@@ -241,12 +328,12 @@
     }
 
     function showView(id) {
-      ['view-auth', 'view-onboarding', 'view-main-menu', 'view-results', 'view-preferences'].forEach(v => {
+      ['view-auth','view-onboarding','view-main-menu','view-results','view-preferences','view-account'].forEach(v => {
         document.getElementById(v).classList.toggle('hidden', v !== id);
       });
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     }
-    
+
     function toggleDarkMode() {
       const isDark = document.body.classList.toggle('dark-mode');
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -263,14 +350,14 @@
 
     async function register() {
       try {
-        const data = await api('/api/auth-register', 'POST', { name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, password: document.getElementById('reg-password').value });
+        await api('/api/auth-register', 'POST', { name: document.getElementById('reg-name').value, email: document.getElementById('reg-email').value, password: document.getElementById('reg-password').value });
         await loadAppState();
       } catch (e) { document.getElementById('auth-status').textContent = e.message; }
     }
 
     async function login() {
       try {
-        const data = await api('/api/auth-login', 'POST', { email: document.getElementById('login-email').value, password: document.getElementById('login-password').value });
+        await api('/api/auth-login', 'POST', { email: document.getElementById('login-email').value, password: document.getElementById('login-password').value });
         await loadAppState();
       } catch (e) { document.getElementById('auth-status').textContent = e.message; }
     }
@@ -284,23 +371,24 @@
       try {
         const session = await api('/api/auth-session');
         if (!session.user) { showView('view-auth'); return; }
-        
-        // Check system status
+
         const sys = await api('/api/system-check');
         document.getElementById('st-db').textContent = sys.database ? '✅ DB' : '❌ DB';
         document.getElementById('st-js').textContent = sys.jsearch ? '✅ JSearch' : '⚪ JSearch';
         document.getElementById('st-ad').textContent = sys.adzuna ? '✅ Adzuna' : '⚪ Adzuna';
         document.getElementById('st-sc').textContent = sys.scraper ? '✅ Scraper' : '⚪ Scraper';
         document.getElementById('st-ai').textContent = sys.groq ? '✅ AI' : '❌ AI';
-        
-        if (!sys.jsearch && !sys.scraper) {
-          document.getElementById('st-hint').style.display = 'block';
-        }
+        if (!sys.jsearch && !sys.scraper) document.getElementById('st-hint').style.display = 'block';
 
         document.getElementById('nav-user-badge').textContent = session.user.name || session.user.email;
+
+        // Pre-fill account settings
+        document.getElementById('acct-name').value = session.user.name || '';
+        document.getElementById('acct-email').value = session.user.email || '';
+
         const profile = await api('/api/profile-get');
         if (profile.profile) fillProfile(profile.profile);
-        
+
         if (!profile.profile?.summary) {
           showView('view-onboarding');
         } else {
@@ -338,7 +426,7 @@
         await api('/api/profile-save', 'POST', {
           summary: document.getElementById('summary').value,
           primaryRole: document.getElementById('primary-role').value,
-          skills: document.getElementById('skills').value.split(',').map(s=>s.trim()).filter(Boolean),
+          skills: document.getElementById('skills').value.split(',').map(s => s.trim()).filter(Boolean),
           yearsExperience: Number(document.getElementById('years').value),
           seniority: document.getElementById('seniority').value,
           location: document.getElementById('location').value,
@@ -357,20 +445,17 @@
         setBtnLoading('btn-match', true);
         const data = await api('/api/jobs-recommend', 'POST', {});
         jobsEl.innerHTML = '';
-        
         const { results, diagnostics } = data;
 
         if (!results?.length) {
-          let diagHtml = `<div style="font-size:13px; color:var(--ink2); background:var(--cream2); padding:15px; border-radius:4px; margin-top:10px;">
+          let diagHtml = `<div style="font-size:13px; color:var(--ink2); background:var(--silver2); padding:15px; border-radius:4px; margin-top:10px;">
             <strong>Diagnostics:</strong><br>
             • Raw jobs found: ${diagnostics?.rawCount || 0}<br>
             • Hidden by Language Filter: ${diagnostics?.langFiltered || 0}<br>
             • Hidden by Role Filter: ${diagnostics?.qaFiltered || 0}<br>`;
-            
           if (diagnostics?.jsearchErrors?.length) {
-            diagHtml += `<br><span style="color:var(--red)">• API Errors: ${diagnostics.jsearchErrors.join(', ')}</span>`;
+            diagHtml += `<br><span style="color:#ef4444">• API Errors: ${diagnostics.jsearchErrors.join(', ')}</span>`;
           }
-          
           diagHtml += `<br><br><em>Try updating your skills or seniority if raw counts are high but final results are 0.</em></div>`;
           jobsEl.innerHTML = `<div><p class="subtitle">No final matches found.</p>${diagHtml}</div>`;
         }
@@ -378,27 +463,107 @@
         for (const job of results || []) {
           const div = document.createElement('div');
           div.className = 'job';
+
           let missingHtml = '';
           if (job.missingSkills?.length) {
             missingHtml = `<div style="margin-top:10px; font-size:12px; color:var(--ink2)">
               <strong>Missing:</strong> ${job.missingSkills.map(s => `<span style="color:#ef4444; margin-right:5px">${s}</span>`).join('')}
             </div>`;
           }
+
+          // Encode job data for the cover letter generator
+          const jobPayload = encodeURIComponent(JSON.stringify({
+            title: job.title,
+            company: job.company,
+            location: job.location || '',
+            description: job.reason || ''
+          }));
+
           div.innerHTML = `
             <div class="job-title">${job.title}</div>
-            <div class="job-meta"><span>${job.company}</span> | <span class="job-fit">${job.match}% Fit</span> | <span style="text-transform:capitalize">${job.seniority || 'Match'}</span></div>
+            <div class="job-meta">
+              <span>${job.company}</span> |
+              <span class="job-fit">${job.match}% Fit</span> |
+              <span style="text-transform:capitalize">${job.seniority || 'Match'}</span>
+            </div>
             <div style="font-size:14px; margin:10px 0">${job.reason}</div>
             ${missingHtml}
-            <div style="margin-top:15px"><a href="${job.applyUrl}" target="_blank" style="color:var(--accent); font-weight:700; text-decoration:none">View Full Listing →</a></div>
+            <div style="margin-top:15px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+              <a href="${job.applyUrl}" target="_blank" style="color:var(--accent); font-weight:700; text-decoration:none">View Full Listing →</a>
+              <button class="btn-cover" onclick="generateCoverLetter(this, '${jobPayload}')">✉ Cover Letter</button>
+            </div>
           `;
           jobsEl.appendChild(div);
         }
-        status.textContent = `Found ${data.results?.length} matches.`;
+
+        status.textContent = `Found ${results?.length || 0} matches.`;
         setBtnLoading('btn-match', false);
-      } catch (e) { 
-        status.textContent = e.message; 
+      } catch (e) {
+        status.textContent = e.message;
         setBtnLoading('btn-match', false);
       }
+    }
+
+    async function generateCoverLetter(btn, encodedJob) {
+      const job = JSON.parse(decodeURIComponent(encodedJob));
+
+      // Show modal with loading state
+      document.getElementById('cl-modal-title').textContent = `Cover Letter — ${job.title}`;
+      document.getElementById('cl-modal-subtitle').textContent = job.company;
+      document.getElementById('cl-modal-body').innerHTML = '<p style="color:var(--ink2); text-align:center; padding:40px 0">Generating your personalised cover letter…</p>';
+      document.getElementById('btn-copy-cl').classList.add('hidden');
+      document.getElementById('cover-letter-modal').classList.remove('hidden');
+      currentCoverLetter = '';
+
+      try {
+        // Use stored rawCvText if available; otherwise try fetching from profile
+        let cvText = rawCvText;
+        if (!cvText) {
+          try {
+            const profile = await api('/api/profile-get');
+            cvText = profile.profile?.rawCvText || null;
+            if (cvText) rawCvText = cvText;
+          } catch (_) {}
+        }
+
+        // Final fallback: build plain text from profile fields
+        if (!cvText) {
+          const summary = document.getElementById('summary').value.trim();
+          const role = document.getElementById('primary-role').value.trim();
+          const skills = document.getElementById('skills').value.trim();
+          const years = document.getElementById('years').value;
+          if (!summary && !skills) {
+            document.getElementById('cl-modal-body').innerHTML = '<p style="color:#ef4444; text-align:center; padding:20px 0">No CV data found. Please upload your CV in Profile & CV first, then try again.</p>';
+            return;
+          }
+          cvText = `Role: ${role}\nYears of experience: ${years}\nSummary: ${summary}\nSkills: ${skills}`;
+        }
+
+        const data = await api('/api/generate-cover-letter', 'POST', { cv: cvText, job });
+        currentCoverLetter = data.letter || '';
+        document.getElementById('cl-modal-body').innerHTML = `<div class="cover-letter-box">${currentCoverLetter}</div>`;
+        document.getElementById('btn-copy-cl').classList.remove('hidden');
+      } catch (e) {
+        document.getElementById('cl-modal-body').innerHTML = `<p style="color:#ef4444; padding:20px 0">Error: ${e.message}</p>`;
+      }
+    }
+
+    function closeCoverLetterModal() {
+      document.getElementById('cover-letter-modal').classList.add('hidden');
+    }
+
+    document.getElementById('cover-letter-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeCoverLetterModal();
+    });
+
+    async function copyCoverLetter() {
+      if (!currentCoverLetter) return;
+      try {
+        await navigator.clipboard.writeText(currentCoverLetter);
+        const btn = document.getElementById('btn-copy-cl');
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => btn.textContent = '📋 Copy to Clipboard', 2000);
+      } catch (e) { alert('Copy failed. Please select and copy the text manually.'); }
     }
 
     async function savePreferences() {
@@ -407,12 +572,62 @@
         await api('/api/user-data?action=preferences-save', 'POST', {
           englishOnly: document.getElementById('prefs-english-only').checked,
           minFitPercent: Number(document.getElementById('prefs-min-fit').value),
-          preferredLocation: document.getElementById('prefs-location').value, 
+          preferredLocation: document.getElementById('prefs-location').value,
           workType: 'any'
         });
         setBtnLoading('btn-save-prefs', false);
         showView('view-main-menu');
       } catch (e) { alert(e.message); setBtnLoading('btn-save-prefs', false); }
+    }
+
+    async function saveAccountInfo() {
+      const statusEl = document.getElementById('acct-info-status');
+      statusEl.className = 'status-msg';
+      statusEl.textContent = '';
+      try {
+        setBtnLoading('btn-save-account', true);
+        await api('/api/user-data?action=account-update', 'POST', {
+          name: document.getElementById('acct-name').value.trim(),
+          email: document.getElementById('acct-email').value.trim()
+        });
+        setBtnLoading('btn-save-account', false);
+        statusEl.textContent = 'Saved! Re-login to see your updated name in the nav.';
+        document.getElementById('nav-user-badge').textContent = document.getElementById('acct-name').value.trim() || document.getElementById('acct-email').value.trim();
+      } catch (e) {
+        setBtnLoading('btn-save-account', false);
+        statusEl.className = 'status-msg error';
+        statusEl.textContent = e.message;
+      }
+    }
+
+    async function savePassword() {
+      const statusEl = document.getElementById('acct-pw-status');
+      statusEl.className = 'status-msg';
+      statusEl.textContent = '';
+      const currentPw = document.getElementById('acct-current-pw').value;
+      const newPw = document.getElementById('acct-new-pw').value;
+      if (!currentPw || !newPw) {
+        statusEl.className = 'status-msg error';
+        statusEl.textContent = 'Both fields are required.';
+        return;
+      }
+      if (newPw.length < 8) {
+        statusEl.className = 'status-msg error';
+        statusEl.textContent = 'New password must be at least 8 characters.';
+        return;
+      }
+      try {
+        setBtnLoading('btn-save-pw', true);
+        await api('/api/user-data?action=password-update', 'POST', { currentPassword: currentPw, newPassword: newPw });
+        setBtnLoading('btn-save-pw', false);
+        statusEl.textContent = 'Password updated successfully.';
+        document.getElementById('acct-current-pw').value = '';
+        document.getElementById('acct-new-pw').value = '';
+      } catch (e) {
+        setBtnLoading('btn-save-pw', false);
+        statusEl.className = 'status-msg error';
+        statusEl.textContent = e.message;
+      }
     }
 
     loadAppState();
