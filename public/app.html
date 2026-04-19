@@ -111,17 +111,11 @@
     input[type="range"]:focus { box-shadow: none; border: none; }
     .range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink2); }
 
-    /* ── FIND JOBS / RESULTS redesign ─────────────────────────────────────── */
-    .filter-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
-    .filter-main { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; }
-    @media (max-width: 560px) { .filter-main { grid-template-columns: 1fr; } }
-    .filter-advanced { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-    @media (max-width: 560px) { .filter-advanced { grid-template-columns: 1fr 1fr; } }
-    .btn-filter-search { padding: 11px 22px; background: var(--navy); color: white; border: none; border-radius: 8px; font-family: var(--sans); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.4px; }
-    .btn-filter-search:hover { filter: brightness(1.1); transform: translateY(-1px); }
-
+    /* ── FIND JOBS / RESULTS ─────────────────────────────────────────────── */
     .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
     .results-count { font-family: var(--sans); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--ink2); }
+    .prefs-summary-bar { background: var(--silver2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: var(--ink2); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .prefs-summary-bar a { font-family: var(--sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--navy); text-decoration: none; white-space: nowrap; cursor: pointer; }
 
     /* Job cards */
     .jobs { display: grid; gap: 14px; }
@@ -520,64 +514,23 @@
       </section>
     </div>
 
-    <!-- ── RESULTS / FIND JOBS (redesigned) ─────────────────────────────── -->
+    <!-- ── RESULTS / FIND JOBS ───────────────────────────────────────────── -->
     <div id="view-results" class="hidden">
       <div style="display:flex; align-items:center; gap:15px; margin-bottom:8px">
         <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px; text-transform:none; letter-spacing:0">←</button>
-        <h1 style="margin:0">Find Jobs</h1>
+        <h1 style="margin:0">Your Matches</h1>
       </div>
-      <p class="subtitle">Ranked by your estimated interview probability based on your CV.</p>
+      <p class="subtitle">Ranked by estimated interview probability based on your CV.</p>
 
-      <!-- Filter bar -->
-      <div class="filter-bar">
-        <div class="filter-main">
-          <div>
-            <label for="fj-query" style="margin-top:0">Role or keyword</label>
-            <input type="text" id="fj-query" placeholder="e.g. QA Engineer, React Developer…"
-              onkeydown="if(event.key==='Enter') runJobSearch()">
-          </div>
-          <div>
-            <label for="fj-loc" style="margin-top:0">Location</label>
-            <input type="text" id="fj-loc" placeholder="Warsaw / Remote / Any"
-              onkeydown="if(event.key==='Enter') runJobSearch()">
-          </div>
-          <div>
-            <label style="margin-top:0">&nbsp;</label>
-            <button class="btn-filter-search" onclick="runJobSearch()">Search</button>
-          </div>
-        </div>
-        <div class="filter-advanced">
-          <div>
-            <label for="fj-work" style="margin-top:0">Work type</label>
-            <select id="fj-work">
-              <option value="">Any</option>
-              <option value="onsite">On-site</option>
-              <option value="hybrid">Hybrid</option>
-              <option value="remote">Remote</option>
-            </select>
-          </div>
-          <div>
-            <label for="fj-lang" style="margin-top:0">Language req.</label>
-            <select id="fj-lang">
-              <option value="">Any</option>
-              <option value="en">English only</option>
-              <option value="pl">Polish OK</option>
-              <option value="de">German OK</option>
-            </select>
-          </div>
-          <div>
-            <label for="fj-citizen" style="margin-top:0">Citizenship</label>
-            <select id="fj-citizen">
-              <option value="hide">Hide restricted</option>
-              <option value="all">Show all</option>
-            </select>
-          </div>
-        </div>
+      <!-- Active preferences summary -->
+      <div class="prefs-summary-bar" id="prefs-summary-bar">
+        <span id="prefs-summary-text">Loading preferences…</span>
+        <a onclick="showView('view-preferences'); loadPreferences()">Edit preferences →</a>
       </div>
 
       <div class="results-header">
         <span class="results-count" id="prefs-status"></span>
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+        <div style="display:flex; gap:10px; align-items:center">
           <select id="fj-sort" onchange="sortResults()" style="width:auto; padding:7px 10px; font-size:13px">
             <option value="match">Best match</option>
             <option value="recent">Most recent</option>
@@ -888,15 +841,12 @@
       const senBadge = job.seniority && job.seniority !== 'unknown'
         ? `<span class="badge badge-seniority">${job.seniority}</span>` : '';
       const langBadge = `<span class="badge badge-lang">EN</span>`;
-
       const missing = (job.missingSkills || []).length
         ? `<div class="missing-tags">${job.missingSkills.map(s => `<span class="missing-tag">Missing: ${s}</span>`).join('')}</div>` : '';
-
       const jobPayload = encodeURIComponent(JSON.stringify({
         title: job.title, company: job.company,
         location: job.location || '', description: job.reason || ''
       }));
-
       return `<div class="job">
         <div class="job-header">
           <div>
@@ -928,7 +878,7 @@
         jobsEl.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--ink2)">
           <div style="font-size:32px;margin-bottom:12px">🔍</div>
           <p style="font-size:15px;font-weight:600;margin-bottom:6px">No matches found</p>
-          <p style="font-size:13px">Try adjusting your filters or lowering the match threshold in Job Settings.</p>
+          <p style="font-size:13px">Try lowering the match threshold in <a onclick="showView('view-preferences');loadPreferences()" style="color:var(--navy);cursor:pointer">Job Settings</a>.</p>
         </div>`;
         return;
       }
@@ -950,76 +900,76 @@
       renderJobs(sorted);
     }
 
-    function applyClientFilters(results) {
-      const locFilter = document.getElementById('fj-loc').value.trim().toLowerCase();
-      const workFilter = document.getElementById('fj-work').value;
-      const langFilter = document.getElementById('fj-lang').value;
-      const citizenFilter = document.getElementById('fj-citizen').value;
-
-      return results.filter(j => {
-        const loc = (j.location || '').toLowerCase();
-        const isRemote = j.isRemote || loc.includes('remote');
-        const desc = (j.description || '').toLowerCase();
-
-        if (locFilter && !loc.includes(locFilter) && !isRemote) return false;
-        if (workFilter === 'remote' && !isRemote) return false;
-        if (workFilter === 'onsite' && isRemote) return false;
-        return true;
-      });
-    }
-
-    async function runJobSearch() {
-      showView('view-results');
-      const query = document.getElementById('fj-query').value.trim();
-      const statusEl = document.getElementById('prefs-status');
-      const jobsEl = document.getElementById('jobs');
-      statusEl.textContent = 'Searching…';
-      jobsEl.innerHTML = '';
-
-      try {
-        const data = await api('/api/jobs?action=search', 'POST', { role: query || 'QA Engineer' });
-        const filtered = applyClientFilters(data.jobs || []);
-        allJobResults = filtered;
-        document.getElementById('prefs-status').textContent = `${filtered.length} results`;
-        renderJobs(filtered);
-        if (filtered.length) showToast(`Found ${filtered.length} jobs ✓`);
-      } catch (e) {
-        statusEl.textContent = e.message;
-        showToast(e.message, 'error');
-      }
+    // Build the small summary bar so users can see what prefs are active
+    function renderPrefsSummary(prefs) {
+      const parts = [];
+      const loc = prefs.preferred_location || prefs.preferredLocation;
+      if (loc) parts.push(`📍 ${loc}`);
+      const wt = prefs.work_type || prefs.workType;
+      if (wt && wt !== 'any') parts.push(`🏢 ${wt}`);
+      if (prefs.english_only || prefs.englishOnly) parts.push('🇬🇧 English only');
+      if (prefs.visa_sponsorship || prefs.visaSponsorship) parts.push('✈️ Visa sponsorship');
+      const minFit = prefs.min_fit_percent ?? prefs.minFitPercent ?? 45;
+      parts.push(`≥${minFit}% match`);
+      const el = document.getElementById('prefs-summary-text');
+      if (el) el.textContent = parts.length ? parts.join('  ·  ') : 'Using default preferences';
     }
 
     async function recommend() {
       const statusEl = document.getElementById('prefs-status');
       const jobsEl = document.getElementById('jobs');
       statusEl.textContent = 'Finding your best matches…';
-      jobsEl.innerHTML = '';
+      jobsEl.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--ink2)">
+        <div style="font-size:28px;margin-bottom:12px">⏳</div>
+        <p style="font-size:14px">Scanning Adzuna & JSearch…</p>
+      </div>`;
       setBtnLoading('btn-match', true);
 
+      // Load preferences first so we can (a) show summary bar and (b) pass them to the API
+      let prefs = {};
       try {
-        const data = await api('/api/jobs?action=recommend', 'POST', {});
+        const pd = await api('/api/user-data?action=preferences-get');
+        prefs = pd.preferences || {};
+        renderPrefsSummary(prefs);
+      } catch (_) {
+        renderPrefsSummary({});
+      }
+
+      try {
+        // Pass active preferences so the server-side search respects them
+        const data = await api('/api/jobs?action=recommend', 'POST', {
+          englishOnly: prefs.english_only || prefs.englishOnly || false,
+          minFitPercent: prefs.min_fit_percent ?? prefs.minFitPercent ?? 45,
+          preferredLocation: prefs.preferred_location || prefs.preferredLocation || '',
+          workType: prefs.work_type || prefs.workType || 'any',
+          hideCitizenship: prefs.hide_citizenship ?? prefs.hideCitizenship ?? true,
+          visaSponsorship: prefs.visa_sponsorship || prefs.visaSponsorship || false,
+          contractType: prefs.contract_type || prefs.contractType || 'any',
+          seniorityPref: prefs.seniority_pref || prefs.seniorityPref || 'any',
+        });
         const { results, diagnostics } = data;
 
         if (!results?.length) {
           const errs = diagnostics?.jsearchErrors?.length
-            ? `<br><span style="color:#ef4444">API Errors: ${diagnostics.jsearchErrors.join(', ')}</span>` : '';
+            ? `<br><span style="color:#ef4444">API errors: ${diagnostics.jsearchErrors.join(', ')}</span>` : '';
           jobsEl.innerHTML = `<div class="diag-box">
             <strong>No matches found</strong><br>
-            Raw jobs found: ${diagnostics?.rawCount || 0}<br>
+            Raw jobs fetched: ${diagnostics?.rawCount || 0}<br>
             Hidden by language filter: ${diagnostics?.langFiltered || 0}<br>
             Hidden by role filter: ${diagnostics?.qaFiltered || 0}
             ${errs}<br><br>
-            <em>Try lowering the match threshold in Job Settings, or update your profile skills.</em>
+            <em>Try lowering the match threshold in <a onclick="showView('view-preferences');loadPreferences()" style="color:var(--navy);cursor:pointer">Job Settings</a>.</em>
           </div>`;
           statusEl.textContent = 'No matches found.';
         } else {
           allJobResults = results;
-          statusEl.textContent = `${results.length} matches found`;
+          statusEl.textContent = `${results.length} matches`;
           renderJobs(results);
-          showToast(`Found ${results.length} job matches ✓`);
+          showToast(`Found ${results.length} matches ✓`);
         }
       } catch (e) {
         statusEl.textContent = e.message;
+        jobsEl.innerHTML = '';
         showToast(e.message, 'error');
       }
       setBtnLoading('btn-match', false);
