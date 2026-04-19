@@ -33,7 +33,9 @@ async function scoreJobHelper(cv, job) {
   }
 }
 
-// Apply post-fetch filters based on user preferences
+// Apply post-fetch filters based on user preferences.
+// Note: location/city filtering is handled inside searchJobsByRole — only
+// work-type filtering remains here.
 function applyPreferenceFilters(jobs, prefs) {
   return jobs.filter(j => {
     const loc = (j.location || '').toLowerCase();
@@ -43,10 +45,6 @@ function applyPreferenceFilters(jobs, prefs) {
     if (wt === 'remote' && !isRemote) return false;
     if (wt === 'onsite' && isRemote) return false;
     if (wt === 'remote-eu' && !isRemote) return false;
-
-    // Location filter: job must include the preferred city, or be remote
-    const prefLoc = (prefs.preferredLocation || '').toLowerCase().trim();
-    if (prefLoc && !isRemote && !loc.includes(prefLoc)) return false;
 
     return true;
   });
@@ -58,12 +56,10 @@ export default async function handler(req, res) {
   // ── Search (simple role-based search, no auth required) ─────────────────
   if (action === 'search') {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-    const { role } = req.body;
+    const { role, preferredLocation } = req.body;
     if (!role?.trim()) return res.status(400).json({ error: 'Missing role' });
     try {
-      // FIX: searchJobsByRole returns { results, diagnostics } — was previously
-      // assigned to `jobs` directly, causing "jobs is not iterable" errors.
-      const { results: jobs, diagnostics } = await searchJobsByRole(role);
+      const { results: jobs, diagnostics } = await searchJobsByRole(role, { preferredLocation });
       return res.status(200).json({ jobs, diagnostics });
     } catch (err) {
       return res.status(500).json({ error: err.message });
@@ -109,21 +105,25 @@ export default async function handler(req, res) {
         seniorityPref:     body.seniorityPref      ?? dbPrefs.seniority_pref     ?? 'any',
       };
 
-      const searchOptions = { englishOnly: prefs.englishOnly };
+      // 4. Build search options — pass location so the fetchers target the right country/city
+      const searchOptions = {
+        englishOnly: prefs.englishOnly,
+        preferredLocation: prefs.preferredLocation,
+      };
 
-      // 4. Build role query, respecting seniority preference
+      // 5. Build role query, respecting seniority preference
       const baseRole = profile.primary_role || profile.skills?.[0] || 'Software Engineer';
       const seniorityLabel = (prefs.seniorityPref !== 'any' ? prefs.seniorityPref : profile.seniority) || '';
       const roleQuery = `${seniorityLabel} ${baseRole}`.trim();
 
       let { results: jobs, diagnostics } = await searchJobsByRole(roleQuery, searchOptions);
 
-      // 5. Broaden if too few results
+      // 6. Broaden if too few results
       if (jobs.length < 10) {
         const broaderRes = await searchJobsByRole(baseRole, searchOptions);
 
         if (jobs.length + broaderRes.results.length < 3) {
-          const { results: fallbackJobs } = await searchJobsByRole('IT Specialist');
+          const { results: fallbackJobs } = await searchJobsByRole('IT Specialist', searchOptions);
           broaderRes.results.push(...fallbackJobs);
         }
 
@@ -137,10 +137,10 @@ export default async function handler(req, res) {
         if (broaderRes.diagnostics) diagnostics = broaderRes.diagnostics;
       }
 
-      // 6. Apply preference filters (location, work type)
+      // 7. Apply work-type preference filter
       jobs = applyPreferenceFilters(jobs, prefs);
 
-      // 7. Score and rank against candidate profile
+      // 8. Score and rank against candidate profile
       const scored = await matchAndScoreJobs(
         {
           summary: profile.summary,
