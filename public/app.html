@@ -845,7 +845,7 @@
         ? `<div class="missing-tags">${job.missingSkills.map(s => `<span class="missing-tag">Missing: ${s}</span>`).join('')}</div>` : '';
       const jobPayload = encodeURIComponent(JSON.stringify({
         title: job.title, company: job.company,
-        location: job.location || '', description: job.reason || ''
+        location: job.location || '', description: job.description || ''
       }));
       return `<div class="job">
         <div class="job-header">
