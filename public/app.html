@@ -12,16 +12,19 @@
       --ink: #0f172a; --ink2: #334155; --surface: #ffffff; --border: #cbd5e1;
       --accent: #3b82f6; --serif: 'Playfair Display', Georgia, serif;
       --sans: 'Syne', sans-serif; --body: 'Mulish', sans-serif;
+      --green: #16a34a; --green-bg: #dcfce7; --amber: #d97706; --amber-bg: #fef3c7;
+      --red: #dc2626; --red-bg: #fee2e2; --accent-bg: #eff6ff;
     }
     body.dark-mode {
       --navy: #e2e8f0; --navy2: #ffffff; --silver: #94a3b8; --silver2: #1e293b;
       --ink: #f8fafc; --ink2: #cbd5e1; --surface: #0f172a; --border: #334155;
-      --background: #020617;
+      --background: #020617; --green-bg: #052e16; --amber-bg: #1c1007;
+      --red-bg: #1c0909; --accent-bg: #0c1a2e;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--body); background: var(--background, #ffffff); color: var(--ink); line-height: 1.6; padding-bottom: 80px; transition: background 0.3s; }
-    body:not(.dark-mode) { --background: #ffffff; }
+    body:not(.dark-mode) { --background: #f8fafc; }
 
     nav { background: var(--navy); height: 60px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     .nav-logo { font-family: var(--sans); font-size: 20px; font-weight: 800; color: #ffffff; text-decoration: none; letter-spacing: -1px; }
@@ -29,47 +32,44 @@
 
     .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
 
-    h1 { font-family: var(--serif); font-size: 42px; font-weight: 700; margin-bottom: 8px; }
-    .subtitle { color: var(--ink2); font-weight: 300; font-size: 18px; margin-bottom: 32px; }
+    h1 { font-family: var(--serif); font-size: 38px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--ink2); font-weight: 300; font-size: 16px; margin-bottom: 28px; }
 
-    .card { background: var(--surface); border: 1px solid var(--border); padding: 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .card { background: var(--surface); border: 1px solid var(--border); padding: 28px 32px; border-radius: 12px; margin-bottom: 20px; }
     .btn-secondary { background: var(--silver2); color: var(--navy); border: 1px solid var(--silver); }
     .btn-secondary:hover { background: var(--silver); }
     button { background: var(--navy); color: #ffffff; border: none; padding: 14px 28px; border-radius: 8px; font-family: var(--sans); font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
     button:hover { transform: translateY(-1px); filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    h2 { font-family: var(--sans); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--navy); margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    h2 { font-family: var(--sans); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--ink2); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
 
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
     @media (max-width: 600px) { .row { grid-template-columns: 1fr; } }
 
-    input, textarea, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; font-family: var(--body); font-size: 14px; background: var(--surface); color: var(--ink); }
-    label { display: block; font-family: var(--sans); font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--navy); margin-bottom: 6px; margin-top: 12px; }
+    input, textarea, select { width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: var(--body); font-size: 14px; background: var(--surface); color: var(--ink); transition: border-color 0.15s, box-shadow 0.15s; outline: none; }
+    input:focus, textarea:focus, select:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(0,0,128,0.08); }
+    input::placeholder, textarea::placeholder { color: var(--ink2); opacity: 0.55; }
+    label { display: block; font-family: var(--sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--ink2); margin-bottom: 5px; margin-top: 14px; }
+    .field-hint { font-size: 12px; color: var(--ink2); margin-top: 4px; opacity: 0.8; }
 
     .status-msg { margin-top: 12px; font-size: 14px; color: #1e7d46; font-weight: 500; }
     .status-msg.error { color: #ef4444; }
     .hidden { display: none !important; }
 
-    .menu-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); cursor: pointer; transition: all 0.2s; }
+    .menu-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 22px 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); cursor: pointer; transition: all 0.2s; }
     .menu-item:hover { border-color: var(--navy); transform: scale(1.01); background: var(--silver2); }
-    .menu-info h3 { font-family: var(--serif); font-size: 24px; margin-bottom: 4px; color: var(--navy); }
-    .menu-info p { font-size: 14px; color: var(--ink2); }
+    .menu-info h3 { font-family: var(--serif); font-size: 22px; margin-bottom: 3px; color: var(--navy); }
+    .menu-info p { font-size: 13px; color: var(--ink2); }
 
-    .jobs { display: grid; gap: 16px; margin-top: 24px; }
-    .job { padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); transition: all 0.2s; }
-    .job:hover { border-color: var(--navy); }
-    .job-title { font-family: var(--serif); font-size: 22px; margin-bottom: 4px; color: var(--navy); }
-    .job-meta { font-size: 13px; color: var(--ink2); margin-bottom: 12px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-    .job-fit { color: var(--accent); font-weight: 800; background: var(--silver2); padding: 2px 8px; border-radius: 4px; }
     .loader { animation: spin 1s linear infinite; display: none; border: 2px solid white; border-top: 2px solid transparent; width: 14px; height: 14px; border-radius: 50%; }
     button.loading .loader { display: inline-block; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Cover letter button */
-    .btn-cover { background: transparent; color: var(--navy); border: 1px solid var(--navy); padding: 8px 16px; font-size: 12px; text-transform: none; letter-spacing: 0; }
+    .btn-cover { background: transparent; color: var(--navy); border: 1px solid var(--navy); padding: 8px 14px; font-size: 12px; text-transform: none; letter-spacing: 0; border-radius: 6px; }
     .btn-cover:hover { background: var(--navy); color: #fff; transform: none; box-shadow: none; }
 
-    /* Modal — hidden by default, shown with .open */
+    /* Modal */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.open { display: flex; }
     .modal { background: var(--surface); border-radius: 12px; padding: 32px; max-width: 660px; width: 100%; max-height: 82vh; overflow-y: auto; position: relative; }
@@ -80,32 +80,115 @@
     .btn-copy { background: transparent; color: var(--ink2); border: 1px solid var(--border); padding: 8px 16px; font-size: 12px; text-transform: none; letter-spacing: 0; margin-top: 12px; }
     .btn-copy:hover { background: var(--silver2); transform: none; box-shadow: none; }
 
-    /* Job Settings — all fields same height, properly aligned */
-    .prefs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; align-items: start; }
-    .prefs-grid .prefs-field { display: flex; flex-direction: column; }
-    .prefs-grid .prefs-field label { margin-top: 0; margin-bottom: 6px; }
-    .prefs-grid .prefs-field input[type="number"] { width: 100%; }
-    .prefs-checkbox-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; }
-    .prefs-checkbox-wrap input[type="checkbox"] { width: 16px; height: 16px; margin: 0; flex-shrink: 0; cursor: pointer; }
-    .prefs-checkbox-wrap strong { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--ink); }
-    .prefs-hint { font-size: 12px; color: var(--ink2); margin: 0; }
+    /* ── JOB SETTINGS redesign ─────────────────────────────────────────────── */
+    .prefs-section { margin-bottom: 20px; }
+    .prefs-section-title { font-family: var(--sans); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--ink2); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .prefs-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .prefs-grid2 { grid-template-columns: 1fr; } }
 
-    /* Toast notification */
+    /* Toggle switch */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--border); }
+    .toggle-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .toggle-label { font-family: var(--body); font-size: 14px; font-weight: 600; color: var(--ink); }
+    .toggle-desc { font-size: 12px; color: var(--ink2); margin-top: 2px; }
+    .toggle-switch { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-knob { position: absolute; inset: 0; background: var(--border); border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+    .toggle-knob:before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: transform 0.2s; }
+    .toggle-switch input:checked + .toggle-knob { background: var(--navy); }
+    .toggle-switch input:checked + .toggle-knob:before { transform: translateX(18px); }
+
+    /* Chips */
+    .chip-group { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip { padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px; font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--ink2); cursor: pointer; transition: all 0.15s; background: transparent; text-transform: none; letter-spacing: 0; padding: 6px 14px; }
+    .chip.on { background: var(--navy); color: white; border-color: var(--navy); transform: none; box-shadow: none; filter: none; }
+    .chip:hover:not(.on) { border-color: var(--navy); color: var(--navy); transform: none; box-shadow: none; filter: none; }
+
+    /* Range slider */
+    .range-val { font-family: var(--sans); font-size: 22px; font-weight: 700; color: var(--navy); }
+    input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px; background: var(--border); border: none; outline: none; padding: 0; margin: 8px 0; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--navy); cursor: pointer; border: 2px solid var(--surface); box-shadow: 0 0 0 2px var(--navy); }
+    input[type="range"]:focus { box-shadow: none; border: none; }
+    .range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink2); }
+
+    /* ── FIND JOBS / RESULTS redesign ─────────────────────────────────────── */
+    .filter-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+    .filter-main { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; }
+    @media (max-width: 560px) { .filter-main { grid-template-columns: 1fr; } }
+    .filter-advanced { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    @media (max-width: 560px) { .filter-advanced { grid-template-columns: 1fr 1fr; } }
+    .btn-filter-search { padding: 11px 22px; background: var(--navy); color: white; border: none; border-radius: 8px; font-family: var(--sans); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.4px; }
+    .btn-filter-search:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    .results-count { font-family: var(--sans); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--ink2); }
+
+    /* Job cards */
+    .jobs { display: grid; gap: 14px; }
+    .job { padding: 22px 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); transition: border-color 0.2s; }
+    .job:hover { border-color: #94a3b8; }
+    .job-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 10px; }
+    .job-title { font-family: var(--serif); font-size: 20px; color: var(--navy); margin-bottom: 3px; line-height: 1.3; }
+    .job-company { font-size: 13px; color: var(--ink2); font-weight: 500; }
+    .match-block { text-align: right; flex-shrink: 0; }
+    .match-pct { font-family: var(--sans); font-size: 22px; font-weight: 800; line-height: 1; }
+    .match-pct.high { color: var(--green); }
+    .match-pct.mid { color: var(--amber); }
+    .match-pct.low { color: var(--red); }
+    .match-label { font-size: 10px; font-family: var(--sans); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink2); margin-top: 2px; }
+    .match-bar-bg { height: 5px; background: var(--silver2); border-radius: 3px; overflow: hidden; margin: 8px 0 12px; }
+    .match-bar-fill { height: 100%; border-radius: 3px; }
+    .job-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .badge { padding: 3px 9px; border-radius: 5px; font-size: 11px; font-weight: 700; font-family: var(--sans); }
+    .badge-loc { background: var(--silver2); color: var(--ink2); }
+    .badge-remote { background: var(--green-bg); color: #166534; }
+    .badge-source { background: var(--silver2); color: var(--ink2); }
+    .badge-lang { background: var(--accent-bg); color: #1e40af; }
+    .badge-seniority { background: var(--amber-bg); color: #92400e; }
+    .job-reason { font-size: 13px; color: var(--ink2); margin-bottom: 10px; line-height: 1.6; }
+    .missing-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+    .missing-tag { padding: 2px 8px; background: var(--red-bg); color: #991b1b; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .job-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
+    .btn-apply { padding: 8px 18px; background: var(--navy); color: white; border: none; border-radius: 7px; font-family: var(--sans); font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; letter-spacing: 0.3px; }
+    .btn-apply:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .job-source-label { font-size: 11px; color: var(--ink2); }
+
+    /* ── CV Upload redesign ───────────────────────────────────────────────── */
+    .cv-dropzone { border: 2px dashed var(--border); border-radius: 10px; padding: 32px 20px; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; background: var(--background, #f8fafc); }
+    .cv-dropzone:hover { border-color: var(--navy); background: rgba(0,0,128,0.03); }
+    .cv-dropzone.has-file { border-color: var(--green); background: var(--green-bg); }
+    .cv-drop-icon { font-size: 28px; margin-bottom: 10px; }
+    .cv-drop-main { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+    .cv-drop-sub { font-size: 12px; color: var(--ink2); }
+
+    .parsed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+    .parsed-stat { background: var(--silver2); border-radius: 8px; padding: 12px 14px; }
+    .parsed-stat-label { font-size: 10px; font-family: var(--sans); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--ink2); margin-bottom: 4px; }
+    .parsed-stat-val { font-size: 15px; font-weight: 600; color: var(--ink); font-family: var(--sans); }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .skill-tag { padding: 3px 9px; background: var(--accent-bg); color: #1d4ed8; border-radius: 4px; font-size: 12px; font-weight: 500; }
+
+    /* Diagnostics box */
+    .diag-box { font-size: 13px; color: var(--ink2); background: var(--silver2); padding: 16px; border-radius: 8px; margin-top: 10px; line-height: 1.8; }
+
+    /* Toast */
     .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 8px; font-family: var(--sans); font-size: 14px; font-weight: 600; z-index: 2000; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; white-space: nowrap; }
     .toast.toast-success { background: #166534; }
     .toast.toast-error { background: #991b1b; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* nav badge */
+    .nav-badge { font-family: var(--sans); font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); }
   </style>
 </head>
 <body>
 
-  <!-- Toast -->
   <div id="toast" class="toast"></div>
 
   <nav>
     <a href="/" class="nav-logo">Hire<span>EU</span></a>
     <div style="display:flex; align-items:center; gap:15px">
-      <button onclick="toggleDarkMode()" style="padding:4px 8px; font-size:16px; background:transparent; border:1px solid var(--ink2); color:var(--cream); cursor:pointer; border-radius:4px;" id="btn-theme">🌙</button>
+      <button onclick="toggleDarkMode()" style="padding:4px 8px; font-size:16px; background:transparent; border:1px solid rgba(255,255,255,0.3); color:#fff; cursor:pointer; border-radius:4px; text-transform:none; letter-spacing:0;" id="btn-theme">🌙</button>
       <span class="nav-badge" id="nav-user-badge">Guest</span>
     </div>
   </nav>
@@ -123,7 +206,7 @@
 
   <div class="container">
 
-    <!-- AUTH -->
+    <!-- ── AUTH ─────────────────────────────────────────────────────────── -->
     <div id="view-auth">
       <h1>Join HireEU</h1>
       <p class="subtitle">The first AI platform built for foreigners job hunting in Poland.</p>
@@ -148,82 +231,117 @@
       </section>
     </div>
 
-    <!-- ONBOARDING / PROFILE -->
+    <!-- ── ONBOARDING / PROFILE ──────────────────────────────────────────── -->
     <div id="view-onboarding" class="hidden">
       <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px">
-        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
+        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px; text-transform:none; letter-spacing:0">←</button>
         <h1 style="margin:0">Profile & CV</h1>
       </div>
-      <p class="subtitle">We need your CV once to find you thousands of matches.</p>
+      <p class="subtitle">Upload your CV — we'll extract everything automatically.</p>
+
       <section class="card">
         <h2>1. Upload CV</h2>
-        <input id="cv-file" type="file" style="margin-bottom:15px">
-        <button onclick="parseCv()" id="btn-parse">✨ AI Extraction</button>
+        <div class="cv-dropzone" id="cv-dropzone" onclick="document.getElementById('cv-file').click()">
+          <div class="cv-drop-icon" id="cv-drop-icon">📄</div>
+          <div class="cv-drop-main" id="cv-drop-main">Drop your CV here or click to browse</div>
+          <div class="cv-drop-sub">PDF or DOCX — up to 5MB</div>
+        </div>
+        <input id="cv-file" type="file" accept=".pdf,.docx" style="display:none" onchange="onCvFileChange(this)">
+        <button onclick="parseCv()" id="btn-parse" style="margin-top:14px; width:100%"><div class="loader"></div>✨ Extract with AI</button>
         <p id="profile-status" class="status-msg"></p>
       </section>
+
+      <section class="card" id="cv-parsed-section" style="display:none">
+        <h2>Parsed Profile ✓</h2>
+        <div class="parsed-grid" id="parsed-stats-grid">
+          <!-- filled by JS -->
+        </div>
+        <div style="margin-bottom:16px">
+          <div class="parsed-stat-label" style="margin-bottom:8px">Detected Skills</div>
+          <div class="skill-tags" id="parsed-skills-tags"></div>
+        </div>
+      </section>
+
       <section class="card">
-        <h2>2. Review Profile</h2>
+        <h2>2. Review & Edit Profile</h2>
         <div class="row">
-          <div><label>Target Role</label><input id="primary-role" placeholder="e.g. Senior Software Engineer"></div>
+          <div><label>Target Role</label><input id="primary-role" placeholder="e.g. QA Engineer"></div>
           <div><label>Current Location</label><input id="location" placeholder="e.g. Warsaw, Poland"></div>
         </div>
         <div class="row">
-          <div><label>Summary</label><textarea id="summary" style="height:100px"></textarea></div>
-          <div><label>Skills (Extracted)</label><textarea id="skills" style="height:100px" placeholder="React, Node.js, etc"></textarea></div>
+          <div>
+            <label>Summary</label>
+            <textarea id="summary" style="height:100px; resize:vertical" placeholder="Brief professional summary…"></textarea>
+          </div>
+          <div>
+            <label>Skills (comma-separated)</label>
+            <textarea id="skills" style="height:100px; resize:vertical" placeholder="React, Node.js, Jira…"></textarea>
+          </div>
         </div>
         <div class="row">
-          <div><label>Exp Years</label><input id="years" type="number"></div>
-          <div><label>Seniority</label><select id="seniority"><option value="junior">Junior</option><option value="mid">Mid</option><option value="senior">Senior</option><option value="lead">Lead</option></select></div>
+          <div>
+            <label>Years of Experience</label>
+            <input id="years" type="number" min="0" max="40" placeholder="2">
+          </div>
+          <div>
+            <label>Seniority</label>
+            <select id="seniority">
+              <option value="junior">Junior / Entry</option>
+              <option value="mid">Mid-level</option>
+              <option value="senior">Senior</option>
+              <option value="lead">Lead / Principal</option>
+            </select>
+          </div>
         </div>
-        <button onclick="saveProfile()" id="btn-save-profile" style="width:100%; margin-top:20px">Confirm & Save Profile</button>
+        <button onclick="saveProfile()" id="btn-save-profile" style="width:100%; margin-top:8px"><div class="loader"></div>Confirm & Save Profile</button>
       </section>
     </div>
 
-    <!-- MAIN MENU -->
+    <!-- ── MAIN MENU ─────────────────────────────────────────────────────── -->
     <div id="view-main-menu" class="hidden">
       <h1>Main Menu</h1>
       <p class="subtitle" id="main-welcome">Welcome back.</p>
-      
-      <div class="card" style="margin-bottom:32px; padding:20px; border-style:dashed;">
-        <h2 style="margin-bottom:12px; border:none; padding:0">Connection Status</h2>
-        <div id="connection-status" style="display:flex; gap:15px; font-size:12px; font-weight:700; text-transform:uppercase;">
+
+      <div class="card" style="margin-bottom:28px; padding:18px 24px; border-style:dashed;">
+        <h2 style="margin-bottom:10px; border:none; padding:0">Connection Status</h2>
+        <div id="connection-status" style="display:flex; gap:15px; font-size:12px; font-weight:700; text-transform:uppercase; flex-wrap:wrap;">
           <span id="st-db">...</span>
           <span id="st-js">...</span>
           <span id="st-ad">...</span>
           <span id="st-sc">...</span>
           <span id="st-ai">...</span>
         </div>
-        <p id="st-hint" class="subtitle" style="font-size:13px; margin:10px 0 0; display:none;">⚠️ Some keys are missing. Jobs won't show up until you add them in Vercel.</p>
+        <p id="st-hint" class="subtitle" style="font-size:13px; margin:8px 0 0; display:none;">⚠️ Some keys are missing. Jobs won't show up until you add them in Vercel.</p>
       </div>
 
       <div class="menu-grid">
         <div class="menu-item" onclick="showView('view-results'); recommend()">
           <div class="menu-info">
             <h3>Find New Matches</h3>
-            <p>Scan JSearch, Adzuna & JustJoinIT for jobs in Poland.</p>
+            <p>Scan JSearch & Adzuna — ranked by your CV match score.</p>
           </div>
           <button id="btn-match" style="padding:12px 20px"><div class="loader"></div>Go →</button>
         </div>
         <div class="menu-item" onclick="showView('view-onboarding')">
           <div class="menu-info">
             <h3>Profile & CV</h3>
-            <p>Update skills, role, and current location.</p>
+            <p>Update your CV, skills, role, and location.</p>
           </div>
-          <button class="btn-secondary" style="padding:12px 20px">Edit</button>
+          <button class="btn-secondary" style="padding:12px 20px; text-transform:none; letter-spacing:0">Edit</button>
         </div>
-        <div class="menu-item" onclick="showView('view-preferences')">
+        <div class="menu-item" onclick="showView('view-preferences'); loadPreferences()">
           <div class="menu-info">
             <h3>Job Settings</h3>
-            <p>Adjust language filters and destination targets.</p>
+            <p>Language filters, location, citizenship rules, and match threshold.</p>
           </div>
-          <button class="btn-secondary" style="padding:12px 20px">Preferences</button>
+          <button class="btn-secondary" style="padding:12px 20px; text-transform:none; letter-spacing:0">Preferences</button>
         </div>
         <div class="menu-item" onclick="showView('view-account')">
           <div class="menu-info">
             <h3>Account Settings</h3>
             <p>Change your name, email address, or password.</p>
           </div>
-          <button class="btn-secondary" style="padding:12px 20px">Manage</button>
+          <button class="btn-secondary" style="padding:12px 20px; text-transform:none; letter-spacing:0">Manage</button>
         </div>
         <div class="menu-item" onclick="logout()">
           <div class="menu-info">
@@ -235,49 +353,141 @@
       </div>
     </div>
 
-    <!-- JOB SETTINGS -->
+    <!-- ── JOB SETTINGS (redesigned) ────────────────────────────────────── -->
     <div id="view-preferences" class="hidden">
       <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px">
-        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
+        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px; text-transform:none; letter-spacing:0">←</button>
         <h1 style="margin:0">Job Settings</h1>
       </div>
-      <p class="subtitle">Fine-tune how we find matches for you.</p>
+      <p class="subtitle">Fine-tune how HireEU finds and ranks matches for you.</p>
+
+      <!-- Location & Work Type -->
       <section class="card">
-        <!-- Row 1: English Only + Min Fit % — both inputs same height -->
-        <div class="prefs-grid">
-          <div class="prefs-field">
-            <label style="margin-top:0">English Only</label>
-            <label class="prefs-checkbox-wrap">
-              <input type="checkbox" id="prefs-english-only">
-              <strong>English-language jobs only</strong>
-            </label>
-            <p class="prefs-hint">Hide jobs requiring Polish or German.</p>
+        <div class="prefs-section-title">Location & Work Type</div>
+        <div class="prefs-grid2" style="margin-bottom:16px">
+          <div>
+            <label for="prefs-city">Preferred City</label>
+            <input id="prefs-city" placeholder="e.g. Warsaw, Kraków, Remote…">
+            <p class="field-hint">Leave blank to search all of Poland</p>
           </div>
-          <div class="prefs-field">
-            <label for="prefs-min-fit" style="margin-top:0">Min Fit %</label>
-            <input type="number" id="prefs-min-fit" value="45" min="0" max="100">
+          <div>
+            <label for="prefs-country">Target Country</label>
+            <select id="prefs-country">
+              <option value="">Any EU Country</option>
+              <option value="pl" selected>Poland</option>
+              <option value="de">Germany</option>
+              <option value="nl">Netherlands</option>
+              <option value="cz">Czech Republic</option>
+              <option value="at">Austria</option>
+              <option value="se">Sweden</option>
+              <option value="fr">France</option>
+            </select>
           </div>
         </div>
-        <!-- Row 2: Preferred Destination -->
-        <div class="prefs-grid">
-          <div class="prefs-field">
-            <label for="prefs-location" style="margin-top:0">Preferred Destination</label>
-            <input id="prefs-location" placeholder="e.g. Warsaw, Remote, etc">
-          </div>
-          <div></div>
+        <label style="margin-top:0; margin-bottom:8px">Work Arrangement</label>
+        <div class="chip-group" id="chips-work-type">
+          <button class="chip on" data-val="any" onclick="selectChipSingle(this,'chips-work-type')">Any</button>
+          <button class="chip" data-val="onsite" onclick="selectChipSingle(this,'chips-work-type')">On-site</button>
+          <button class="chip" data-val="hybrid" onclick="selectChipSingle(this,'chips-work-type')">Hybrid</button>
+          <button class="chip" data-val="remote" onclick="selectChipSingle(this,'chips-work-type')">Remote</button>
+          <button class="chip" data-val="remote-eu" onclick="selectChipSingle(this,'chips-work-type')">Remote EU only</button>
         </div>
-        <button onclick="savePreferences()" id="btn-save-prefs" style="width:100%; margin-top:8px">Save Preferences</button>
       </section>
+
+      <!-- Language & Citizenship -->
+      <section class="card">
+        <div class="prefs-section-title">Language & Citizenship Filters</div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">English-only jobs</div>
+            <div class="toggle-desc">Hide listings that require Polish, German, or other languages</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="prefs-english-only">
+            <span class="toggle-knob"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Hide citizenship-restricted roles</div>
+            <div class="toggle-desc">Filter out jobs requiring EU/US citizenship or security clearance</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="prefs-no-citizenship" checked>
+            <span class="toggle-knob"></span>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Visa sponsorship preferred</div>
+            <div class="toggle-desc">Prioritise employers who mention sponsorship or relocation support</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="prefs-visa">
+            <span class="toggle-knob"></span>
+          </label>
+        </div>
+        <div style="margin-top:16px">
+          <label style="margin-top:0; margin-bottom:8px">Languages you speak</label>
+          <div class="chip-group" id="chips-langs">
+            <button class="chip on" data-val="en" onclick="toggleChipMulti(this)">English</button>
+            <button class="chip" data-val="pl" onclick="toggleChipMulti(this)">Polish</button>
+            <button class="chip" data-val="de" onclick="toggleChipMulti(this)">German</button>
+            <button class="chip" data-val="fr" onclick="toggleChipMulti(this)">French</button>
+            <button class="chip" data-val="ua" onclick="toggleChipMulti(this)">Ukrainian</button>
+            <button class="chip" data-val="es" onclick="toggleChipMulti(this)">Spanish</button>
+          </div>
+          <p class="field-hint" style="margin-top:8px">Used to include matching jobs, not to filter out</p>
+        </div>
+      </section>
+
+      <!-- Match Threshold -->
+      <section class="card">
+        <div class="prefs-section-title">Match Threshold</div>
+        <p class="field-hint" style="margin-bottom:12px">Only show jobs where your estimated match score exceeds this value</p>
+        <div class="range-val" id="prefs-fit-label">45%</div>
+        <input type="range" id="prefs-min-fit" min="0" max="90" step="5" value="45"
+          oninput="document.getElementById('prefs-fit-label').textContent = this.value + '%'">
+        <div class="range-labels"><span>0% — Show all</span><span>90% — Very strict</span></div>
+      </section>
+
+      <!-- Job Type & Seniority -->
+      <section class="card">
+        <div class="prefs-section-title">Job Type & Seniority</div>
+        <div class="prefs-grid2">
+          <div>
+            <label for="prefs-contract">Contract Type</label>
+            <select id="prefs-contract">
+              <option value="any">Any</option>
+              <option value="uop">Full-time (UoP)</option>
+              <option value="b2b">B2B / Contract</option>
+              <option value="part">Part-time</option>
+              <option value="intern">Internship</option>
+            </select>
+          </div>
+          <div>
+            <label for="prefs-seniority-pref">Seniority Level</label>
+            <select id="prefs-seniority-pref">
+              <option value="any">Any</option>
+              <option value="junior">Junior / Entry</option>
+              <option value="mid">Mid-level</option>
+              <option value="senior">Senior</option>
+              <option value="lead">Lead / Principal</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <button onclick="savePreferences()" id="btn-save-prefs" style="width:100%"><div class="loader"></div>Save Preferences</button>
     </div>
 
-    <!-- ACCOUNT SETTINGS -->
+    <!-- ── ACCOUNT SETTINGS ──────────────────────────────────────────────── -->
     <div id="view-account" class="hidden">
       <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px">
-        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
+        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px; text-transform:none; letter-spacing:0">←</button>
         <h1 style="margin:0">Account Settings</h1>
       </div>
       <p class="subtitle">Update your login details.</p>
-
       <section class="card">
         <h2>Profile Info</h2>
         <div class="row">
@@ -293,7 +503,6 @@
         <button onclick="saveAccountInfo()" id="btn-save-account" style="margin-top:8px">Save Changes</button>
         <p id="acct-info-status" class="status-msg"></p>
       </section>
-
       <section class="card">
         <h2>Change Password</h2>
         <div class="row">
@@ -311,25 +520,82 @@
       </section>
     </div>
 
-    <!-- RESULTS -->
+    <!-- ── RESULTS / FIND JOBS (redesigned) ─────────────────────────────── -->
     <div id="view-results" class="hidden">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
-        <div style="display:flex; align-items:center; gap:15px">
-           <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px">←</button>
-           <h1 style="margin:0">Your Matches</h1>
-        </div>
-        <button class="btn-secondary" onclick="recommend()">Refresh Results 🔄</button>
+      <div style="display:flex; align-items:center; gap:15px; margin-bottom:8px">
+        <button class="btn-secondary" onclick="showView('view-main-menu')" style="padding:5px 12px; font-size:18px; text-transform:none; letter-spacing:0">←</button>
+        <h1 style="margin:0">Find Jobs</h1>
       </div>
-      <p id="prefs-status" class="status-msg"></p>
+      <p class="subtitle">Ranked by your estimated interview probability based on your CV.</p>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <div class="filter-main">
+          <div>
+            <label for="fj-query" style="margin-top:0">Role or keyword</label>
+            <input type="text" id="fj-query" placeholder="e.g. QA Engineer, React Developer…"
+              onkeydown="if(event.key==='Enter') runJobSearch()">
+          </div>
+          <div>
+            <label for="fj-loc" style="margin-top:0">Location</label>
+            <input type="text" id="fj-loc" placeholder="Warsaw / Remote / Any"
+              onkeydown="if(event.key==='Enter') runJobSearch()">
+          </div>
+          <div>
+            <label style="margin-top:0">&nbsp;</label>
+            <button class="btn-filter-search" onclick="runJobSearch()">Search</button>
+          </div>
+        </div>
+        <div class="filter-advanced">
+          <div>
+            <label for="fj-work" style="margin-top:0">Work type</label>
+            <select id="fj-work">
+              <option value="">Any</option>
+              <option value="onsite">On-site</option>
+              <option value="hybrid">Hybrid</option>
+              <option value="remote">Remote</option>
+            </select>
+          </div>
+          <div>
+            <label for="fj-lang" style="margin-top:0">Language req.</label>
+            <select id="fj-lang">
+              <option value="">Any</option>
+              <option value="en">English only</option>
+              <option value="pl">Polish OK</option>
+              <option value="de">German OK</option>
+            </select>
+          </div>
+          <div>
+            <label for="fj-citizen" style="margin-top:0">Citizenship</label>
+            <select id="fj-citizen">
+              <option value="hide">Hide restricted</option>
+              <option value="all">Show all</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-header">
+        <span class="results-count" id="prefs-status"></span>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <select id="fj-sort" onchange="sortResults()" style="width:auto; padding:7px 10px; font-size:13px">
+            <option value="match">Best match</option>
+            <option value="recent">Most recent</option>
+          </select>
+          <button class="btn-secondary" onclick="recommend()" style="padding:8px 16px; font-size:13px; text-transform:none; letter-spacing:0">Refresh ↺</button>
+        </div>
+      </div>
+
       <div id="jobs" class="jobs"></div>
     </div>
 
-  </div>
+  </div><!-- /container -->
 
   <script>
     let rawCvText = null;
     let currentCoverLetter = '';
     let toastTimer = null;
+    let allJobResults = [];
 
     // ── Toast ──────────────────────────────────────────────────────────────
     function showToast(msg, type = 'success') {
@@ -340,7 +606,7 @@
       toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3000);
     }
 
-    // ── API helper ─────────────────────────────────────────────────────────
+    // ── API ────────────────────────────────────────────────────────────────
     async function api(path, method = 'GET', body) {
       const res = await fetch(path, { method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
       const data = await res.json().catch(() => ({}));
@@ -348,7 +614,6 @@
       return data;
     }
 
-    // Groq cover letter with retry on 429
     async function apiCoverLetter(payload, retries = 3) {
       for (let i = 0; i < retries; i++) {
         try {
@@ -356,13 +621,11 @@
         } catch (e) {
           const is429 = e.message.includes('429');
           if (is429 && i < retries - 1) {
-            const wait = (i + 1) * 8000; // 8s, 16s
+            const wait = (i + 1) * 8000;
             document.getElementById('cl-modal-body').innerHTML =
               `<p style="color:var(--ink2); text-align:center; padding:40px 0">AI is busy, retrying in ${wait/1000}s… (attempt ${i+2}/${retries})</p>`;
             await new Promise(r => setTimeout(r, wait));
-          } else {
-            throw e;
-          }
+          } else { throw e; }
         }
       }
     }
@@ -458,18 +721,57 @@
       rawCvText = profile.rawCvText || null;
     }
 
+    // ── CV Upload UI ───────────────────────────────────────────────────────
+    function onCvFileChange(input) {
+      if (!input.files[0]) return;
+      const dz = document.getElementById('cv-dropzone');
+      document.getElementById('cv-drop-icon').textContent = '✅';
+      document.getElementById('cv-drop-main').textContent = input.files[0].name;
+      dz.classList.add('has-file');
+    }
+
     // ── Profile ────────────────────────────────────────────────────────────
     async function parseCv() {
       const file = document.getElementById('cv-file').files[0];
-      if (!file) return;
-      document.getElementById('profile-status').textContent = 'Analyzing...';
+      if (!file) { showToast('Please select a CV file first', 'error'); return; }
+      const statusEl = document.getElementById('profile-status');
+      statusEl.textContent = 'Analyzing your CV…';
+      statusEl.className = 'status-msg';
+      setBtnLoading('btn-parse', true);
       try {
-        const base64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.readAsDataURL(file); });
+        const base64 = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(r.result.split(',')[1]);
+          r.onerror = rej;
+          r.readAsDataURL(file);
+        });
         const parsed = await api('/api/parse-cv', 'POST', { fileBase64: base64, fileType: file.type });
         fillProfile(parsed);
-        document.getElementById('profile-status').textContent = 'Profile ready. Check the details below.';
+        showParsedSection(parsed);
+        statusEl.textContent = 'Profile extracted — review below and save.';
         showToast('CV extracted successfully ✓');
-      } catch (e) { document.getElementById('profile-status').textContent = e.message; }
+      } catch (e) {
+        statusEl.className = 'status-msg error';
+        statusEl.textContent = e.message;
+        showToast(e.message, 'error');
+      }
+      setBtnLoading('btn-parse', false);
+    }
+
+    function showParsedSection(profile) {
+      const sec = document.getElementById('cv-parsed-section');
+      sec.style.display = 'block';
+      const grid = document.getElementById('parsed-stats-grid');
+      grid.innerHTML = [
+        ['Primary Role', profile.primaryRole || '—'],
+        ['Seniority', profile.seniority || '—'],
+        ['Experience', (profile.yearsExperience || 0) + ' yrs'],
+        ['Location', profile.location || '—'],
+      ].map(([l,v]) => `<div class="parsed-stat"><div class="parsed-stat-label">${l}</div><div class="parsed-stat-val">${v}</div></div>`).join('');
+
+      const tagsEl = document.getElementById('parsed-skills-tags');
+      const skills = profile.skills || [];
+      tagsEl.innerHTML = skills.map(s => `<span class="skill-tag">${s}</span>`).join('') || '<span style="color:var(--ink2);font-size:13px">No skills detected</span>';
     }
 
     async function saveProfile() {
@@ -487,79 +789,245 @@
         setBtnLoading('btn-save-profile', false);
         showToast('Profile saved ✓');
         await loadAppState();
-      } catch (e) { showToast(e.message, 'error'); setBtnLoading('btn-save-profile', false); }
+      } catch (e) {
+        showToast(e.message, 'error');
+        setBtnLoading('btn-save-profile', false);
+      }
+    }
+
+    // ── Preferences chip helpers ───────────────────────────────────────────
+    function selectChipSingle(el, groupId) {
+      document.querySelectorAll(`#${groupId} .chip`).forEach(c => c.classList.remove('on'));
+      el.classList.add('on');
+    }
+
+    function toggleChipMulti(el) {
+      el.classList.toggle('on');
+    }
+
+    function getChipSingleVal(groupId) {
+      const active = document.querySelector(`#${groupId} .chip.on`);
+      return active ? active.dataset.val : '';
+    }
+
+    function getChipMultiVals(groupId) {
+      return [...document.querySelectorAll(`#${groupId} .chip.on`)].map(c => c.dataset.val);
+    }
+
+    function setChipSingle(groupId, val) {
+      document.querySelectorAll(`#${groupId} .chip`).forEach(c => {
+        c.classList.toggle('on', c.dataset.val === val);
+      });
+    }
+
+    function setChipMulti(groupId, vals = []) {
+      document.querySelectorAll(`#${groupId} .chip`).forEach(c => {
+        c.classList.toggle('on', vals.includes(c.dataset.val));
+      });
+    }
+
+    // ── Preferences load/save ──────────────────────────────────────────────
+    async function loadPreferences() {
+      try {
+        const data = await api('/api/user-data?action=preferences-get');
+        const p = data.preferences || {};
+        if (p.preferred_location) document.getElementById('prefs-city').value = p.preferred_location;
+        if (p.target_country) document.getElementById('prefs-country').value = p.target_country;
+        if (p.work_type) setChipSingle('chips-work-type', p.work_type);
+        if (p.english_only != null) document.getElementById('prefs-english-only').checked = !!p.english_only;
+        if (p.hide_citizenship != null) document.getElementById('prefs-no-citizenship').checked = !!p.hide_citizenship;
+        if (p.visa_sponsorship != null) document.getElementById('prefs-visa').checked = !!p.visa_sponsorship;
+        if (p.spoken_languages) setChipMulti('chips-langs', p.spoken_languages);
+        if (p.min_fit_percent != null) {
+          document.getElementById('prefs-min-fit').value = p.min_fit_percent;
+          document.getElementById('prefs-fit-label').textContent = p.min_fit_percent + '%';
+        }
+        if (p.contract_type) document.getElementById('prefs-contract').value = p.contract_type;
+        if (p.seniority_pref) document.getElementById('prefs-seniority-pref').value = p.seniority_pref;
+      } catch (e) {
+        // silently fail — user may not have prefs saved yet
+      }
+    }
+
+    async function savePreferences() {
+      try {
+        setBtnLoading('btn-save-prefs', true);
+        await api('/api/user-data?action=preferences-save', 'POST', {
+          preferredLocation: document.getElementById('prefs-city').value,
+          targetCountry: document.getElementById('prefs-country').value,
+          workType: getChipSingleVal('chips-work-type'),
+          englishOnly: document.getElementById('prefs-english-only').checked,
+          hideCitizenship: document.getElementById('prefs-no-citizenship').checked,
+          visaSponsorship: document.getElementById('prefs-visa').checked,
+          spokenLanguages: getChipMultiVals('chips-langs'),
+          minFitPercent: Number(document.getElementById('prefs-min-fit').value),
+          contractType: document.getElementById('prefs-contract').value,
+          seniorityPref: document.getElementById('prefs-seniority-pref').value,
+        });
+        setBtnLoading('btn-save-prefs', false);
+        showToast('Job preferences saved ✓');
+        showView('view-main-menu');
+      } catch (e) {
+        showToast(e.message, 'error');
+        setBtnLoading('btn-save-prefs', false);
+      }
     }
 
     // ── Jobs ───────────────────────────────────────────────────────────────
-    async function recommend() {
-      const status = document.getElementById('prefs-status');
+    function getMatchClass(n) { return n >= 75 ? 'high' : n >= 55 ? 'mid' : 'low'; }
+    function getBarColor(n) { return n >= 75 ? 'var(--green)' : n >= 55 ? 'var(--amber)' : 'var(--red)'; }
+
+    function renderJobCard(job) {
+      const cls = getMatchClass(job.match);
+      const barColor = getBarColor(job.match);
+      const isRemote = job.isRemote || (job.location || '').toLowerCase().includes('remote');
+      const locBadge = isRemote
+        ? `<span class="badge badge-remote">Remote</span>`
+        : `<span class="badge badge-loc">${job.location || 'Poland'}</span>`;
+      const srcBadge = `<span class="badge badge-source">${job.source || 'Adzuna'}</span>`;
+      const senBadge = job.seniority && job.seniority !== 'unknown'
+        ? `<span class="badge badge-seniority">${job.seniority}</span>` : '';
+      const langBadge = `<span class="badge badge-lang">EN</span>`;
+
+      const missing = (job.missingSkills || []).length
+        ? `<div class="missing-tags">${job.missingSkills.map(s => `<span class="missing-tag">Missing: ${s}</span>`).join('')}</div>` : '';
+
+      const jobPayload = encodeURIComponent(JSON.stringify({
+        title: job.title, company: job.company,
+        location: job.location || '', description: job.reason || ''
+      }));
+
+      return `<div class="job">
+        <div class="job-header">
+          <div>
+            <div class="job-title">${job.title}</div>
+            <div class="job-company">${job.company}</div>
+          </div>
+          <div class="match-block">
+            <div class="match-pct ${cls}">${job.match}%</div>
+            <div class="match-label">Match</div>
+          </div>
+        </div>
+        <div class="match-bar-bg"><div class="match-bar-fill" style="width:${job.match}%;background:${barColor}"></div></div>
+        <div class="job-badges">${locBadge}${srcBadge}${senBadge}${langBadge}</div>
+        <div class="job-reason">${job.reason || ''}</div>
+        ${missing}
+        <div class="job-footer">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn-apply" href="${job.applyUrl || '#'}" target="_blank">View Listing →</a>
+            <button class="btn-cover" onclick="generateCoverLetter(this,'${jobPayload}')">✉ Cover Letter</button>
+          </div>
+          <span class="job-source-label">via ${job.source || 'Adzuna'} · ${job.postedAt ? new Date(job.postedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'Recently'}</span>
+        </div>
+      </div>`;
+    }
+
+    function renderJobs(results) {
       const jobsEl = document.getElementById('jobs');
-      status.textContent = 'Searching...';
+      if (!results.length) {
+        jobsEl.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--ink2)">
+          <div style="font-size:32px;margin-bottom:12px">🔍</div>
+          <p style="font-size:15px;font-weight:600;margin-bottom:6px">No matches found</p>
+          <p style="font-size:13px">Try adjusting your filters or lowering the match threshold in Job Settings.</p>
+        </div>`;
+        return;
+      }
+      jobsEl.innerHTML = results.map(renderJobCard).join('');
+    }
+
+    function sortResults() {
+      const mode = document.getElementById('fj-sort').value;
+      let sorted = [...allJobResults];
+      if (mode === 'recent') {
+        sorted.sort((a, b) => {
+          const da = a.postedAt ? new Date(a.postedAt).getTime() : 0;
+          const db = b.postedAt ? new Date(b.postedAt).getTime() : 0;
+          return db - da;
+        });
+      } else {
+        sorted.sort((a, b) => b.match - a.match);
+      }
+      renderJobs(sorted);
+    }
+
+    function applyClientFilters(results) {
+      const locFilter = document.getElementById('fj-loc').value.trim().toLowerCase();
+      const workFilter = document.getElementById('fj-work').value;
+      const langFilter = document.getElementById('fj-lang').value;
+      const citizenFilter = document.getElementById('fj-citizen').value;
+
+      return results.filter(j => {
+        const loc = (j.location || '').toLowerCase();
+        const isRemote = j.isRemote || loc.includes('remote');
+        const desc = (j.description || '').toLowerCase();
+
+        if (locFilter && !loc.includes(locFilter) && !isRemote) return false;
+        if (workFilter === 'remote' && !isRemote) return false;
+        if (workFilter === 'onsite' && isRemote) return false;
+        return true;
+      });
+    }
+
+    async function runJobSearch() {
+      showView('view-results');
+      const query = document.getElementById('fj-query').value.trim();
+      const statusEl = document.getElementById('prefs-status');
+      const jobsEl = document.getElementById('jobs');
+      statusEl.textContent = 'Searching…';
+      jobsEl.innerHTML = '';
+
       try {
-        setBtnLoading('btn-match', true);
-        const data = await api('/api/jobs-recommend', 'POST', {});
-        jobsEl.innerHTML = '';
+        const data = await api('/api/jobs?action=search', 'POST', { role: query || 'QA Engineer' });
+        const filtered = applyClientFilters(data.jobs || []);
+        allJobResults = filtered;
+        document.getElementById('prefs-status').textContent = `${filtered.length} results`;
+        renderJobs(filtered);
+        if (filtered.length) showToast(`Found ${filtered.length} jobs ✓`);
+      } catch (e) {
+        statusEl.textContent = e.message;
+        showToast(e.message, 'error');
+      }
+    }
+
+    async function recommend() {
+      const statusEl = document.getElementById('prefs-status');
+      const jobsEl = document.getElementById('jobs');
+      statusEl.textContent = 'Finding your best matches…';
+      jobsEl.innerHTML = '';
+      setBtnLoading('btn-match', true);
+
+      try {
+        const data = await api('/api/jobs?action=recommend', 'POST', {});
         const { results, diagnostics } = data;
 
         if (!results?.length) {
-          let diagHtml = `<div style="font-size:13px; color:var(--ink2); background:var(--silver2); padding:15px; border-radius:4px; margin-top:10px;">
-            <strong>Diagnostics:</strong><br>
-            • Raw jobs found: ${diagnostics?.rawCount || 0}<br>
-            • Hidden by Language Filter: ${diagnostics?.langFiltered || 0}<br>
-            • Hidden by Role Filter: ${diagnostics?.qaFiltered || 0}<br>`;
-          if (diagnostics?.jsearchErrors?.length) {
-            diagHtml += `<br><span style="color:#ef4444">• API Errors: ${diagnostics.jsearchErrors.join(', ')}</span>`;
-          }
-          diagHtml += `<br><br><em>Try updating your skills or seniority if raw counts are high but final results are 0.</em></div>`;
-          jobsEl.innerHTML = `<div><p class="subtitle">No final matches found.</p>${diagHtml}</div>`;
+          const errs = diagnostics?.jsearchErrors?.length
+            ? `<br><span style="color:#ef4444">API Errors: ${diagnostics.jsearchErrors.join(', ')}</span>` : '';
+          jobsEl.innerHTML = `<div class="diag-box">
+            <strong>No matches found</strong><br>
+            Raw jobs found: ${diagnostics?.rawCount || 0}<br>
+            Hidden by language filter: ${diagnostics?.langFiltered || 0}<br>
+            Hidden by role filter: ${diagnostics?.qaFiltered || 0}
+            ${errs}<br><br>
+            <em>Try lowering the match threshold in Job Settings, or update your profile skills.</em>
+          </div>`;
+          statusEl.textContent = 'No matches found.';
+        } else {
+          allJobResults = results;
+          statusEl.textContent = `${results.length} matches found`;
+          renderJobs(results);
+          showToast(`Found ${results.length} job matches ✓`);
         }
-
-        for (const job of results || []) {
-          const div = document.createElement('div');
-          div.className = 'job';
-          let missingHtml = '';
-          if (job.missingSkills?.length) {
-            missingHtml = `<div style="margin-top:10px; font-size:12px; color:var(--ink2)">
-              <strong>Missing:</strong> ${job.missingSkills.map(s => `<span style="color:#ef4444; margin-right:5px">${s}</span>`).join('')}
-            </div>`;
-          }
-          const jobPayload = encodeURIComponent(JSON.stringify({
-            title: job.title,
-            company: job.company,
-            location: job.location || '',
-            description: job.reason || ''
-          }));
-          div.innerHTML = `
-            <div class="job-title">${job.title}</div>
-            <div class="job-meta">
-              <span>${job.company}</span> |
-              <span class="job-fit">${job.match}% Fit</span> |
-              <span style="text-transform:capitalize">${job.seniority || 'Match'}</span>
-            </div>
-            <div style="font-size:14px; margin:10px 0">${job.reason}</div>
-            ${missingHtml}
-            <div style="margin-top:15px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-              <a href="${job.applyUrl}" target="_blank" style="color:var(--accent); font-weight:700; text-decoration:none">View Full Listing →</a>
-              <button class="btn-cover" onclick="generateCoverLetter(this, '${jobPayload}')">✉ Cover Letter</button>
-            </div>
-          `;
-          jobsEl.appendChild(div);
-        }
-
-        status.textContent = `Found ${results?.length || 0} matches.`;
-        setBtnLoading('btn-match', false);
-        if (results?.length) showToast(`Found ${results.length} job matches ✓`);
       } catch (e) {
-        status.textContent = e.message;
-        setBtnLoading('btn-match', false);
+        statusEl.textContent = e.message;
         showToast(e.message, 'error');
       }
+      setBtnLoading('btn-match', false);
     }
 
     // ── Cover Letter ───────────────────────────────────────────────────────
     async function generateCoverLetter(btn, encodedJob) {
       const job = JSON.parse(decodeURIComponent(encodedJob));
-
       document.getElementById('cl-modal-title').textContent = `Cover Letter — ${job.title}`;
       document.getElementById('cl-modal-subtitle').textContent = job.company;
       document.getElementById('cl-modal-body').innerHTML = '<p style="color:var(--ink2); text-align:center; padding:40px 0">Generating your personalised cover letter…</p>';
@@ -622,27 +1090,10 @@
       } catch (e) { alert('Copy failed. Please select and copy the text manually.'); }
     }
 
-    // ── Preferences ────────────────────────────────────────────────────────
-    async function savePreferences() {
-      try {
-        setBtnLoading('btn-save-prefs', true);
-        await api('/api/user-data?action=preferences-save', 'POST', {
-          englishOnly: document.getElementById('prefs-english-only').checked,
-          minFitPercent: Number(document.getElementById('prefs-min-fit').value),
-          preferredLocation: document.getElementById('prefs-location').value,
-          workType: 'any'
-        });
-        setBtnLoading('btn-save-prefs', false);
-        showToast('Job preferences saved ✓');
-        showView('view-main-menu');
-      } catch (e) { showToast(e.message, 'error'); setBtnLoading('btn-save-prefs', false); }
-    }
-
     // ── Account ────────────────────────────────────────────────────────────
     async function saveAccountInfo() {
       const statusEl = document.getElementById('acct-info-status');
-      statusEl.className = 'status-msg';
-      statusEl.textContent = '';
+      statusEl.className = 'status-msg'; statusEl.textContent = '';
       try {
         setBtnLoading('btn-save-account', true);
         await api('/api/user-data?action=account-update', 'POST', {
@@ -663,22 +1114,11 @@
 
     async function savePassword() {
       const statusEl = document.getElementById('acct-pw-status');
-      statusEl.className = 'status-msg';
-      statusEl.textContent = '';
+      statusEl.className = 'status-msg'; statusEl.textContent = '';
       const currentPw = document.getElementById('acct-current-pw').value;
       const newPw = document.getElementById('acct-new-pw').value;
-      if (!currentPw || !newPw) {
-        statusEl.className = 'status-msg error';
-        statusEl.textContent = 'Both fields are required.';
-        showToast('Both password fields are required', 'error');
-        return;
-      }
-      if (newPw.length < 8) {
-        statusEl.className = 'status-msg error';
-        statusEl.textContent = 'New password must be at least 8 characters.';
-        showToast('Password too short', 'error');
-        return;
-      }
+      if (!currentPw || !newPw) { statusEl.className = 'status-msg error'; statusEl.textContent = 'Both fields are required.'; return; }
+      if (newPw.length < 8) { statusEl.className = 'status-msg error'; statusEl.textContent = 'Password must be at least 8 characters.'; return; }
       try {
         setBtnLoading('btn-save-pw', true);
         await api('/api/user-data?action=password-update', 'POST', { currentPassword: currentPw, newPassword: newPw });
